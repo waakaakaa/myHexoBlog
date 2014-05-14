@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>一种在图片里隐藏你的程序代码的技术 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="我最近开发了我的第一个网页游戏：一个HTML5的视频智力游戏。 开发的过程很有趣，我喜欢编程，但当实现了游戏逻辑后，我有了一个有趣的想法：为什么不想个办法把代码隐藏起来？起初我想到的是一些很简单的做法，比如禁 止上下文菜单，以防右键点击时可以查看页面源代码。但这毫无意义，右键菜单不能用，人们仍然可以通过键盘快捷键或菜单栏里的“查看源文件”来观看源代码。
+一张图片能隐含千言万语。
+这依赖于图片的体积">
+  
+  <meta content="article" property="og:type">
+<meta content="一种在图片里隐藏你的程序代码的技术" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/一种在图片里隐藏你的程序代码的技术/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="我最近开发了我的第一个网页游戏：一个HTML5的视频智力游戏。 开发的过程很有趣，我喜欢编程，但当实现了游戏逻辑后，我有了一个有趣的想法：为什么不想个办法把代码隐藏起来？起初我想到的是一些很简单的做法，比如禁 止上下文菜单，以防右键点击时可以查看页面源代码。但这毫无意义，右键菜单不能用，人们仍然可以通过键盘快捷键或菜单栏里的“查看源文件”来观看源代码。
+一张图片能隐含千言万语。
+这依赖于图片的体积" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/一种在图片里隐藏你的程序代码的技术/">
+  <time datetime="2014-05-14T05:00:19.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">一种在图片里隐藏你的程序代码的技术</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>我最近开发了我的第一个网页游戏：<a href="http://www.patrick-wied.at/projects/html5-video-puzzle" target="_blank">一个HTML5的视频智力游戏</a>。 开发的过程很有趣，我喜欢编程，但当实现了游戏逻辑后，我有了一个有趣的想法：为什么不想个办法把代码隐藏起来？起初我想到的是一些很简单的做法，比如禁 止上下文菜单，以防右键点击时可以查看页面源代码。但这毫无意义，右键菜单不能用，人们仍然可以通过键盘快捷键或菜单栏里的“查看源文件”来观看源代码。</p>
+<p><strong>一张图片能隐含千言万语</strong>。</p>
+<p>这依赖于图片的体积。但我决定要把源代码加密存放到一张图片里。HTML5的画布(canvas)组件很适合干这种事情，因为它支持针对图像像素的 操作。一个像素由四个值(通道)来表示：红，绿，蓝和alpha通道。它们的值的分布范围是从0到255。我的Javascript代码就是一个个的字 符，每个字符都有一个ASCII对应值。ASCII值的范围也是0-255，所以，我想做的是，遍历画布上的每个像素，给每个像素设置3个代码字符的 ASCII值作为它的RGB值，你可以通过charCodeAt函数轻松的取出这些字符。</p>
+<blockquote>
+<p>.charCodeAt(0)</p>
+</blockquote>
+<p>生成的是一张色彩斑斓、很小的图片，它就是我的程序代码  。看看吧:</p>
+<p>解码的时候，我只需要把这个图片画到画布上，遍历像素点，取出r,g,b值所代表的字符：</p>
+<blockquote>
+<p>String.fromCharCode(code)</p>
+</blockquote>
+<p>把它们连接成一个大的字符串，这就是你的代码了——可执行的代码。 </p>
+<p>这样就能保护你的源代码了吗？</p>
+<p>其实不能——一个有经验的(甚至没有经验的)程序员仍然能够知道如何去解码图片，取出里面的代码，但我想这是能防止那些怀着不良商业目的人偷盗你的的代码的第一步措施——而那些能够想出如何解码的程序员(大部分)都不是来剽窃的 </p>
+<p><strong>这种方法的主要缺陷</strong></p>
+<p>这种技术只能应用在支持HTML5画布(canvas)技术的现代浏览器里，IE6、IE8 里肯定是不行的。甚至有些现代的浏览器对于图片的alpha通道的编码也有支持问题，所以，每个像素点你只能放3个字符——一个100×100大小的图片 可以存放3万个文本字符。 </p>
+<p>你还有其它简单的能防止别人拷贝你的代码的方法吗？我们当然可以把字符进行加密，但如何保证你的解密步骤能不被人轻易的破解呢？告诉我你的想法吧！</p>
+<p>[本文英文原文链接：<a href="http://www.patrick-wied.at/blog/a-technique-for-hiding-your-javascript-code" target="_blank">A technique for hiding your JavaScript Code</a> ]</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

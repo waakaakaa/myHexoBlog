@@ -1,0 +1,545 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>ThreadLocal 那点事儿 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。
+早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难">
+  
+  <meta content="article" property="og:type">
+<meta content="ThreadLocal 那点事儿" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/threadlocal-那点事儿/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。
+早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/threadlocal-那点事儿/">
+  <time datetime="2014-05-14T06:51:37.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">ThreadLocal 那点事儿</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。</p>
+<p>早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难用，所以至今没有得到广泛使用。其实它还是挺有用的，不相信的话，我们一起来看看这个例子吧。</p>
+<p>一个序列号生成器的程序，可能同时会有多个线程并发访问它，要保证每个线程得到的序列号都是自增的，而不能相互干扰。</p>
+<p>先定义一个接口：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">interface</span> Sequence {
+
+    <span class="keyword">int</span> getNumber();
+}
+</code></pre><p>每次调用 getNumber() 方法可获取一个序列号，下次再调用时，序列号会自增。</p>
+<p>再做一个线程类：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClientThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> {</span>
+
+    <span class="keyword">private</span> Sequence sequence;
+
+    <span class="keyword">public</span> <span class="title">ClientThread</span>(Sequence sequence) {
+        <span class="keyword">this</span>.sequence = sequence;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) {
+            System.out.println(Thread.currentThread().getName() + <span class="string">" =&gt; "</span> + sequence.getNumber());
+        }
+    }
+}
+</code></pre><p>在线程中连续输出三次线程名与其对应的序列号。</p>
+<p>我们先不用 ThreadLocal，来做一个实现类吧。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SequenceA</span> <span class="keyword">implements</span> <span class="title">Sequence</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number = <span class="number">0</span>;
+
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNumber</span>() {
+        number = number + <span class="number">1</span>;
+        <span class="keyword">return</span> number;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+        Sequence sequence = <span class="keyword">new</span> SequenceA();
+
+        ClientThread thread1 = <span class="keyword">new</span> ClientThread(sequence);
+        ClientThread thread2 = <span class="keyword">new</span> ClientThread(sequence);
+        ClientThread thread3 = <span class="keyword">new</span> ClientThread(sequence);
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+    }
+}
+</code></pre><p>序列号初始值是0，在 main() 方法中模拟了三个线程，运行后结果如下：</p>
+<pre><code><span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">1</span>
+<span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">2</span>
+<span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">3</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">4</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">5</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">6</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">7</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">8</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">9</span>
+</code></pre><p>由于线程启动顺序是随机的，所以并不是0、1、2这样的顺序，这个好理解。为什么当 Thread-0 输出了1、2、3之后，而 Thread-2 却输出了4、5、6呢？线程之间竟然共享了 static 变量！这就是所谓的“非线程安全”问题了。</p>
+<p>那么如何来保证“线程安全”呢？对应于这个案例，就是说不同的线程可拥有自己的 static 变量，如何实现呢？下面看看另外一个实现吧。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SequenceB</span> <span class="keyword">implements</span> <span class="title">Sequence</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Integer&gt; numberContainer = <span class="keyword">new</span> ThreadLocal&lt;Integer&gt;() {
+        <span class="annotation">@Override</span>
+        <span class="keyword">protected</span> Integer <span class="title">initialValue</span>() {
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+    };
+
+<span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNumber</span>() {
+     numberContainer.set(numberContainer.get() + <span class="number">1</span>);
+     <span class="keyword">return</span> numberContainer.get();
+ }
+
+ <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+     Sequence sequence = <span class="keyword">new</span> SequenceB();
+
+     ClientThread thread1 = <span class="keyword">new</span> ClientThread(sequence);
+      ClientThread thread2 = <span class="keyword">new</span> ClientThread(sequence);
+     ClientThread thread3 = <span class="keyword">new</span> ClientThread(sequence);
+
+     thread1.start();
+     thread2.start();
+     thread3.start();
+    }
+}
+</code></pre><p>通过 ThreadLocal 封装了一个 Integer 类型的 numberContainer 静态成员变量，并且初始值是0。再看 getNumber() 方法，首先从 numberContainer 中 get 出当前的值，加1，随后 set 到 numberContainer 中，最后将 numberContainer 中 get 出当前的值并返回。</p>
+<p>是不是很恶心？但是很强大！确实稍微饶了一下，我们不妨把 ThreadLocal 看成是一个容器，这样理解就简单了。所以，这里故意用 Container 这个单词作为后缀来命名 ThreadLocal 变量。</p>
+<p>运行结果如何呢？看看吧。</p>
+<pre><code><span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">1</span>
+<span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">2</span>
+<span class="keyword">Thread</span>-<span class="number">0</span> =&gt; <span class="number">3</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">1</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">2</span>
+<span class="keyword">Thread</span>-<span class="number">2</span> =&gt; <span class="number">3</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">1</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">2</span>
+<span class="keyword">Thread</span>-<span class="number">1</span> =&gt; <span class="number">3</span>
+</code></pre><p>每个线程相互独立了，同样是 static 变量，对于不同的线程而言，它没有被共享，而是每个线程各一份，这样也就保证了线程安全。 也就是说，TheadLocal 为每一个线程提供了一个独立的副本！</p>
+<p>搞清楚 ThreadLocal 的原理之后，有必要总结一下 ThreadLocal 的 API，其实很简单。</p>
+<ol>
+<li>public void set(T value)：将值放入线程局部变量中</li>
+<li>public T get()：从线程局部变量中获取值</li>
+<li>public void remove()：从线程局部变量中移除值（有助于 JVM 垃圾回收）</li>
+<li>protected T initialValue()：返回线程局部变量中的初始值（默认为 null） </li>
+</ol>
+<p>为什么 initialValue() 方法是 protected 的呢？就是为了提醒程序员们，这个方法是要你们来实现的，请给这个线程局部变量一个初始值吧。</p>
+<p>了解了原理与这些 API，其实想想 ThreadLocal 里面不就是封装了一个 Map 吗？自己都可以写一个 ThreadLocal 了，尝试一下吧。</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> MyThreadLocal&lt;T&gt; {
+
+    <span class="keyword">private</span> Map&lt;Thread, T&gt; container = Collections.synchronizedMap(<span class="keyword">new</span> HashMap&lt;Thread, T&gt;());
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span>(T <span class="keyword">value</span>) {
+        container.put(Thread.currentThread(), <span class="keyword">value</span>);
+    }
+
+    <span class="keyword">public</span> T <span class="title">get</span>() {
+        Thread thread = Thread.currentThread();
+        T <span class="keyword">value</span> = container.<span class="keyword">get</span>(thread);
+        <span class="keyword">if</span> (<span class="keyword">value</span> == <span class="keyword">null</span> &amp;&amp; !container.containsKey(thread)) {
+            <span class="keyword">value</span> = initialValue();
+            container.put(thread, <span class="keyword">value</span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">value</span>;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span>() {
+        container.remove(Thread.currentThread());
+    }
+
+    <span class="keyword">protected</span> T <span class="title">initialValue</span>() {
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+}
+</code></pre><p>以上完全山寨了一个 ThreadLocal，其中中定义了一个同步 Map（为什么要这样？请读者自行思考），代码应该非常容易读懂。</p>
+<p>下面用这 MyThreadLocal 再来实现一把看看。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SequenceC</span> <span class="keyword">implements</span> <span class="title">Sequence</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> MyThreadLocal&lt;Integer&gt; numberContainer = <span class="keyword">new</span> MyThreadLocal&lt;Integer&gt;() {
+        <span class="annotation">@Override</span>
+        <span class="keyword">protected</span> Integer <span class="title">initialValue</span>() {
+            <span class="keyword">return</span> <span class="number">0</span>;
+        }
+    };
+
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNumber</span>() {
+        numberContainer.set(numberContainer.get() + <span class="number">1</span>);
+        <span class="keyword">return</span> numberContainer.get();
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+        Sequence sequence = <span class="keyword">new</span> SequenceC();
+
+        ClientThread thread1 = <span class="keyword">new</span> ClientThread(sequence);
+        ClientThread thread2 = <span class="keyword">new</span> ClientThread(sequence);
+        ClientThread thread3 = <span class="keyword">new</span> ClientThread(sequence);
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+    }
+}
+</code></pre><p>以上代码其实就是将 ThreadLocal 替换成了 MyThreadLocal，仅此而已，运行效果和之前的一样，也是正确的。</p>
+<p>其实 ThreadLocal 可以单独成为一种设计模式，就看你怎么看了。 </p>
+<p>ThreadLocal 具体有哪些使用案例呢？</p>
+<p>我想首先要说的就是：通过 ThreadLocal 存放 JDBC Connection，以达到事务控制的能力。</p>
+<p>如何实现呢？下回分解！</p>
+<p>ThreadLocal 那点事儿（续集）</p>
+<p>注意：当您在一个类中使用了 static 成员变量的时候，一定要多问问自己，这个 static 成员变量需要考虑“线程安全”吗？（也就是说，多个线程需要独享自己的 static 成员变量吗？）如果需要考虑，那就请用 ThreadLocal 吧！</p>
+<hr>
+<p>本篇是《ThreadLocal 那点事儿》的续集，如果您没看上一篇，就就有点亏了。如果您错过了这一篇，那亏得就更大了。</p>
+<p>还是保持我一贯的 Style，用一个 Demo 来说话吧。用户提出一个需求：当修改产品价格的时候，需要记录操作日志，什么时候做了什么事情。</p>
+<p>想必这个案例，只要是做过应用系统的小伙伴们，都应该遇到过吧？无外乎数据库里就两张表：product 与 log，用两条 SQL 语句应该可以解决问题：</p>
+<pre><code><span class="operator"><span class="keyword">update</span> product <span class="keyword">set</span> price = ? <span class="keyword">where</span> id = ?
+<span class="keyword">insert</span> <span class="keyword">into</span> log (created, description) <span class="keyword">values</span> (?, ?)</span>
+</code></pre><p>But！要确保这两条 SQL 语句必须在同一个事务里进行提交，否则有可能 update 提交了，但 insert 却没有提交。如果这样的事情真的发生了，我们肯定会被用户指着鼻子狂骂：“为什么产品价格改了，却看不到什么时候改的呢？”。</p>
+<p>聪明的我在接到这个需求以后，是这样做的：</p>
+<p>首先，我写一个 DBUtil 的工具类，封装了数据库的常用操作： </p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBUtil</span> {</span>
+    <span class="comment">// 数据库配置</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String driver = <span class="string">"com.mysql.jdbc.Driver"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String url = <span class="string">"jdbc:mysql://localhost:3306/demo"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String username = <span class="string">"root"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String password = <span class="string">"root"</span>;
+
+    <span class="comment">// 定义一个数据库连接</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> Connection conn = <span class="keyword">null</span>;
+
+    <span class="comment">// 获取连接</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span>() {
+        <span class="keyword">try</span> {
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, username, password);
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        }
+        <span class="keyword">return</span> conn;
+    }
+
+    <span class="comment">// 关闭连接</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">closeConnection</span>() {
+        <span class="keyword">try</span> {
+            <span class="keyword">if</span> (conn != <span class="keyword">null</span>) {
+                conn.close();
+            }
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre><p>里面搞了一个 static 的 Connection，这下子数据库连接就好操作了，牛逼吧！</p>
+<p>然后，我定义了一个接口，用于给逻辑层来调用：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">interface</span> ProductService {
+
+    <span class="keyword">void</span> updateProductPrice(<span class="keyword">long</span> productId, <span class="keyword">int</span> price);
+}
+</code></pre><p>根据用户提出的需求，我想这个接口完全够用了。根据 productId 去更新对应 Product 的 price，然后再插入一条数据到 log 表中。</p>
+<p>其实业务逻辑也不太复杂，于是我快速地完成了 ProductService 接口的实现类：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductServiceImpl</span> <span class="keyword">implements</span> <span class="title">ProductService</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String UPDATE_PRODUCT_SQL = <span class="string">"update product set price = ? where id = ?"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String INSERT_LOG_SQL = <span class="string">"insert into log (created, description) values (?, ?)"</span>;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateProductPrice</span>(<span class="keyword">long</span> productId, <span class="keyword">int</span> price) {
+        <span class="keyword">try</span> {
+            <span class="comment">// 获取连接</span>
+            Connection conn = DBUtil.getConnection();
+            conn.setAutoCommit(<span class="keyword">false</span>); <span class="comment">// 关闭自动提交事务（开启事务）</span>
+
+            <span class="comment">// 执行操作</span>
+            updateProduct(conn, UPDATE_PRODUCT_SQL, productId, price); <span class="comment">// 更新产品</span>
+            insertLog(conn, INSERT_LOG_SQL, <span class="string">"Create product."</span>); <span class="comment">// 插入日志</span>
+
+            <span class="comment">// 提交事务</span>
+            conn.commit();
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        } <span class="keyword">finally</span> {
+            <span class="comment">// 关闭连接</span>
+            DBUtil.closeConnection();
+        }
+    }
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">updateProduct</span>(Connection conn, String updateProductSQL, <span class="keyword">long</span> productId, <span class="keyword">int</span> productPrice) <span class="keyword">throws</span> Exception {
+        PreparedStatement pstmt = conn.prepareStatement(updateProductSQL);
+        pstmt.setInt(<span class="number">1</span>, productPrice);
+        pstmt.setLong(<span class="number">2</span>, productId);
+        <span class="keyword">int</span> rows = pstmt.executeUpdate();
+        <span class="keyword">if</span> (rows != <span class="number">0</span>) {
+            System.out.println(<span class="string">"Update product success!"</span>);
+        }
+    }
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insertLog</span>(Connection conn, String insertLogSQL, String logDescription) <span class="keyword">throws</span> Exception {
+        PreparedStatement pstmt = conn.prepareStatement(insertLogSQL);
+        pstmt.setString(<span class="number">1</span>, <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss SSS"</span>).format(<span class="keyword">new</span> Date()));
+        pstmt.setString(<span class="number">2</span>, logDescription);
+        <span class="keyword">int</span> rows = pstmt.executeUpdate();
+        <span class="keyword">if</span> (rows != <span class="number">0</span>) {
+            System.out.println(<span class="string">"Insert log success!"</span>);
+        }
+    }
+}
+</code></pre><p>代码的可读性还算不错吧？这里我用到了 JDBC 的高级特性 Transaction 了。暗自庆幸了一番之后，我想是不是有必要写一个客户端，来测试一下执行结果是不是我想要的呢？ 于是我偷懒，直接在 ProductServiceImpl 中增加了一个 main() 方法：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+    ProductService productService = <span class="keyword">new</span> ProductServiceImpl();
+    productService.updateProductPrice(<span class="number">1</span>, <span class="number">3000</span>);
+}
+</code></pre><p>我想让 productId 为 1 的产品的价格修改为 3000。于是我把程序跑了一遍，控制台输出：</p>
+<pre><code><span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+</code></pre><p>应该是对了。作为一名专业的程序员，为了万无一失，我一定要到数据库里在看看。没错！product 表对应的记录更新了，log 表也插入了一条记录。这样就可以将 ProductService 接口交付给别人来调用了。</p>
+<p>几个小时过去了，QA 妹妹开始骂我：“我靠！我才模拟了 10 个请求，你这个接口怎么就挂了？说是数据库连接关闭了！”。</p>
+<p>听到这样的叫声，让我浑身打颤，立马中断了我的小视频，赶紧打开 IDE，找到了这个 ProductServiceImpl 这个实现类。好像没有 Bug 吧？但我现在不敢给她任何回应，我确实有点怕她的。</p>
+<p>我突然想起，她是用工具模拟的，也就是模拟多个线程了！那我自己也可以模拟啊，于是我写了一个线程类：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClientThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> {</span>
+
+    <span class="keyword">private</span> ProductService productService;
+
+    <span class="keyword">public</span> <span class="title">ClientThread</span>(ProductService productService) {
+        <span class="keyword">this</span>.productService = productService;
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>() {
+        System.out.println(Thread.currentThread().getName());
+        productService.updateProductPrice(<span class="number">1</span>, <span class="number">3000</span>);
+    }
+}
+</code></pre><p>我用这线程去调用 ProduceService 的方法，看看是不是有问题。此时，我还要再修改一下 main() 方法：</p>
+<pre><code><span class="comment">// public static void main(String[] args) {</span>
+<span class="comment">//     ProductService productService = new ProductServiceImpl();</span>
+<span class="comment">//     productService.updateProductPrice(1, 3000);</span>
+<span class="comment">// }</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) {
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
+        ProductService productService = <span class="keyword">new</span> ProductServiceImpl();
+        ClientThread thread = <span class="keyword">new</span> ClientThread(productService);
+        thread.start();
+    }
+}
+</code></pre><p>我也模拟 10 个线程吧，我就不信那个邪了！</p>
+<p>运行结果真的让我很晕、很晕：</p>
+<pre><code>Thread-<span class="number">1</span>
+Thread-<span class="number">3</span>
+Thread-<span class="number">5</span>
+Thread-<span class="number">7</span>
+Thread-<span class="number">9</span>
+Thread-<span class="number">0</span>
+Thread-<span class="number">2</span>
+Thread-<span class="number">4</span>
+Thread-<span class="number">6</span>
+Thread-<span class="number">8</span>
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+Update product success!
+Insert log success!
+<span class="label">com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException:</span> No operations allowed after connection closed.
+at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeConstructorAccessorImpl</span><span class="preprocessor">.newInstance</span>0(Native Method)
+at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.NativeConstructorAccessorImpl</span><span class="preprocessor">.newInstance</span>(NativeConstructorAccessorImpl<span class="preprocessor">.java</span>:<span class="number">39</span>)
+at sun<span class="preprocessor">.reflect</span><span class="preprocessor">.DelegatingConstructorAccessorImpl</span><span class="preprocessor">.newInstance</span>(DelegatingConstructorAccessorImpl<span class="preprocessor">.java</span>:<span class="number">27</span>)
+at java<span class="preprocessor">.lang</span><span class="preprocessor">.reflect</span><span class="preprocessor">.Constructor</span><span class="preprocessor">.newInstance</span>(Constructor<span class="preprocessor">.java</span>:<span class="number">513</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.Util</span><span class="preprocessor">.handleNewInstance</span>(Util<span class="preprocessor">.java</span>:<span class="number">411</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.Util</span><span class="preprocessor">.getInstance</span>(Util<span class="preprocessor">.java</span>:<span class="number">386</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.SQLError</span><span class="preprocessor">.createSQLException</span>(SQLError<span class="preprocessor">.java</span>:<span class="number">1015</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.SQLError</span><span class="preprocessor">.createSQLException</span>(SQLError<span class="preprocessor">.java</span>:<span class="number">989</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.SQLError</span><span class="preprocessor">.createSQLException</span>(SQLError<span class="preprocessor">.java</span>:<span class="number">975</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.SQLError</span><span class="preprocessor">.createSQLException</span>(SQLError<span class="preprocessor">.java</span>:<span class="number">920</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.ConnectionImpl</span><span class="preprocessor">.throwConnectionClosedException</span>(ConnectionImpl<span class="preprocessor">.java</span>:<span class="number">1304</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.ConnectionImpl</span><span class="preprocessor">.checkClosed</span>(ConnectionImpl<span class="preprocessor">.java</span>:<span class="number">1296</span>)
+at <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.ConnectionImpl</span><span class="preprocessor">.commit</span>(ConnectionImpl<span class="preprocessor">.java</span>:<span class="number">1699</span>)
+at <span class="keyword">com</span><span class="preprocessor">.smart</span><span class="preprocessor">.sample</span><span class="preprocessor">.test</span><span class="preprocessor">.transaction</span><span class="preprocessor">.solution</span>1<span class="preprocessor">.ProductServiceImpl</span><span class="preprocessor">.updateProductPrice</span>(ProductServiceImpl<span class="preprocessor">.java</span>:<span class="number">25</span>)
+at <span class="keyword">com</span><span class="preprocessor">.smart</span><span class="preprocessor">.sample</span><span class="preprocessor">.test</span><span class="preprocessor">.transaction</span><span class="preprocessor">.ClientThread</span><span class="preprocessor">.run</span>(ClientThread<span class="preprocessor">.java</span>:<span class="number">18</span>)
+</code></pre><p>我靠！竟然在多线程的环境下报错了，果然是数据库连接关闭了。怎么回事呢？我陷入了沉思中。于是我 Copy 了一把那句报错信息，在百度、Google，还有 OSC 里都找了，解答实在是千奇百怪。</p>
+<p>我突然想起，既然是跟 Connection 有关系，那我就将主要精力放在检查 Connection 相关的代码上吧。是不是 Connection 不应该是 static 的呢？我当初设计成 static 的主要是为了让 DBUtil 的 static 方法访问起来更加方便，用 static 变量来存放 Connection 也提高了性能啊。怎么搞呢？</p>
+<p>于是我看到了 OSC 上非常火爆的一篇文章《ThreadLocal 那点事儿》，终于才让我明白了！原来要使每个线程都拥有自己的连接，而不是共享同一个连接，否则线程1有可能会关闭线程2的连接，所以线程2就报错了。一定是这样！</p>
+<p>我赶紧将 DBUtil 给重构了：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> DBUtil {
+    <span class="comment">// 数据库配置</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> final String driver = <span class="string">"com.mysql.jdbc.Driver"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> final String url = <span class="string">"jdbc:mysql://localhost:3306/demo"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> final String username = <span class="string">"root"</span>;
+    <span class="keyword">private</span> <span class="keyword">static</span> final String password = <span class="string">"root"</span>;
+
+    <span class="comment">// 定义一个用于放置数据库连接的局部线程变量（使每个线程都拥有自己的连接）</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Connection&gt; connContainer = <span class="keyword">new</span> ThreadLocal&lt;Connection&gt;();
+
+    <span class="comment">// 获取连接</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span>() {
+        Connection conn = connContainer.<span class="keyword">get</span>();
+        <span class="keyword">try</span> {
+            <span class="keyword">if</span> (conn == <span class="keyword">null</span>) {
+                Class.forName(driver);
+                conn = DriverManager.getConnection(url, username, password);
+            }
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        } <span class="keyword">finally</span> {
+            connContainer.<span class="keyword">set</span>(conn);
+        }
+        <span class="keyword">return</span> conn;
+    }
+
+    <span class="comment">// 关闭连接</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">closeConnection</span>() {
+        Connection conn = connContainer.<span class="keyword">get</span>();
+        <span class="keyword">try</span> {
+            <span class="keyword">if</span> (conn != <span class="keyword">null</span>) {
+                conn.close();
+            }
+        } <span class="keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        } <span class="keyword">finally</span> {
+            connContainer.remove();
+        }
+    }
+}
+</code></pre><p>我把 Connection 放到了 ThreadLocal 中，这样每个线程之间就隔离了，不会相互干扰了。</p>
+<p>此外，在 getConnection() 方法中，首先从 ThreadLocal 中（也就是 connContainer 中） 获取 Connection，如果没有，就通过 JDBC 来创建连接，最后再把创建好的连接放入这个 ThreadLocal 中。可以把 ThreadLocal 看做是一个容器，一点不假。</p>
+<p>同样，我也对 closeConnection() 方法做了重构，先从容器中获取 Connection，拿到了就 close 掉，最后从容器中将其 remove 掉，以保持容器的清洁。</p>
+<p>这下应该行了吧？我再次运行 main() 方法：</p>
+<pre><code><span class="keyword">Thread</span>-<span class="number">0</span>
+<span class="keyword">Thread</span>-<span class="number">2</span>
+<span class="keyword">Thread</span>-<span class="number">4</span>
+<span class="keyword">Thread</span>-<span class="number">6</span>
+<span class="keyword">Thread</span>-<span class="number">8</span>
+<span class="keyword">Thread</span>-<span class="number">1</span>
+<span class="keyword">Thread</span>-<span class="number">3</span>
+<span class="keyword">Thread</span>-<span class="number">5</span>
+<span class="keyword">Thread</span>-<span class="number">7</span>
+<span class="keyword">Thread</span>-<span class="number">9</span>
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+<span class="keyword">Update</span> product success!
+<span class="keyword">Insert</span> log success!
+</code></pre><p>我去！总算是解决了，QA 妹妹，你应该会对我微笑一下吧？</p>
+<p>感谢您的关注，分享是一种快乐，也希望得到您的支持与批评！</p>
+<p>注意：该示例仅用于说明 TheadLocal 的基本用法。在实际工作中，推荐使用连接池来管理数据库连接。示例中的代码仅作参考，使用前请酌情考虑。</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

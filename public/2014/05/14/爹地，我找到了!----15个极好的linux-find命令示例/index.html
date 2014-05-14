@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>爹地，我找到了! -- 15个极好的Linux find命令示例 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="前阵子，我们审查了15件实事 find命令的例子（第一部分）。查找命令可以做很多比只是在寻找基于名称的文件 （第2部分）在这篇文章中，让我们来讨论15高级find命令的例子， 包括-根据它访问，修改或改变的时间查找文件，查找文件相比之下，执行操作找到的文件等， 拉梅什纳塔拉詹：这是我的照片中的可爱的小女儿。她很高兴地发现在加州长滩水族馆海狮。 
+基于访问/修改/更改时间查找文件
+你可以找到基于以下">
+  
+  <meta content="article" property="og:type">
+<meta content="爹地，我找到了! -- 15个极好的Linux find命令示例" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/爹地，我找到了!----15个极好的linux-find命令示例/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="前阵子，我们审查了15件实事 find命令的例子（第一部分）。查找命令可以做很多比只是在寻找基于名称的文件 （第2部分）在这篇文章中，让我们来讨论15高级find命令的例子， 包括-根据它访问，修改或改变的时间查找文件，查找文件相比之下，执行操作找到的文件等， 拉梅什纳塔拉詹：这是我的照片中的可爱的小女儿。她很高兴地发现在加州长滩水族馆海狮。 
+基于访问/修改/更改时间查找文件
+你可以找到基于以下" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/爹地，我找到了!----15个极好的linux-find命令示例/">
+  <time datetime="2014-05-14T06:34:41.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">爹地，我找到了! -- 15个极好的Linux find命令示例</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>前阵子，我们审查了15件实事 find命令的例子（第一部分）。查找命令可以做很多比只是在寻找基于名称的文件 （第2部分）在这篇文章中，让我们来讨论15高级find命令的例子， 包括-根据它访问，修改或改变的时间查找文件，查找文件相比之下，执行操作找到的文件等， 拉梅什纳塔拉詹：这是我的照片中的可爱的小女儿。她很高兴地发现在加州长滩水族馆海狮。 </p>
+<p><strong>基于访问/修改/更改时间查找文件</strong></p>
+<p>你可以找到基于以下三个文件的时间属性的文件。</p>
+<ul>
+<li>访问时间的文件。文件访问时，访问时间得到更新。</li>
+<li>的文件的修改时间。文件内容修改时，修改时间得到更新。</li>
+<li>更改文件的时间。更改时间时，被更新的inode数据的变化。</li>
+</ul>
+<p>在下面的例子中，min选项之间的差异和时间选项是参数。</p>
+<ul>
+<li>分论点将它的参数为分钟。例如，60分钟（1小时）= 60分钟。</li>
+<li>时间参数，将它的参数为24小时。例如，时间2 = 2 * 24小时（2天）。</li>
+<li>虽然这样做的24个小时计算，小数部分都将被忽略，所以25小时为24小时，和47小时取为24小时，仅48小时为48小时。要获得更清晰的参考atime的部分find命令的手册页。</li>
+</ul>
+<p><strong>例1：找到在1个小时内被更改的文件</strong></p>
+<p>想要通过文件修改时间找出文件，可以使用参数 -mmin -mtime。下面是man手册中有关mmin和mtime的定义。</p>
+<ul>
+<li>-mmin n 文件最后一次修改是在n分钟之内</li>
+<li>-mtime n 文件最后一次修改是在 n*24小时之内（译者注：也就是n天了呗）</li>
+</ul>
+<p>执行下面例子中的命令，将会找到当前目录以及其子目录下，最近一次修改时间在1个小时（60分钟）之内的文件或目录</p>
+<pre><code><span class="preprocessor"># find . -mmin -60</span>
+</code></pre><p>同样的方式，执行下面例子中的命令，将会找到24小时（1天）内修改了的文件（文件系统根目录 / 下）</p>
+<pre><code><span class="preprocessor"># find / -mtime -1</span>
+</code></pre><p><strong>例2：找到1个小时内被访问过的文件</strong></p>
+<p>想要通过文件访问时间找出文件，可以使用参数 -amin -atime。下面是man手册中有关amin和atime的定义。</p>
+<ul>
+<li>-amin n 文件最后一次访问是在n分钟之内</li>
+<li>-atime n 文件最后一次访问是在 n*24小时之内</li>
+</ul>
+<p>执行下面例子中的命令，将会找到当前目录以及其子目录下，最近一次访问时间在1个小时（60分钟）之内的文件或目录</p>
+<pre><code><span class="preprocessor"># find . -amin -60</span>
+</code></pre><p>同样的方式，执行下面例子中的命令，将会找到24小时（1天）内被访问了的文件（文件系统根目录 / 下）</p>
+<pre><code><span class="preprocessor"># find / -atime -1</span>
+</code></pre><p><strong>例3：查找一个小时内状态被改变的文件</strong></p>
+<p>（译者注：这里的改变更第1个例子的更改文件内容时间是不同概念，这里是更改的是文件inode的数据，比如文件的权限，所属人等等信息）</p>
+<p>要查找文件的inode的更改时间，使用-cmin和-ctime选项</p>
+<ul>
+<li>-cmin n  文件的状态在n分钟内被改变</li>
+<li>-ctime n  文件状态在n*24小时内（也就是n天内）被改变</li>
+</ul>
+<p>（译者注：如果上面的n为-n形式，则表示n分钟/天之内，n为+n则表示n分钟/天之前）</p>
+<p>下面的例子在当前目录和其子目录下面查找一个小时内文件状态改变的文件（也就是60分钟内）：</p>
+<pre><code><span class="preprocessor"># find . -cmin -60</span>
+</code></pre><p>同样的道理，下面的例子在根目录/及其子目录下一天内（24小时内）文件状态被改变的文件列表：</p>
+<pre><code><span class="preprocessor"># find / -ctime -1</span>
+</code></pre><p><strong>例4：搜索仅仅限定于文件，不显示文件夹</strong></p>
+<p>上面的例子搜索出来不仅仅有文件，还会显示文件夹。因为当一个文件被访问的时候，它所处的文件夹也会被访问，如果你对文件夹不感兴趣，那么可以使用 -type f 选项</p>
+<p>下面的例子会显示30分钟内被修改过的文件，文件夹不显示：</p>
+<pre><code><span class="preprocessor"># find /etc/sysconfig -amin -30</span>
+.
+./console
+./network-scripts
+./i18n
+./rhn
+./rhn/clientCaps.d
+./networking
+./networking/profiles
+./networking/profiles/<span class="default"><span class="keyword">default</span></span>
+./networking/profiles/<span class="default"><span class="keyword">default</span>/resolv.conf</span>
+./networking/profiles/<span class="default"><span class="keyword">default</span>/hosts</span>
+./networking/devices
+./apm-scripts
+[注: 上面的输出包含了文件和文件夹]
+
+<span class="preprocessor"># find /etc/sysconfig -amin -30 -type f</span>
+./i18n
+./networking/profiles/<span class="default"><span class="keyword">default</span>/resolv.conf</span>
+./networking/profiles/<span class="default"><span class="keyword">default</span>/hosts</span>
+[注: 上面的输出仅仅包含文件]
+</code></pre><p><strong>例5： 仅仅查找非隐藏的文件（不显示隐藏文件）：</strong></p>
+<p>如果我们查找的时候不想隐藏文件也显示出来，可以使用下面的正则式查找：</p>
+<p>下面的命令会显示当前目录及其子目录下15分钟内文件内容被修改过的文件，并且只列出非隐藏文件。也就是说，以.开头的文件时不会显示出来的</p>
+<pre><code><span class="special">#</span> find . -mmin -15 <span class="command">\(</span> ! -regex ".*/<span class="command">\.</span>.*" <span class="command">\)</span>
+</code></pre><p>基于文件比较的查找命令</p>
+<p>我们平时通过更别的东西进行比较，会更容易记住一些事情。比如说我想找出在我编辑test文件之后编辑过的文件。你可以通过test这个文件的编辑时间作为比较基准去查找之后编辑过的文件：</p>
+<p><strong>例6： 查找文件修改时间在某一文件修改后的文件：</strong></p>
+<pre><code>语法： find -newer <span class="keyword">FILE</span>
+</code></pre><p>下面的例子显示在/etc/passwd修改之后被修改过的文件。对于系统管理员，想知道你新增了一个用户后去跟踪系统的活动状态是很有帮助的（万一那新用户不老实，一上来就乱搞，你很快就知道了  ^_^）：</p>
+<pre><code><span class="preprocessor"># find -newer /etc/passwd</span>
+</code></pre><p><strong>例7：查找文件访问时间在某一文件的修改时间之后的文件：</strong></p>
+<pre><code><span class="preprocessor"># find -newer /etc/passwd</span>
+</code></pre><p>下面的例子显示所有在/etc/hosts文件被修改后被访问到的文件。如果你新增了一个主机/端口记录在/etc/hosts文件中，你很可能很想知道在那之后有什么文件被访问到了，下面是这个命令：</p>
+<pre><code><span class="preprocessor"># find -anewer /etc/hosts</span>
+</code></pre><p><strong>例8：查找状态改变时间在某个文件修改时间之后的文件：</strong></p>
+<pre><code>语法： find -cnewer <span class="keyword">FILE</span>
+</code></pre><p>下面的例子显示在修改文件/etc/fstab之后所有文件状态改变过的文件。如果你在/etc/fstab新增了一个挂载点，你很可能想知道之后哪些文件的状态发生了改变，这时候你可以使用如下命令：</p>
+<pre><code><span class="preprocessor"># find -cnewer /etc/fstab</span>
+</code></pre><p>在查找到的文件列表结果上直接执行命令：</p>
+<p>这之前你已经看到了如果通过find命令去查找各种条件的文件列表。如果你对这些find命令还不熟悉，我建议你看完上面的第一部分</p>
+<p>接下来这部分我们向你介绍如果在find命令上执行各种不同的命令，也就是说如何去操作find命令查找出来的文件列表。</p>
+<p>我们能在find命令查找出来的文件名列表上指定任意的操作：</p>
+<pre><code># find <span class="tag">&lt;<span class="title">CONDITION</span> <span class="attribute">to</span> <span class="attribute">Find</span> <span class="attribute">files</span>&gt;</span> -exec <span class="tag">&lt;<span class="title">OPERATION</span>&gt;</span> \;
+</code></pre><p>其中的OPERATION可以是任意的命令，下面列举一下比较常用的：</p>
+<ul>
+<li>rm 命令，用于删除find查找出来的文件</li>
+<li>mv 命令，用于重命名查找出的文件</li>
+<li>ls -l 命令，显示查找出的文件的详细信息</li>
+<li>md5sum， 对查找出的文件进行md5sum运算，可以获得一个字符串，用于检测文件内容的合法性</li>
+<li>wc 命令，用于统计计算文件的单词数量，文件大小等待</li>
+<li>执行任何Unix的shell命令</li>
+<li>执行你自己写的shell脚本，参数就是每个查找出来的文件名</li>
+</ul>
+<p><strong>例9：在find命令输出上使用 ls -l， 列举出1小时内被编辑过的文件的详细信息</strong></p>
+<pre><code><span class="preprocessor"># find -mmin -60</span>
+./cron
+./secure
+
+<span class="preprocessor"># find -mmin -60 -exec ls -l {} \;</span>
+-rw<span class="comment">-------  1 root root 1028 Jun 21 15:01 ./cron</span>
+-rw<span class="comment">-------  1 root root 831752 Jun 21 15:42 ./secure</span>
+</code></pre><p><strong>例10：仅仅在当前文件系统中搜索</strong></p>
+<p>系统管理员有时候仅仅想在/挂载的文件系统分区上搜索，而不想去搜索其他的挂载分区，比如/home/挂载分区。如果你有多个分区被挂载了，你想在/下搜索，一般可以按下面的这样做</p>
+<p>下面这个命令会搜索根目录/及其子目录下所有.log结尾的文件名。如果你有多个分区在/下面，那么这个搜索会去搜索所有的被挂载的分区：</p>
+<pre><code><span class="array"># find </span>/ -name <span class="string">"*.log"</span>
+</code></pre><p>如果我们使用-xdev选项，那么仅仅会在在当前文件系统中搜索，下面是在xdev的man page上面找到的一段-xdev的定义：</p>
+<ul>
+<li>-xdev Don’t descend directories on other filesystems.</li>
+</ul>
+<p>下面的命令会在/目录及其子目录下搜索当前文件系统(也就是/挂载的文件系统)中所有以.log结尾的文件，也就是说如果你有多个分区挂载在/下面，下面的搜索不会去搜索其他的分区的（比如/home/）</p>
+<pre><code><span class="array"># find </span>/ -xdev -name <span class="string">"*.log"</span>
+</code></pre><p><strong>例11： 在同一个命令中使用多个{}</strong></p>
+<p>linux手册说命令中只能使用一个{}，不过你可以像下面这样在同一个命令中使用多个{}</p>
+<pre><code># find -name <span class="string">"*.txt"</span> cp <span class="list">{}</span> <span class="list">{}</span>.bkup \;
+</code></pre><p>注意，在同一个命令中使用这个{}是可以的，但是在不同的命令里就不行了，也就是说，如果你想象下面这样重命名文件是行不通的</p>
+<pre><code>find <span class="attribute">-name</span> <span class="string">"*.txt"</span> <span class="attribute">-exec</span> mv {} <span class="string">`basename {} .htm`</span><span class="built_in">.</span>html <span class="subst">\</span>;
+</code></pre><p><strong>例12： 使用多个{}实例</strong></p>
+<p>你可以像下面这样写一个shell脚本去模拟上面那个重命名的例子</p>
+<pre><code># mv <span class="string">"$1"</span> <span class="string">"<span class="escape">`b</span>asename "</span>$<span class="number">1</span><span class="string">" .htm<span class="escape">`.</span>html"</span>
+</code></pre><p>上面的双引号是为了防止文件名中出现的空格，不加的话会有问题。然后你把这个shell脚本保存为mv.sh，你可以像下面这样使用find命令了</p>
+<pre><code>find <span class="attribute">-name</span> <span class="string">"*.html"</span> <span class="attribute">-exec</span> <span class="built_in">.</span>/mv<span class="built_in">.</span>sh <span class="string">'{}'</span> <span class="subst">\</span>;
+</code></pre><p>所以，任何情况下你在find命令执行中想使用同一个文件名多次的话，先写一个脚本，然后在find中通过-exec执行这个脚本，把文件名参数传递进去就行，这是最简单的办法</p>
+<p><strong>例13： 将错误重定向到/dev/nul</strong></p>
+<p>重定向错误输出一般不是什么好的想法。一个有经验的程序员懂得在终端显示错误并及时修正它是很重要的。</p>
+<p>尤其是在find命令中重定向错误不是个好的实践。 但是如果你确实不想看到那些烦人的错误，想把错误都重定向到null设备中（也就是linux上的黑洞装置，任何丢进去的东西消失的无影无踪了）。你可以像下面这样做</p>
+<pre><code>find -name <span class="string">"*.txt"</span> <span class="number">2</span>&gt;&gt;<span class="regexp">/dev/</span><span class="literal">null</span>
+</code></pre><p>有时候这是很有用的。比如，如果你想通过你自己的账号在/目录下查找所有的*.conf文件，你会得到很多很多的”Permission denied”的错误消息， 就像下面这样：</p>
+<pre><code>$ find <span class="subst">/</span> <span class="attribute">-name</span> <span class="string">"*.conf"</span>
+/sbin/generate<span class="attribute">-modprobe</span><span class="built_in">.</span>conf
+find: /tmp/orbit<span class="attribute">-root</span>: Permission denied
+find: /tmp/ssh<span class="attribute">-gccBMp5019</span>: Permission denied
+find: /tmp/keyring<span class="subst">-</span><span class="number">5</span>iqiGo: Permission denied
+find: /<span class="built_in">var</span>/<span class="keyword">log</span>/httpd: Permission denied
+find: /<span class="built_in">var</span>/<span class="keyword">log</span>/ppp: Permission denied
+/boot/grub/grub<span class="built_in">.</span>conf
+find: /<span class="built_in">var</span>/<span class="keyword">log</span>/audit: Permission denied
+find: /<span class="built_in">var</span>/<span class="keyword">log</span>/squid: Permission denied
+find: /<span class="built_in">var</span>/<span class="keyword">log</span>/samba: Permission denied
+find: /<span class="built_in">var</span>/<span class="keyword">cache</span>/alchemist/printconf<span class="built_in">.</span>rpm/wm: Permission denied
+<span class="preprocessor">[</span>Note: There are two valid <span class="subst">*</span><span class="built_in">.</span>conf files burned <span class="keyword">in</span> the <span class="string">"Permission denied"</span> messages<span class="preprocessor">]</span><span class="markup"></span>
+</code></pre><p>你说烦人不？所以，如果你只想看到find命令真实的查找结果而不是这些”Permission denied”错误消息，你可以将这些错误消息重定向到/dev/null中去</p>
+<pre><code>$ find <span class="subst">/</span> <span class="attribute">-name</span> <span class="string">"*.conf"</span> <span class="number">2</span><span class="subst">&gt;&gt;</span>/dev/<span class="built_in">null</span>
+/sbin/generate<span class="attribute">-modprobe</span><span class="built_in">.</span>conf
+/boot/grub/grub<span class="built_in">.</span>conf
+<span class="preprocessor">[</span>Note: <span class="literal">All</span> the <span class="string">"Permission denied"</span> messages are <span class="literal">not</span> displayed<span class="preprocessor">]</span><span class="markup"></span>
+</code></pre><p><strong>例14： 将文件名中的空格换成下划线</strong></p>
+<p>你从网上下载下来的音频文件的文件名很多都带有空格。但是带有空格的文件名在linux(类Unix)系统里面是很不好的。你可以使用find然后后面加上rename命令的替换功能去重命名这些文件，将空格转换成下划线</p>
+<p>下面显示怎样将所有mp3文件的文件名中的空格换成_</p>
+<pre><code>$ find . -<span class="typedef"><span class="keyword">type</span> f -iname “*.mp3″ -exec rename “s/ /_/g” <span class="container">{}</span> \;</span>
+</code></pre><p><strong>例15： 在find结果中同时执行两条命令</strong></p>
+<p>在find的man page页面中，下面是一次文件查找遍历中使用两条命令的语法举例</p>
+<p>下面的find命令的例子，遍历文件系统一次，列出拥有setuid属性的文件和目录，写入/root/suid.txt文件， 如果文件大小超过100M，将其记录到/root/big.txt中</p>
+<pre><code><span class="array"># find </span>/ \( -perm -<span class="number">4000</span> -fprintf /root/suid.txt <span class="string">'%#m %u %p\n'</span> \) , \
+\( -size +<span class="number">100</span>M -fprintf /root/big.txt <span class="string">'%-10s %p\n'</span> \)
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

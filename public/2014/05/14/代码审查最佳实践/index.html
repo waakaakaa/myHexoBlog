@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>代码审查最佳实践 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="代码审查可以帮助提高代码质量，避免由于代码习惯而造成的 bug。下面列出的这些要点因该可以作为大部分代码审查的指导，如果是 Java 应用的话，这些建议应该被视作最佳实践。
+文档
+
+Javadoc 应该在每一个类和方法中添加。
+如果是修复某个 bug，应该添加 bug ID。
+走捷径的方法或者复杂的逻辑要有解释。
+如果代码会被公开，每个文件头都要标注版权信息。
+复杂的 HTML，JavaScri">
+  
+  <meta content="article" property="og:type">
+<meta content="代码审查最佳实践" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/代码审查最佳实践/" property="og:url">
+<meta content="http://waakaakaa.qiniudn.com/08215745_vKS6.png" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="代码审查可以帮助提高代码质量，避免由于代码习惯而造成的 bug。下面列出的这些要点因该可以作为大部分代码审查的指导，如果是 Java 应用的话，这些建议应该被视作最佳实践。
+文档
+
+Javadoc 应该在每一个类和方法中添加。
+如果是修复某个 bug，应该添加 bug ID。
+走捷径的方法或者复杂的逻辑要有解释。
+如果代码会被公开，每个文件头都要标注版权信息。
+复杂的 HTML，JavaScri" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/代码审查最佳实践/">
+  <time datetime="2014-05-14T03:59:45.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">代码审查最佳实践</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://waakaakaa.qiniudn.com/08215745_vKS6.png" alt="image"></p>
+<p>代码审查可以帮助提高代码质量，避免由于代码习惯而造成的 bug。下面列出的这些要点因该可以作为大部分代码审查的指导，如果是 Java 应用的话，这些建议应该被视作最佳实践。</p>
+<p>文档</p>
+<ol>
+<li>Javadoc 应该在每一个类和方法中添加。</li>
+<li>如果是修复某个 bug，应该添加 bug ID。</li>
+<li>走捷径的方法或者复杂的逻辑要有解释。</li>
+<li>如果代码会被公开，每个文件头都要标注版权信息。</li>
+<li>复杂的 HTML，JavaScript，CSS 应该包含文档。</li>
+</ol>
+<p>功能</p>
+<ol>
+<li>如果类似的逻辑被使用了多次，应该把它写成一个帮助类，然后在多出调用。</li>
+<li>鼓励使用 API 而不是重复编写代码解决相同的问题。</li>
+<li>要强调代码的单元测试。</li>
+<li>任何新加的代码不应该破坏已有的代码。</li>
+<li>假如是 Web 应用，JSP 不应该包含 Java 代码。</li>
+</ol>
+<p>安全</p>
+<ol>
+<li>任何代码都不能执行用户的输入，除非转义过了。这个常常包含 JavaScript 的 eval 函数和 SQL 语句。</li>
+<li>禁止那些在短时间内提交非常多请求的 IP。</li>
+<li>任何类，变量，还有方法都应该有正确的访问域。</li>
+<li>尽量避免使用 iframe。</li>
+</ol>
+<p>性能</p>
+<ol>
+<li>所有数据库和文件操句柄在不需要的时候都应该被关闭。</li>
+<li>SQL 语句的写法会导致性能千差万别。</li>
+<li>鼓励创建不可变（immutable）的类。</li>
+<li>类似的逻辑代码，尽量通过 if else 语句来实现更多的重用。</li>
+<li>尽量避免使用重对象（heavy objects）。</li>
+<li>如果是 Web 项目，请检查是否使用了合适的图片尺寸，CSS sprites 和浏览器缓存等技术。</li>
+<li>全局都需要的信息保存在 application context 中。</li>
+</ol>
+<p>编码习惯</p>
+<ol>
+<li>没有被使用的变量要删除。</li>
+<li>针对不同的 Exception 要用不同的 catch 语句，而不是一个 Exception 解决所有问题。</li>
+<li>针对变量，方法和类要用相同的命名方法。</li>
+<li>常量应该被写在独立的常量类中。</li>
+<li>每行代码的尾部不要有多余的空格。</li>
+<li>对于括号，循环，if语句等等要用统一的格式。</li>
+<li>每一个单独的方法不应该超过100行。</li>
+<li>一个单独的语句不应该超过编辑器的可视区域，它可以被拆分成几行。</li>
+<li>检查 String 对象既不是null也不是空的最好方法是 if(“”.equals(str))</li>
+<li>假如类有很多成员变量，并且实例化的时候只需要少数变量传入的话，最好使用静态工厂方法，而不是重载构造函数。</li>
+<li>给方法添加适当的访问控制，而不是所有都是 public。</li>
+<li>遵守项目中使用的框架的最佳实践建议，例如 Spring，Struts，Hibernate，jQuery。</li>
+</ol>
+<p>以上的某些注意点可以通过静态代码检查工具完成，例如 CheckStyle，FindBugs 和 JTest。</p>
+<p><a href="http://javaexperience.com/code-review-checklist/" target="_blank">原文链接</a>，<a href="http://www.oschina.net/news/31722/code-review-best-practices" target="_blank">OSChina.NET</a> 编译</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Peter Norvig：编程语言的选择并不重要 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Lisp被许多资深程序员视为编程语言中的圣杯，因为学起来很难。著名程序员、最热门的技术问答网站StackOverflow创始人Joel Spolsky曾经在“Java语言学校的危险性”一 文中说，自己当年在大学里学习用Lisp的导论课程也是苦不堪言，而Lisp这样的函数式语言实际开发中并不常用，但是一旦到了体现优势的时候，你如果不 懂，将失之千里。他还认为，Google的核心技术之一MapRed">
+  
+  <meta content="article" property="og:type">
+<meta content="Peter Norvig：编程语言的选择并不重要" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/peter-norvig：编程语言的选择并不重要/" property="og:url">
+<meta content="http://waakaakaa.qiniudn.com/58_101020040205_1.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Lisp被许多资深程序员视为编程语言中的圣杯，因为学起来很难。著名程序员、最热门的技术问答网站StackOverflow创始人Joel Spolsky曾经在“Java语言学校的危险性”一 文中说，自己当年在大学里学习用Lisp的导论课程也是苦不堪言，而Lisp这样的函数式语言实际开发中并不常用，但是一旦到了体现优势的时候，你如果不 懂，将失之千里。他还认为，Google的核心技术之一MapRed" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/peter-norvig：编程语言的选择并不重要/">
+  <time datetime="2014-05-14T03:49:25.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Peter Norvig：编程语言的选择并不重要</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://waakaakaa.qiniudn.com/58_101020040205_1.jpg" alt="image"></p>
+<p>Lisp被许多资深程序员视为编程语言中的圣杯，因为学起来很难。著名程序员、最热门的技术问答网站StackOverflow创始人Joel Spolsky曾经在<a href="http://www.ruanyifeng.com/blog/2008/12/the_perils_of_javaschools.html" target="_blank">“Java语言学校的危险性”</a>一 文中说，自己当年在大学里学习用Lisp的导论课程也是苦不堪言，而Lisp这样的函数式语言实际开发中并不常用，但是一旦到了体现优势的时候，你如果不 懂，将失之千里。他还认为，Google的核心技术之一MapReduce就来自函数式语言，而且使Google领先微软多年。请注意，Spolsky曾 经1990年代微软的Excel项目经理，VBA的主要创造者。</p>
+<p>《Unix编程艺术》的作者Eric Raymond也在<a href="http://www.aka.org.cn/Docs/hacker-howto_2001.html" target="_blank">“如何成为黑客”</a>（英文版）中说过，Lisp是对黑客特别重要的语言，“掌握了之后，你会得到丰富的启迪和经验。 即使实际上很少使用Lisp，这些经验也会使你在以后的日子里成为更好的程序员。”</p>
+<p>而Paul Graham更是Lisp的头号吹鼓手，他曾与蠕虫病毒发明者Robert Morris一起，成功地用Lisp开发历史上第一个Web应用——ViaWeb，并高价卖给Yahoo致富。他在2001年写了一篇宣传Lisp的名文“<a href="http://www.paulgraham.com/avg.html" target="_blank">Beating the Averages</a>”（英文），其中说到：“Lisp之所以极为优秀，并不是因为只有铁杆粉丝才知道的某些魔术般的性质，而在于它确实是最强大的编程语言。大家不用它的原因，在于编程语言不只是技术，而且也是思维习惯，这是改变起来最慢的东西。”</p>
+<p>有意思的是，美国时间10月18日，著名技术新闻网站Hacker News上，名为kung-fu-master的用户发了一篇名为<a href="http://news.ycombinator.com/item?id=1803351" target="_blank">“问PG: Lisp与Python (2010)”</a>的帖子，内容很简单：“好像许多Lisp老枪都开始转而用Python的（比如Peter Norvig）。今天你怎么看Lisp与Python？”</p>
+<p>这里的PG就是指Hacker News的创始人、著名Lisp程序员与吹鼓手Paul Graham。而其中提到的Peter Norvig则是另一个著名Lisp程序员，现任Google研发总监。他有一篇经典的文章<a href="http://daiyuwen.freeshell.org/gb/misc/21-days-cn.html" target="_blank">“十年学会编程”</a>（英文版），相信大家都已经看过，他的首选推荐语言当然也是Lisp（更准确的说是Lisp的方言Scheme）。</p>
+<p>面对这样直接的问题，专家们是怎么回答的呢？</p>
+<p>Paul Graham说：</p>
+<blockquote>
+<p>这问题好像来自2005年而不是2010年。Lisp现在由于Clojure（Lisp的现代方言，可以运行在JVM和.NET上——CSDN编者注）的出现，已经又变得时髦了。当然Python也有很好的库，但是我觉得用缺乏宏的语言编程很受局限。</p>
+</blockquote>
+<p>许多网友对Python没有宏的问题进行了讨论。有人说不支持宏是出于代码可读性的考虑。而更多的人则认同宏是一种抽象工具，任何工具都会被误用、滥用，但并不表示工具本身有问题。</p>
+<p>另一Lisp专家，《Coder at Work》和《Practical Common Lisp》作者&gt;Peter Seibel也加入了讨论（他最近忙于编辑一种杂志Code Quarterly）。他说：自己与Peter Norvig有类似的体验。虽然自己Lisp非常熟练，但是在表达算法方面Python是最佳选择。不过，相比Lisp实现，CPython的运行速度慢得惊人，甚至差5-10倍。</p>
+<p>而Peter Norvig也罕见地现出真身，给出了自己的回答，内容一如既往地经典：</p>
+<blockquote>
+<p>我是Peter Norvig。我转向Python不是因为它比Lisp更好、更令人满意、更实用，而是因为它用作伪代码更合适。许多学生说，在《人工智能》 （Norvig与Russell合著的经典教材）一书中的伪代码与我们在网上提供的Lisp代码之间进行转换太难了。于是我要寻找一种更近似伪代码的语 言，发现Python是最合适的。然后我就自学了Python，熟练到足以实现教材中示例的地步。我发现Python对于一些类型的小问题非常合适，有些 库也是我与其他的一些代码（包括在Google内和网上其他地方的代码）集成非常需要的。 我认为Lisp对更大的项目和编译速度很重要的应用而言仍然具有优势。但是在主要目的是交流而非编程的时候（比如针对数量众多的学生），Python更有 优势。</p>
+</blockquote>
+<p>就更一般意义上的编程而言，在Google和其他地方，我认为语言的选择并不如其他方面的选择那么重要：如果你有了正确的总体架构、正确的程序员团队、正确的开发过程（能够快速开发、持续改善），那么很多语言都能胜任；但如果以上的东西你没有，那无论选择什么语言，你都会陷入一团糟。</p>
+<p>还有人找出今年2月Norvig在一次采访（无法直接访问）中类似的话，透露了Google内部的一些信息：</p>
+<ol>
+<li><p>Google最开始似乎核心程序员都是用C++的，效率很高。这部分形成了公司的文化。</p>
+</li>
+<li><p>Google早期的Lisp程序员(Erann Gat) 注意到其他程序员和自己的效率差不多，甚至更好。关键还是在人，与20年前相比，现在语言的选择不那么重要了。</p>
+</li>
+<li><p>Lisp是为单个程序员或者一小组程序员进行探索性工作而专门设计的……如果我想自己在周末修改代码，会更愿意用Lisp，但是如果有几百个程序员一起改代码，那就不是编程语言的问题，而是社会问题了。</p>
+</li>
+<li><p>库。</p>
+</li>
+</ol>
+<p>其他人举出的材料中，最有意思的应该来自Lisp之父、计算机科学巨人约翰麦卡锡。<a href="http://smuglispweeny.blogspot.com/2008/02/ooh-ooh-my-turn-why-lisp.html" target="_blank">这篇博客</a>（无法直接访问）里生动讲述了这位图灵奖得主在某次听Peter Norvig改而鼓吹Python的演讲后的情景：</p>
+<p>Norvig演讲后，进入提问环节。出乎我的意料，他点了一位皱巴巴的老头。老头的胡子和头发都花白了，而且乱糟糟的，看 上去像是来此参观但是迷路了，到这里来休息一下，好奇地听听我们在说什么。我第一个念头是，估计他已经被这么艰深的话题弄晕了。但是马上想到，不对啊，这 里离斯坦福很近，这老头的年纪也对，难道是……</p>
+<p>只听Norvig说：“是，John，你有什么问题？”我记不清Lisp之父当时怎么问的了，但不超过十个词，就是问 Python是否能如Lisp那样优雅地像数据一样处理代码。“不，John，不行。”Norvig回答，然后静等麦卡锡继续发问。但是，老人什么也没有 再说。此时真是无言胜千语啊……</p>
+<p>看来，在大师眼中，数据与代码等同处理是最重要的语言特性之一。他还曾经在访谈中这样评价Ruby（提问者说Ruby从Lisp中借鉴了很多）：“Ruby能像数据那样使用列表结构吗？那每次算加和减的时候，都得进行解析啰？这方面Ruby还不如1960年的Lisp。”</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

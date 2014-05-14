@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>单个 C 文件实现的 Web 服务器 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="/*
+ * WebServer.c
+ *
+ *  Created on: Nov 3, 2012
+ *      Author: pavithra
+ *
+ * A web server in C language using only the standard libraries.
+ * The port number is passed as an argument.
+ *
+ */
+
+#incl">
+  
+  <meta content="article" property="og:type">
+<meta content="单个 C 文件实现的 Web 服务器" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/单个-c-文件实现的-web-服务器/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="/*
+ * WebServer.c
+ *
+ *  Created on: Nov 3, 2012
+ *      Author: pavithra
+ *
+ * A web server in C language using only the standard libraries.
+ * The port number is passed as an argument.
+ *
+ */
+
+#incl" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/单个-c-文件实现的-web-服务器/">
+  <time datetime="2014-05-14T07:58:31.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">单个 C 文件实现的 Web 服务器</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>/*</p>
+<pre><code> * WebServer.c
+ *
+ *  Created on: Nov <span class="number">3</span>, <span class="number">2012</span>
+ *      Author: pavithra
+ *
+ * A web server in C language <span class="keyword">using</span> only the standard libraries.
+ * The port number is passed as an argument.
+ *
+ */
+
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<span class="preprocessor">#include &lt;unistd.h&gt;</span>
+<span class="preprocessor">#include &lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include &lt;string.h&gt;</span>
+<span class="preprocessor">#include &lt;sys/types.h&gt;</span>
+<span class="preprocessor">#include &lt;sys/socket.h&gt;</span>
+<span class="preprocessor">#include &lt;netinet/in.h&gt;</span>
+<span class="preprocessor">#include &lt;fcntl.h&gt;</span>
+<span class="preprocessor">#include &lt;errno.h&gt;</span>
+
+<span class="preprocessor">#define EOL "\r\n"</span>
+<span class="preprocessor">#define EOL_SIZE 2</span>
+
+<span class="keyword">typedef</span> <span class="keyword">struct</span> {
+ <span class="keyword">char</span> *ext;
+ <span class="keyword">char</span> *mediatype;
+} extn;
+
+<span class="comment">//Possible media types</span>
+extn extensions[] ={
+ {<span class="string">"gif"</span>, <span class="string">"image/gif"</span> },
+ {<span class="string">"txt"</span>, <span class="string">"text/plain"</span> },
+ {<span class="string">"jpg"</span>, <span class="string">"image/jpg"</span> },
+ {<span class="string">"jpeg"</span>,<span class="string">"image/jpeg"</span>},
+ {<span class="string">"png"</span>, <span class="string">"image/png"</span> },
+ {<span class="string">"ico"</span>, <span class="string">"image/ico"</span> },
+ {<span class="string">"zip"</span>, <span class="string">"image/zip"</span> },
+ {<span class="string">"gz"</span>,  <span class="string">"image/gz"</span>  },
+ {<span class="string">"tar"</span>, <span class="string">"image/tar"</span> },
+ {<span class="string">"htm"</span>, <span class="string">"text/html"</span> },
+ {<span class="string">"html"</span>,<span class="string">"text/html"</span> },
+ {<span class="string">"php"</span>, <span class="string">"text/html"</span> },
+ {<span class="string">"pdf"</span>,<span class="string">"application/pdf"</span>},
+ {<span class="string">"zip"</span>,<span class="string">"application/octet-stream"</span>},
+ {<span class="string">"rar"</span>,<span class="string">"application/octet-stream"</span>},
+ {<span class="number">0</span>,<span class="number">0</span>} };
+
+<span class="comment">/*
+ A helper function
+ */</span>
+<span class="keyword">void</span> error(<span class="keyword">const</span> <span class="keyword">char</span> *msg) {
+ perror(msg);
+ <span class="built_in">exit</span>(<span class="number">1</span>);
+}
+
+<span class="comment">/*
+ A helper function
+ */</span>
+<span class="keyword">int</span> get_file_size(<span class="keyword">int</span> fd) {
+ <span class="keyword">struct</span> stat stat_struct;
+ <span class="keyword">if</span> (fstat(fd, &amp;stat_struct) == -<span class="number">1</span>)
+  <span class="keyword">return</span> (<span class="number">1</span>);
+ <span class="keyword">return</span> (<span class="keyword">int</span>) stat_struct.st_size;
+}
+
+<span class="comment">/*
+ A helper function
+ */</span>
+<span class="keyword">void</span> send_new(<span class="keyword">int</span> fd, <span class="keyword">char</span> *msg) {
+ <span class="keyword">int</span> len = <span class="built_in">strlen</span>(msg);
+ <span class="keyword">if</span> (send(fd, msg, len, <span class="number">0</span>) == -<span class="number">1</span>) {
+  <span class="built_in">printf</span>(<span class="string">"Error in send\n"</span>);
+ }
+}
+
+<span class="comment">/*
+ This function recieves the buffer
+ until an "End of line(EOL)" byte is recieved
+ */</span>
+<span class="keyword">int</span> recv_new(<span class="keyword">int</span> fd, <span class="keyword">char</span> *buffer) {
+ <span class="keyword">char</span> *p = buffer; <span class="comment">// Use of a pointer to the buffer rather than dealing with the buffer directly</span>
+ <span class="keyword">int</span> eol_matched = <span class="number">0</span>; <span class="comment">// Use to check whether the recieved byte is matched with the buffer byte or not</span>
+ <span class="keyword">while</span> (recv(fd, p, <span class="number">1</span>, <span class="number">0</span>) != <span class="number">0</span>) <span class="comment">// Start receiving 1 byte at a time</span>
+ {
+  <span class="keyword">if</span> (*p == EOL[eol_matched]) <span class="comment">// if the byte matches with the first eol byte that is '\r'</span>
+    {
+   ++eol_matched;
+   <span class="keyword">if</span> (eol_matched == EOL_SIZE) <span class="comment">// if both the bytes matches with the EOL</span>
+   {
+    *(p + <span class="number">1</span> - EOL_SIZE) = <span class="string">'\0'</span>; <span class="comment">// End the string</span>
+    <span class="keyword">return</span> (<span class="built_in">strlen</span>(buffer)); <span class="comment">// Return the bytes recieved</span>
+   }
+  } <span class="keyword">else</span> {
+   eol_matched = <span class="number">0</span>;
+  }
+  p++; <span class="comment">// Increment the pointer to receive next byte</span>
+ }
+ <span class="keyword">return</span> (<span class="number">0</span>);
+}
+
+<span class="comment">/*
+ A helper function: Returns the
+ web root location.
+ */</span>
+<span class="keyword">char</span>* webroot() {
+ <span class="comment">// open the file "conf" for reading</span>
+ FILE *in = fopen(<span class="string">"conf"</span>, <span class="string">"rt"</span>);
+ <span class="comment">// read the first line from the file</span>
+ <span class="keyword">char</span> buff[<span class="number">1000</span>];
+ fgets(buff, <span class="number">1000</span>, in);
+ <span class="comment">// close the stream</span>
+ fclose(in);
+ <span class="keyword">char</span>* nl_ptr = <span class="built_in">strrchr</span>(buff, <span class="string">'\n'</span>);
+ <span class="keyword">if</span> (nl_ptr != NULL)
+  *nl_ptr = <span class="string">'\0'</span>;
+ <span class="keyword">return</span> strdup(buff);
+}
+
+<span class="comment">/*
+ Handles php requests
+ */</span>
+<span class="keyword">void</span> php_cgi(<span class="keyword">char</span>* script_path, <span class="keyword">int</span> fd) {
+ send_new(fd, <span class="string">"HTTP/1.1 200 OK\n Server: Web Server in C\n Connection: close\n"</span>);
+ dup2(fd, STDOUT_FILENO);
+ <span class="keyword">char</span> script[<span class="number">500</span>];
+ <span class="built_in">strcpy</span>(script, <span class="string">"SCRIPT_FILENAME="</span>);
+ <span class="built_in">strcat</span>(script, script_path);
+ putenv(<span class="string">"GATEWAY_INTERFACE=CGI/1.1"</span>);
+ putenv(script);
+ putenv(<span class="string">"QUERY_STRING="</span>);
+ putenv(<span class="string">"REQUEST_METHOD=GET"</span>);
+ putenv(<span class="string">"REDIRECT_STATUS=true"</span>);
+ putenv(<span class="string">"SERVER_PROTOCOL=HTTP/1.1"</span>);
+ putenv(<span class="string">"REMOTE_HOST=127.0.0.1"</span>);
+ execl(<span class="string">"/usr/bin/php-cgi"</span>, <span class="string">"php-cgi"</span>, NULL);
+}
+
+<span class="comment">/*
+ This function parses the HTTP requests,
+ arrange resource locations,
+ check for supported media types,
+ serves files in a web root,
+ sends the HTTP error codes.
+ */</span>
+<span class="keyword">int</span> connection(<span class="keyword">int</span> fd) {
+ <span class="keyword">char</span> request[<span class="number">500</span>], resource[<span class="number">500</span>], *ptr;
+ <span class="keyword">int</span> fd1, length;
+ <span class="keyword">if</span> (recv_new(fd, request) == <span class="number">0</span>) {
+  <span class="built_in">printf</span>(<span class="string">"Recieve Failed\n"</span>);
+ }
+ <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, request);
+ <span class="comment">// Check for a valid browser request</span>
+ ptr = <span class="built_in">strstr</span>(request, <span class="string">" HTTP/"</span>);
+ <span class="keyword">if</span> (ptr == NULL) {
+  <span class="built_in">printf</span>(<span class="string">"NOT HTTP !\n"</span>);
+ } <span class="keyword">else</span> {
+  *ptr = <span class="number">0</span>;
+  ptr = NULL;
+
+  <span class="keyword">if</span> (<span class="built_in">strncmp</span>(request, <span class="string">"GET "</span>, <span class="number">4</span>) == <span class="number">0</span>) {
+   ptr = request + <span class="number">4</span>;
+  }
+  <span class="keyword">if</span> (ptr == NULL) {
+   <span class="built_in">printf</span>(<span class="string">"Unknown Request ! \n"</span>);
+  } <span class="keyword">else</span> {
+   <span class="keyword">if</span> (ptr[<span class="built_in">strlen</span>(ptr) - <span class="number">1</span>] == <span class="string">'/'</span>) {
+    <span class="built_in">strcat</span>(ptr, <span class="string">"index.html"</span>);
+   }
+   <span class="built_in">strcpy</span>(resource, webroot());
+   <span class="built_in">strcat</span>(resource, ptr);
+   <span class="keyword">char</span>* s = <span class="built_in">strchr</span>(ptr, <span class="string">'.'</span>);
+   <span class="keyword">int</span> i;
+   <span class="keyword">for</span> (i = <span class="number">0</span>; extensions[i].ext != NULL; i++) {
+    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(s + <span class="number">1</span>, extensions[i].ext) == <span class="number">0</span>) {
+     fd1 = open(resource, O_RDONLY, <span class="number">0</span>);
+     <span class="built_in">printf</span>(<span class="string">"Opening \"%s\"\n"</span>, resource);
+     <span class="keyword">if</span> (fd1 == -<span class="number">1</span>) {
+      <span class="built_in">printf</span>(<span class="string">"404 File not found Error\n"</span>);
+      send_new(fd, <span class="string">"HTTP/1.1 404 Not Found\r\n"</span>);
+      send_new(fd, <span class="string">"Server : Web Server in C\r\n\r\n"</span>);
+      send_new(fd, <span class="string">"&lt;html&gt;&lt;head&gt;&lt;title&gt;404 Not Found&lt;/head&gt;&lt;/title&gt;"</span>);
+      send_new(fd, <span class="string">"&lt;body&gt;&lt;p&gt;404 Not Found: The requested resource could not be found!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"</span>);
+      <span class="comment">//Handling php requests</span>
+     } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">strcmp</span>(extensions[i].ext, <span class="string">"php"</span>) == <span class="number">0</span>) {
+      php_cgi(resource, fd);
+      sleep(<span class="number">1</span>);
+      close(fd);
+      <span class="built_in">exit</span>(<span class="number">1</span>);
+     } <span class="keyword">else</span> {
+      <span class="built_in">printf</span>(<span class="string">"200 OK, Content-Type: %s\n\n"</span>,
+        extensions[i].mediatype);
+      send_new(fd, <span class="string">"HTTP/1.1 200 OK\r\n"</span>);
+      send_new(fd, <span class="string">"Server : Web Server in C\r\n\r\n"</span>);
+      <span class="keyword">if</span> (ptr == request + <span class="number">4</span>) <span class="comment">// if it is a GET request</span>
+        {
+       <span class="keyword">if</span> ((length = get_file_size(fd1)) == -<span class="number">1</span>)
+        <span class="built_in">printf</span>(<span class="string">"Error in getting size !\n"</span>);
+       size_t total_bytes_sent = <span class="number">0</span>;
+       ssize_t bytes_sent;
+       <span class="keyword">while</span> (total_bytes_sent &lt; length) {
+        <span class="comment">//Zero copy optimization</span>
+        <span class="keyword">if</span> ((bytes_sent = sendfile(fd, fd1, <span class="number">0</span>,
+          length - total_bytes_sent)) &lt;= <span class="number">0</span>) {
+         <span class="keyword">if</span> (errno == EINTR || errno == EAGAIN) {
+          <span class="keyword">continue</span>;
+         }
+         perror(<span class="string">"sendfile"</span>);
+         <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        total_bytes_sent += bytes_sent;
+       }
+
+      }
+     }
+     <span class="keyword">break</span>;
+    }
+    <span class="keyword">int</span> size = <span class="keyword">sizeof</span>(extensions) / <span class="keyword">sizeof</span>(extensions[<span class="number">0</span>]);
+    <span class="keyword">if</span> (i == size - <span class="number">2</span>) {
+     <span class="built_in">printf</span>(<span class="string">"415 Unsupported Media Type\n"</span>);
+     send_new(fd, <span class="string">"HTTP/1.1 415 Unsupported Media Type\r\n"</span>);
+     send_new(fd, <span class="string">"Server : Web Server in C\r\n\r\n"</span>);
+     send_new(fd, <span class="string">"&lt;html&gt;&lt;head&gt;&lt;title&gt;415 Unsupported Media Type&lt;/head&gt;&lt;/title&gt;"</span>);
+     send_new(fd, <span class="string">"&lt;body&gt;&lt;p&gt;415 Unsupported Media Type!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"</span>);
+    }
+   }
+
+   close(fd);
+  }
+ }
+ shutdown(fd, SHUT_RDWR);
+}
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[]) {
+ <span class="keyword">int</span> sockfd, newsockfd, portno, pid;
+ socklen_t clilen;
+ <span class="keyword">struct</span> sockaddr_in serv_addr, cli_addr;
+
+ <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
+  <span class="built_in">fprintf</span>(stderr, <span class="string">"ERROR, no port provided\n"</span>);
+  <span class="built_in">exit</span>(<span class="number">1</span>);
+ }
+ sockfd = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);
+ <span class="keyword">if</span> (sockfd &lt; <span class="number">0</span>)
+  error(<span class="string">"ERROR opening socket"</span>);
+ bzero((<span class="keyword">char</span> *) &amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr));
+ portno = atoi(argv[<span class="number">1</span>]);
+ serv_addr.sin_family = AF_INET;
+ serv_addr.sin_addr.s_addr = INADDR_ANY;
+ serv_addr.sin_port = htons(portno);
+ <span class="keyword">if</span> (bind(sockfd, (<span class="keyword">struct</span> sockaddr *) &amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr)) &lt; <span class="number">0</span>)
+  error(<span class="string">"ERROR on binding"</span>);
+ listen(sockfd, <span class="number">5</span>);
+ clilen = <span class="keyword">sizeof</span>(cli_addr);
+ <span class="comment">/*
+  Server runs forever, forking off a separate
+  process for each connection.
+  */</span>
+ <span class="keyword">while</span> (<span class="number">1</span>) {
+  newsockfd = accept(sockfd, (<span class="keyword">struct</span> sockaddr *) &amp;cli_addr, &amp;clilen);
+  <span class="keyword">if</span> (newsockfd &lt; <span class="number">0</span>)
+   error(<span class="string">"ERROR on accept"</span>);
+  pid = fork();
+  <span class="keyword">if</span> (pid &lt; <span class="number">0</span>)
+   error(<span class="string">"ERROR on fork"</span>);
+  <span class="keyword">if</span> (pid == <span class="number">0</span>) {
+   close(sockfd);
+   connection(newsockfd);
+   <span class="built_in">exit</span>(<span class="number">0</span>);
+  } <span class="keyword">else</span>
+   close(newsockfd);
+ } <span class="comment">/* end of while */</span>
+ close(sockfd);
+ <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">/* we never get here */</span>
+}
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

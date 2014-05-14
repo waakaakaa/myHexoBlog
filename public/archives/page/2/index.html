@@ -1,0 +1,1047 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>归档 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+  <meta content="website" property="og:type">
+<meta content="挖之家" property="og:title">
+<meta content="http://waakaakaa.github.io/archives/page/2/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content">
+
+
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/一种在图片里隐藏你的程序代码的技术/">
+  <time datetime="2014-05-14T05:00:19.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/一种在图片里隐藏你的程序代码的技术/">一种在图片里隐藏你的程序代码的技术</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>我最近开发了我的第一个网页游戏：<a href="http://www.patrick-wied.at/projects/html5-video-puzzle" target="_blank">一个HTML5的视频智力游戏</a>。 开发的过程很有趣，我喜欢编程，但当实现了游戏逻辑后，我有了一个有趣的想法：为什么不想个办法把代码隐藏起来？起初我想到的是一些很简单的做法，比如禁 止上下文菜单，以防右键点击时可以查看页面源代码。但这毫无意义，右键菜单不能用，人们仍然可以通过键盘快捷键或菜单栏里的“查看源文件”来观看源代码。</p>
+<p><strong>一张图片能隐含千言万语</strong>。</p>
+<p>这依赖于图片的体积。但我决定要把源代码加密存放到一张图片里。HTML5的画布(canvas)组件很适合干这种事情，因为它支持针对图像像素的 操作。一个像素由四个值(通道)来表示：红，绿，蓝和alpha通道。它们的值的分布范围是从0到255。我的Javascript代码就是一个个的字 符，每个字符都有一个ASCII对应值。ASCII值的范围也是0-255，所以，我想做的是，遍历画布上的每个像素，给每个像素设置3个代码字符的 ASCII值作为它的RGB值，你可以通过charCodeAt函数轻松的取出这些字符。</p>
+<blockquote>
+<p>.charCodeAt(0)</p>
+</blockquote>
+<p>生成的是一张色彩斑斓、很小的图片，它就是我的程序代码  。看看吧:</p>
+<p>解码的时候，我只需要把这个图片画到画布上，遍历像素点，取出r,g,b值所代表的字符：</p>
+<blockquote>
+<p>String.fromCharCode(code)</p>
+</blockquote>
+<p>把它们连接成一个大的字符串，这就是你的代码了——可执行的代码。 </p>
+<p>这样就能保护你的源代码了吗？</p>
+<p>其实不能——一个有经验的(甚至没有经验的)程序员仍然能够知道如何去解码图片，取出里面的代码，但我想这是能防止那些怀着不良商业目的人偷盗你的的代码的第一步措施——而那些能够想出如何解码的程序员(大部分)都不是来剽窃的 </p>
+<p><strong>这种方法的主要缺陷</strong></p>
+<p>这种技术只能应用在支持HTML5画布(canvas)技术的现代浏览器里，IE6、IE8 里肯定是不行的。甚至有些现代的浏览器对于图片的alpha通道的编码也有支持问题，所以，每个像素点你只能放3个字符——一个100×100大小的图片 可以存放3万个文本字符。 </p>
+<p>你还有其它简单的能防止别人拷贝你的代码的方法吗？我们当然可以把字符进行加密，但如何保证你的解密步骤能不被人轻易的破解呢？告诉我你的想法吧！</p>
+<p>[本文英文原文链接：<a href="http://www.patrick-wied.at/blog/a-technique-for-hiding-your-javascript-code" target="_blank">A technique for hiding your JavaScript Code</a> ]</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/java-处理-xml-的三种主流技术及介绍/">
+  <time datetime="2014-05-14T04:38:14.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/java-处理-xml-的三种主流技术及介绍/">Java 处理 XML 的三种主流技术及介绍</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>XML (Extensible Markup Language) 意为可扩展标记语言，它已经是软件开发行业中大多数程序员和厂商用以选择作为数据传输的载体。本文作者对于 Java 处理 XML 的几种主流技术进行一些总结和介绍，希望帮助那些有不同需求的开发人员对于 XML 处理技术的作出最优的选择。</p>
+<p>最初，XML 语言仅仅是意图用来作为 HTML 语言的替代品而出现的，但是随着该语言的不断发展和完善，人们越来越发现它所具有的优点：例如标记语言可扩展，严格的语法规定，可使用有意义的标记，内容 存储和表现分离等等优势注定了该语言从诞生之日起就会走向辉煌。 XML 语言在成为 W3C 标准之后进入到了一个快速发展的时期，当然它本身所具有的一系列优点和优势也注定了各大技术厂商对它的偏爱，Java 作为软件行业的一种开发技术也迅速作出了反应，出现了多种对 XML 支持的工具，本文将会从这个角度对 Java 处理 XML 的几种主流技术进行介绍，希望能对您有所帮助。在这篇文章中，您将会得到以下信息：</p>
+<ol>
+<li>Java 提供了哪些优秀的类库及工具便于程序员对 XML 进行处理 ?</li>
+<li>有了 DOM 了，其它工具类库还有必要么 ?</li>
+<li>几个小例程带你快速了解这三种解析方式</li>
+</ol>
+<p>Java 有哪些优秀的类库及工具便于程序员对 XML 进行处理 ?</p>
+<ul>
+<li>大名鼎鼎的 DOM</li>
+<li>绿色环保的 SAX</li>
+<li>默默无闻的 Digester</li>
+</ul>
+<h1 id="XML_三种解析方式简介">XML 三种解析方式简介</h1>
+<p>大名鼎鼎的 DOM</p>
+<p>说它大名鼎鼎可是一点不为过，DOM 是 W3C 处理 XML 的标准 API，它是许多其它与 XML 处理相关的标准的基础，不仅是 Java，其它诸如 Javascript，PHP，MS .NET 等等语言都实现了该标准， 成为了应用最为广泛的 XML 处理方式。当然，为了能提供更多更加强大的功能，Java 对于 DOM 直接扩展工具类有很多，比如很多 Java 程序员耳熟能详的 JDOM，DOM4J 等等， 它们基本上属于对 DOM 接口功能的扩充，保留了很多 DOM API 的特性，许多原本的 DOM 程序员甚至都没有任何障碍就熟练掌握了另外两者的使用，直观、易于操作的方式使它深受广大 Java 程序员的喜爱。</p>
+<p>绿色环保的 SAX</p>
+<p>SAX 的应运而生有它特殊的需要，为什么说它绿色环保呢，这是因为 SAX 使用了最少的系统资源和最快速的解析方式对 XML 处理提供了支持。 但随之而来繁琐的查找方式也给广大程序员带来许多困扰，常常令人头痛不已，同时它对 XPath 查询功能的支持，令人们对它又爱又恨。</p>
+<p>默默无闻的 Digester：XML 的 JavaBean 化</p>
+<p>Digester 是 apache 基金组织下的一个开源项目，笔者对它的了解源于对 Struts 框架的研究，是否有很多程序员想要一解各大开源框架的设计甚至想要自己写一个功能强大的框架时会碰到这样一个难题： 这些形形色色的用 XML 语言标记的框架配置文件，框架底层是用什么技术来解析呢？ DOM 解析耗费时间，SAX 解析又过于繁琐，况且每次解析系统开销也会过大， 于是，大家想到需要用与 XML 结构相对应的 JavaBean 来装载这些信息，由此 Digester 应运而生。它的出现为 XML 转换为 JavaBean 对象的需求带来了方便的操作接口，使得更多的类似需求得到了比较完美的解决方法， 不再需要程序员自己实现此类繁琐的解析程序了。与此同时 SUN 也推出了 XML 和 JavaBean 转换工具类 JAXB，有兴趣的读者可以自行了解。</p>
+<h1 id="三种解析方式比较">三种解析方式比较</h1>
+<p>DOM</p>
+<p>优缺点：实现 W3C 标准，有多种编程语言支持这种解析方式，并且这种方法本身操作上简单快捷，十分易于初学者掌握。其处理方式是将 XML 整个作为类似树结构的方式读入内存中以便操作及解析，因此支持应用程序对 XML 数据的内容和结构进行修改，但是同时由于其需要在处理开始时将整个 XML 文件读入到内存中去进行分析，因此其在解析大数据量的 XML 文件时会遇到类似于内存泄露以及程序崩溃的风险，请对这点多加注意。</p>
+<p>适用范围：小型 XML 文件解析、需要全解析或者大部分解析 XML、需要修改 XML 树内容以生成自己的对象模型</p>
+<p>SAX</p>
+<p>SAX 从根本上解决了 DOM 在解析 XML 文档时产生的占用大量资源的问题。其实现是通过类似于流解析的技术，通读整个 XML 文档树，通过事件处理器来响应程序员对于 XML 数据解析的需求。由于其不需要将整个 XML 文档读入内存当中，它对系统资源的节省是十分显而易见的，它在一些需要处理大型 XML 文档以及性能要求较高的场合有起了十分重要的作用。支持 XPath 查询的 SAX 使得开发人员更加灵活，处理起 XML 来更加的得心应手。但是同时，其仍然有一些不足之处也困扰广大的开发人员：首先是它十分复杂的 API 接口令人望而生畏，其次由于其是属于类似流解析的文件扫描方式，因此不支持应用程序对于 XML 树内容结构等的修改，可能会有不便之处。</p>
+<p>适用范围：大型 XML 文件解析、只需要部分解析或者只想取得部分 XML 树内容、有 XPath 查询需求、有自己生成特定 XML 树对象模型的需求</p>
+<p>Digester/JAXB</p>
+<p>优缺点 : 由于其是在上述两者的基础上衍生出来的工具类，为的是满足将 XML 转换为 JavaBean 的特殊需求，故而没有什么特别明显的优缺点。作为大名鼎鼎的开源框架 Struts 的 XML 解析工具 Digester，为我们带来了将 XML 转换为 JavaBean 的可靠方法。</p>
+<p>适用范围 : 有将 XML 文档直接转换为 JavaBean 需求。</p>
+<p>应用示例</p>
+<p>下面给出一段用于解析的 XML 片段：</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span> 
+ <span class="tag">&lt;<span class="title">books</span>&gt;</span> 
+   <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"001"</span>&gt;</span> 
+      <span class="tag">&lt;<span class="title">title</span>&gt;</span>Harry Potter<span class="tag">&lt;/<span class="title">title</span>&gt;</span> 
+      <span class="tag">&lt;<span class="title">author</span>&gt;</span>J K. Rowling<span class="tag">&lt;/<span class="title">author</span>&gt;</span> 
+   <span class="tag">&lt;/<span class="title">book</span>&gt;</span> 
+   <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"002"</span>&gt;</span> 
+      <span class="tag">&lt;<span class="title">title</span>&gt;</span>Learning XML<span class="tag">&lt;/<span class="title">title</span>&gt;</span> 
+      <span class="tag">&lt;<span class="title">author</span>&gt;</span>Erik T. Ray<span class="tag">&lt;/<span class="title">author</span>&gt;</span> 
+   <span class="tag">&lt;/<span class="title">book</span>&gt;</span> 
+ <span class="tag">&lt;/<span class="title">books</span>&gt;</span> 
+</code></pre><h1 id="DOM_解析_XML">DOM 解析 XML</h1>
+<p>Java 中的 DOM 接口简介： JDK 中的 DOM API 遵循 W3C DOM 规范，其中 org.w3c.dom 包提供了 Document、DocumentType、Node、NodeList、Element 等接口， 这些接口均是访问 DOM 文档所必须的。我们可以利用这些接口创建、遍历、修改 DOM 文档。</p>
+<p>javax.xml.parsers 包中的 DoumentBuilder 和 DocumentBuilderFactory 用于解析 XML 文档生成对应的 DOM Document 对象。</p>
+<p>javax.xml.transform.dom 和 javax.xml.transform.stream 包中 DOMSource 类和 StreamSource 类，用于将更新后的 DOM 文档写入 XML 文件。</p>
+<p>下面给出一个运用 DOM 解析 XML 的例子：</p>
+<pre><code><span class="preprocessor"><span class="keyword">import</span> java.io.File;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> java.io.IOException;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> javax.xml.parsers.DocumentBuilder;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> javax.xml.parsers.DocumentBuilderFactory;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> javax.xml.parsers.ParserConfigurationException;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> org.w3c.dom.Document;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> org.w3c.dom.Element;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> org.w3c.dom.Node;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> org.w3c.dom.NodeList;</span> 
+ <span class="preprocessor"><span class="keyword">import</span> org.xml.sax.SAXException;</span> 
+
+ <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DOMParser</span> {</span> 
+   DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance(); 
+   <span class="comment">//Load and parse XML file into DOM </span>
+   <span class="keyword">public</span> Document parse(String filePath) { 
+      Document document = <span class="literal">null</span>; 
+      <span class="keyword">try</span> { 
+         <span class="comment">//DOM parser instance </span>
+         DocumentBuilder builder = builderFactory.newDocumentBuilder(); 
+         <span class="comment">//parse an XML file into a DOM tree </span>
+         document = builder.parse(<span class="keyword">new</span> File(filePath)); 
+      } <span class="keyword">catch</span> (ParserConfigurationException e) { 
+         e.printStackTrace();  
+      } <span class="keyword">catch</span> (SAXException e) { 
+         e.printStackTrace(); 
+      } <span class="keyword">catch</span> (IOException e) { 
+         e.printStackTrace(); 
+      } 
+      <span class="keyword">return</span> document; 
+   } 
+
+   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) { 
+         DOMParser parser = <span class="keyword">new</span> DOMParser(); 
+         Document document = parser.parse(<span class="string">"books.xml"</span>); 
+         <span class="comment">//get root element </span>
+         Element rootElement = document.getDocumentElement(); 
+
+         <span class="comment">//traverse child elements </span>
+         NodeList nodes = rootElement.getChildNodes(); 
+         <span class="keyword">for</span> (int i=<span class="number">0</span>; i &lt; nodes.getLength(); i++) 
+         { 
+            Node node = nodes.item(i); 
+            <span class="keyword">if</span> (node.getNodeType() == Node.ELEMENT_NODE) {   
+               Element child = (Element) node; 
+               <span class="comment">//process child element </span>
+            } 
+         } 
+
+         NodeList nodeList = rootElement.getElementsByTagName(<span class="string">"book"</span>); 
+         <span class="keyword">if</span>(nodeList != <span class="literal">null</span>) 
+         { 
+            <span class="keyword">for</span> (int i = <span class="number">0</span> ; i &lt; nodeList.getLength(); i++) 
+            {
+                Element element = (Element)nodeList.item(i); 
+                String id = element.getAttribute(<span class="string">"id"</span>); 
+            } 
+         } 
+   } 
+ } 
+</code></pre><p>在上面的例子中，DOMParser 的 Parse() 方法负责解析 XML 文件并生成对应的 DOM Document 对象。其中 DocumentBuilderFactory 用于生成 DOM 文档解析器以便解析 XML 文档。 在获取了 XML 文件对应的 Document 对象之后，我们可以调用一系列的 API 方便的对文档对象模型中的元素进行访问和处理。 需要注意的是调用 Element 对象的 getChildNodes() 方法时将返回其下所有的子节点，其中包括空白节点，因此需要在处理子 Element 之前对节点类型加以判断。</p>
+<p>可以看出 DOM 解析 XML 易于开发，只需要通过解析器建立起 XML 对应的 DOM 树型结构后便可以方便的使用 API 对节点进行访问和处理，支持节点的删除和修改等。 但是 DOM 解析 XML 文件时会将整个 XML 文件的内容解析成树型结构存放在内存中，因此不适合用 DOM 解析很大的 XML 文件。</p>
+<h1 id="SAX_解析_XML">SAX 解析 XML</h1>
+<p>与 DOM 建立树形结构的方式不同，SAX 采用事件模型来解析 XML 文档，是解析 XML 文档的一种更快速、更轻量的方法。 利用 SAX 可以对 XML 文档进行有选择的解析和访问，而不必像 DOM 那样加载整个文档，因此它对内存的要求较低。 但 SAX 对 XML 文档的解析为一次性读取，不创建任何文档对象，很难同时访问文档中的多处数据。</p>
+<p>下面是一个 SAX 解析 XML 的例子：</p>
+<pre><code><span class="keyword">import</span> org.xml.sax.Attributes; 
+ <span class="keyword">import</span> org.xml.sax.SAXException; 
+ <span class="keyword">import</span> org.xml.sax.XMLReader; 
+ <span class="keyword">import</span> org.xml.sax.helpers.DefaultHandler; 
+ <span class="keyword">import</span> org.xml.sax.helpers.XMLReaderFactory; 
+
+ <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SAXParser</span> {</span> 
+
+   class BookHandler extends DefaultHandler { 
+      <span class="keyword">private</span> List&lt;String&gt; nameList; 
+      <span class="keyword">private</span> <span class="keyword">boolean</span> title = <span class="keyword">false</span>; 
+
+      <span class="keyword">public</span> List&lt;String&gt; <span class="title">getNameList</span>() { 
+        <span class="keyword">return</span> nameList; 
+      } 
+      <span class="comment">// Called at start of an XML document </span>
+      <span class="annotation">@Override</span> 
+      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startDocument</span>() <span class="keyword">throws</span> SAXException { 
+         System.out.println(<span class="string">"Start parsing document..."</span>); 
+         nameList = <span class="keyword">new</span> ArrayList&lt;String&gt;(); 
+      } 
+      <span class="comment">// Called at end of an XML document </span>
+      <span class="annotation">@Override</span> 
+      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endDocument</span>() <span class="keyword">throws</span> SAXException {  
+         System.out.println(<span class="string">"End"</span>);  
+      } 
+
+      <span class="javadoc">/** 
+       * Start processing of an element. 
+       *<span class="javadoctag"> @param</span> namespaceURI  Namespace URI 
+       *<span class="javadoctag"> @param</span> localName  The local name, without prefix 
+       *<span class="javadoctag"> @param</span> qName  The qualified name, with prefix 
+       *<span class="javadoctag"> @param</span> atts  The attributes of the element 
+       */</span> 
+      <span class="annotation">@Override</span> 
+      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startElement</span>(String uri, String localName, String qName, 
+         Attributes atts) <span class="keyword">throws</span> SAXException { 
+         <span class="comment">// Using qualified name because we are not using xmlns prefixes here. </span>
+         <span class="keyword">if</span> (qName.equals(<span class="string">"title"</span>)) { 
+            title = <span class="keyword">true</span>; 
+         } 
+      } 
+
+      <span class="annotation">@Override</span> 
+      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">endElement</span>(String namespaceURI, String localName, String qName) 
+           <span class="keyword">throws</span> SAXException { 
+         <span class="comment">// End of processing current element </span>
+         <span class="keyword">if</span> (title) { 
+            title = <span class="keyword">false</span>; 
+         } 
+      } 
+
+      <span class="annotation">@Override</span> 
+      <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">characters</span>(<span class="keyword">char</span>[] ch, <span class="keyword">int</span> start, <span class="keyword">int</span> length) { 
+         <span class="comment">// Processing character data inside an element </span>
+         <span class="keyword">if</span> (title) { 
+            String bookTitle = <span class="keyword">new</span> String(ch, start, length); 
+            System.out.println(<span class="string">"Book title: "</span> + bookTitle); 
+            nameList.add(bookTitle); 
+         } 
+      }             
+   } 
+
+   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span>(String[] args) <span class="keyword">throws</span> SAXException, IOException { 
+      XMLReader parser = XMLReaderFactory.createXMLReader(); 
+      BookHandler bookHandler = (<span class="keyword">new</span> SAXParser()).<span class="keyword">new</span> BookHandler(); 
+      parser.setContentHandler(bookHandler); 
+      parser.parse(<span class="string">"books.xml"</span>); 
+      System.out.println(bookHandler.getNameList()); 
+   } 
+ } 
+</code></pre><p>SAX 解析器接口和事件处理器接口定义在 org.xml.sax 包中。主要的接口包括 ContentHandler、DTDHandler、EntityResolver 及 ErrorHandler。 其中 ContentHandler 是主要的处理器接口，用于处理基本的文档解析事件；DTDHandler 和 EntityResolver 接口用于处理与 DTD 验证和实体解析相关的事件； ErrorHandler 是基本的错误处理接口。DefaultHandler 类实现了上述四个事件处理接口。上面的例子中 BookHandler 继承了 DefaultHandler 类， 并覆盖了其中的五个回调方法 startDocument()、endDocument()、startElement()、endElement() 及 characters() 以加入自己的事件处理逻辑。</p>
+<h1 id="Digester_解析_XML">Digester 解析 XML</h1>
+<p>为了满足将 XML 转换为 JavaBean 的特殊需求，Apache 旗下的一个名为 Digester 的工具为我们提供了这么一个选择。由于最终是将 XML 转化为 JavaBean 存储在内存当中， 故而解析性能等方面其实与使用者并没有多大关系。解析的关键在于用以匹配 XML 的模式以及规则等，由于该工具较为复杂，限于篇幅，作者只能给予简单的介绍。</p>
+<p>下面是一个 Digester 解析 XML 的例子片段：</p>
+<pre><code>// 定义要解析的 XML 的路径，并初始化工具类
+File input = new File(<span class="string">"books.xml"</span>)<span class="comment">; </span>
+Digester digester = new Digester()<span class="comment">; </span>
+
+// 如果碰到了 &lt;books&gt; 这个标签，应该初始化 test<span class="preprocessor">.myBean</span><span class="preprocessor">.Books</span> 这个 JavaBean 并填装相关内容
+digester<span class="preprocessor">.addObjectCreate</span>(<span class="string">"books"</span>, <span class="string">"test.myBean.Books"</span>)<span class="comment">; </span>
+digester<span class="preprocessor">.addSetProperties</span>(<span class="string">"books"</span>)<span class="comment">; </span>
+// 如果碰到了 &lt;books/book&gt; 这个标签，同上初始化 test<span class="preprocessor">.myBean</span><span class="preprocessor">.Book</span> 这个 JavaBean 
+digester<span class="preprocessor">.addObjectCreate</span>(<span class="string">"books/book"</span>, <span class="string">"test.myBean.Book"</span>)<span class="comment">; </span>
+digester<span class="preprocessor">.addSetProperties</span>(<span class="string">"books/book"</span>)<span class="comment">; </span>
+// 通过调用上面已经初始化过的 JavaBean 的 addBook() 方法来把多个 &lt;books/book&gt; 加到一个集合中
+digester<span class="preprocessor">.addSetNext</span>(<span class="string">"books/book"</span>, <span class="string">"addBook"</span>, <span class="string">"test.myBean.Book"</span>)<span class="comment">; </span>
+
+// 定义好了上面的解析规则后，就可以开始进行解析工作了
+Books books = (Books) digester<span class="preprocessor">.parse</span>(input)<span class="comment">; </span>
+</code></pre><p>上述代码简单的向读者展示了 Digester 处理 XML 的一些要点，主要是说明了一些模式以及规则的匹配。 简言之，Digester 就是一种用来把一个 XML 转化为一个与该 XML 结构类似的 JavaBean。你可以把 XML 根元素想象成一个 JavaBean， 该根元素的 attribute 就是这个 JavaBean 的各种 Field，当该根元素有其他子 tag 时，又要把这个子 tag 想象成一个个新的 XML，将其视为一个新的 JavaBean， 并作为一个 Field 加入到父 Bean 当中，然后以此类推，通过循环的方式将整个 XML 进行解析。</p>
+<h1 id="结束语">结束语</h1>
+<p>本文介绍了 Java 解析 XML 的三种常用技术，其中 DOM 易于上手，程序易于理解，但缺点在于占用内存大，不适合于解析较大的 XML 文件； SAX 基于事件模型占用系统资源少，能够胜任较大的 XML 文件解析，但解析过程较为繁琐查找元素不方便； Digester/JAXB 基于上述两种技术衍生而来。文中的实例向读者展示了三种 API 的基本使用方法， 在实际开发过程中使用那种技术解析 XML 更好要依据各自的优缺点视具体情况而定。<br>原文出处：<a href="http://www.ibm.com/developerworks/cn/xml/dm-1208gub/index.html" target="_blank">IBM developerWorks</a> </p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/代码审查最佳实践/">
+  <time datetime="2014-05-14T03:59:45.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/代码审查最佳实践/">代码审查最佳实践</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://waakaakaa.qiniudn.com/08215745_vKS6.png" alt="image"></p>
+<p>代码审查可以帮助提高代码质量，避免由于代码习惯而造成的 bug。下面列出的这些要点因该可以作为大部分代码审查的指导，如果是 Java 应用的话，这些建议应该被视作最佳实践。</p>
+<p>文档</p>
+<ol>
+<li>Javadoc 应该在每一个类和方法中添加。</li>
+<li>如果是修复某个 bug，应该添加 bug ID。</li>
+<li>走捷径的方法或者复杂的逻辑要有解释。</li>
+<li>如果代码会被公开，每个文件头都要标注版权信息。</li>
+<li>复杂的 HTML，JavaScript，CSS 应该包含文档。</li>
+</ol>
+<p>功能</p>
+<ol>
+<li>如果类似的逻辑被使用了多次，应该把它写成一个帮助类，然后在多出调用。</li>
+<li>鼓励使用 API 而不是重复编写代码解决相同的问题。</li>
+<li>要强调代码的单元测试。</li>
+<li>任何新加的代码不应该破坏已有的代码。</li>
+<li>假如是 Web 应用，JSP 不应该包含 Java 代码。</li>
+</ol>
+<p>安全</p>
+<ol>
+<li>任何代码都不能执行用户的输入，除非转义过了。这个常常包含 JavaScript 的 eval 函数和 SQL 语句。</li>
+<li>禁止那些在短时间内提交非常多请求的 IP。</li>
+<li>任何类，变量，还有方法都应该有正确的访问域。</li>
+<li>尽量避免使用 iframe。</li>
+</ol>
+<p>性能</p>
+<ol>
+<li>所有数据库和文件操句柄在不需要的时候都应该被关闭。</li>
+<li>SQL 语句的写法会导致性能千差万别。</li>
+<li>鼓励创建不可变（immutable）的类。</li>
+<li>类似的逻辑代码，尽量通过 if else 语句来实现更多的重用。</li>
+<li>尽量避免使用重对象（heavy objects）。</li>
+<li>如果是 Web 项目，请检查是否使用了合适的图片尺寸，CSS sprites 和浏览器缓存等技术。</li>
+<li>全局都需要的信息保存在 application context 中。</li>
+</ol>
+<p>编码习惯</p>
+<ol>
+<li>没有被使用的变量要删除。</li>
+<li>针对不同的 Exception 要用不同的 catch 语句，而不是一个 Exception 解决所有问题。</li>
+<li>针对变量，方法和类要用相同的命名方法。</li>
+<li>常量应该被写在独立的常量类中。</li>
+<li>每行代码的尾部不要有多余的空格。</li>
+<li>对于括号，循环，if语句等等要用统一的格式。</li>
+<li>每一个单独的方法不应该超过100行。</li>
+<li>一个单独的语句不应该超过编辑器的可视区域，它可以被拆分成几行。</li>
+<li>检查 String 对象既不是null也不是空的最好方法是 if(“”.equals(str))</li>
+<li>假如类有很多成员变量，并且实例化的时候只需要少数变量传入的话，最好使用静态工厂方法，而不是重载构造函数。</li>
+<li>给方法添加适当的访问控制，而不是所有都是 public。</li>
+<li>遵守项目中使用的框架的最佳实践建议，例如 Spring，Struts，Hibernate，jQuery。</li>
+</ol>
+<p>以上的某些注意点可以通过静态代码检查工具完成，例如 CheckStyle，FindBugs 和 JTest。</p>
+<p><a href="http://javaexperience.com/code-review-checklist/" target="_blank">原文链接</a>，<a href="http://www.oschina.net/news/31722/code-review-best-practices" target="_blank">OSChina.NET</a> 编译</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/every-programmer-should-know-these-latency-numbers/">
+  <time datetime="2014-05-14T03:56:45.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/every-programmer-should-know-these-latency-numbers/">Every Programmer Should Know These Latency Numbers</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h3 id="Latency_numbers_every_programmer_should_know">Latency numbers every programmer should know</h3>
+<pre><code>L1 <span class="keyword">cache</span> reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">0.5</span> ns
+Branch mispredict <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">5</span> ns
+L2 <span class="keyword">cache</span> reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">7</span> ns
+Mutex lock/unlock <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">25</span> ns
+Main memory reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">100</span> ns
+Compress <span class="number">1</span>K <span class="built_in">bytes</span> <span class="keyword">with</span> Zippy <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">3</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">3</span> µs
+Send <span class="number">2</span>K <span class="built_in">bytes</span> over <span class="number">1</span> Gbps network <span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">20</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">20</span> µs
+SSD random read <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">150</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">150</span> µs
+Read <span class="number">1</span> MB sequentially from memory <span class="attribute">...</span><span class="built_in">..</span> <span class="number">250</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">250</span> µs
+Round trip within same datacenter <span class="attribute">...</span><span class="attribute">...</span> <span class="number">500</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">0.5</span> ms
+Read <span class="number">1</span> MB sequentially from SSD<span class="subst">*</span> <span class="attribute">...</span><span class="built_in">..</span> <span class="number">1</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">1</span> ms
+Disk seek <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">10</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">10</span> ms
+Read <span class="number">1</span> MB sequentially from disk <span class="attribute">...</span><span class="built_in">.</span> <span class="number">20</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">20</span> ms
+Send packet CA<span class="subst">-&gt;</span>Netherlands<span class="subst">-&gt;</span>CA <span class="attribute">...</span><span class="built_in">.</span> <span class="number">150</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">150</span> ms
+</code></pre><p>Assuming ~1GB/sec SSD</p>
+<p><img src="http://i.imgur.com/k0t1e.png" alt="Visual representation of latencies"></p>
+<p>Visual chart provided by <a href="https://gist.github.com/ayshen" target="_blank">ayshen</a></p>
+<p>Data by <a href="http://research.google.com/people/jeff/" target="_blank">Jeff Dean</a></p>
+<p>Originally by <a href="http://norvig.com/21-days.html#answers" target="_blank">Peter Norvig</a></p>
+<p>Lets multiply all these durations by a billion:</p>
+<p>Magnitudes:</p>
+<h3 id="Minute:">Minute:</h3>
+<pre><code>L1 cache <span class="keyword">reference</span> <span class="number">0.5</span> s One heart beat (<span class="number">0.5</span> s)
+Branch mispredict <span class="number">5</span> s Yawn
+L2 cache <span class="keyword">reference</span> <span class="number">7</span> s Long yawn
+Mutex lock/unlock <span class="number">25</span> s Making a coffee
+</code></pre><h3 id="Hour:">Hour:</h3>
+<pre><code>Main memory reference <span class="number">100</span> s Brushing your teeth
+Compress <span class="number">1</span>K <span class="keyword">bytes</span> <span class="operator">with</span> Zippy <span class="number">50</span> <span class="built_in">min</span> One episode <span class="operator">of</span> <span class="operator">a</span> TV show (including ad breaks)
+</code></pre><h3 id="Day:">Day:</h3>
+<pre><code>Send <span class="number">2</span>K bytes <span class="keyword">over</span> <span class="number">1</span> Gbps network <span class="number">5.5</span> hr From lunch <span class="keyword">to</span> <span class="keyword">end</span> <span class="keyword">of</span> work <span class="property">day</span>
+</code></pre><h3 id="Week">Week</h3>
+<pre><code>SSD <span class="built_in">random</span> <span class="built_in">read</span> <span class="number">1.7</span> days A <span class="keyword">normal</span> weekend
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> memory <span class="number">2.9</span> days A <span class="keyword">long</span> weekend
+Round trip <span class="operator">within</span> same datacenter <span class="number">5.8</span> days A medium vacation
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> SSD <span class="number">11.6</span> days Waiting <span class="keyword">for</span> almost <span class="number">2</span> weeks <span class="keyword">for</span> <span class="operator">a</span> delivery
+</code></pre><h3 id="Year">Year</h3>
+<pre><code>Disk <span class="built_in">seek</span> <span class="number">16.5</span> weeks A semester <span class="operator">in</span> university
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> disk <span class="number">7.8</span> months Almost producing <span class="operator">a</span> <span class="built_in">new</span> human being
+The above <span class="number">2</span> together <span class="number">1</span> year
+</code></pre><h3 id="Decade">Decade</h3>
+<pre><code>Send packet CA-&gt;Netherlands-&gt;CA <span class="number">4.8</span> years Average <span class="built_in">time</span> <span class="keyword">it</span> takes <span class="built_in">to</span> complete <span class="operator">a</span> bachelor<span class="string">'s degree</span>
+</code></pre>
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/peter-norvig：编程语言的选择并不重要/">
+  <time datetime="2014-05-14T03:49:25.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/peter-norvig：编程语言的选择并不重要/">Peter Norvig：编程语言的选择并不重要</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://waakaakaa.qiniudn.com/58_101020040205_1.jpg" alt="image"></p>
+<p>Lisp被许多资深程序员视为编程语言中的圣杯，因为学起来很难。著名程序员、最热门的技术问答网站StackOverflow创始人Joel Spolsky曾经在<a href="http://www.ruanyifeng.com/blog/2008/12/the_perils_of_javaschools.html" target="_blank">“Java语言学校的危险性”</a>一 文中说，自己当年在大学里学习用Lisp的导论课程也是苦不堪言，而Lisp这样的函数式语言实际开发中并不常用，但是一旦到了体现优势的时候，你如果不 懂，将失之千里。他还认为，Google的核心技术之一MapReduce就来自函数式语言，而且使Google领先微软多年。请注意，Spolsky曾 经1990年代微软的Excel项目经理，VBA的主要创造者。</p>
+<p>《Unix编程艺术》的作者Eric Raymond也在<a href="http://www.aka.org.cn/Docs/hacker-howto_2001.html" target="_blank">“如何成为黑客”</a>（英文版）中说过，Lisp是对黑客特别重要的语言，“掌握了之后，你会得到丰富的启迪和经验。 即使实际上很少使用Lisp，这些经验也会使你在以后的日子里成为更好的程序员。”</p>
+<p>而Paul Graham更是Lisp的头号吹鼓手，他曾与蠕虫病毒发明者Robert Morris一起，成功地用Lisp开发历史上第一个Web应用——ViaWeb，并高价卖给Yahoo致富。他在2001年写了一篇宣传Lisp的名文“<a href="http://www.paulgraham.com/avg.html" target="_blank">Beating the Averages</a>”（英文），其中说到：“Lisp之所以极为优秀，并不是因为只有铁杆粉丝才知道的某些魔术般的性质，而在于它确实是最强大的编程语言。大家不用它的原因，在于编程语言不只是技术，而且也是思维习惯，这是改变起来最慢的东西。”</p>
+<p>有意思的是，美国时间10月18日，著名技术新闻网站Hacker News上，名为kung-fu-master的用户发了一篇名为<a href="http://news.ycombinator.com/item?id=1803351" target="_blank">“问PG: Lisp与Python (2010)”</a>的帖子，内容很简单：“好像许多Lisp老枪都开始转而用Python的（比如Peter Norvig）。今天你怎么看Lisp与Python？”</p>
+<p>这里的PG就是指Hacker News的创始人、著名Lisp程序员与吹鼓手Paul Graham。而其中提到的Peter Norvig则是另一个著名Lisp程序员，现任Google研发总监。他有一篇经典的文章<a href="http://daiyuwen.freeshell.org/gb/misc/21-days-cn.html" target="_blank">“十年学会编程”</a>（英文版），相信大家都已经看过，他的首选推荐语言当然也是Lisp（更准确的说是Lisp的方言Scheme）。</p>
+<p>面对这样直接的问题，专家们是怎么回答的呢？</p>
+<p>Paul Graham说：</p>
+<blockquote>
+<p>这问题好像来自2005年而不是2010年。Lisp现在由于Clojure（Lisp的现代方言，可以运行在JVM和.NET上——CSDN编者注）的出现，已经又变得时髦了。当然Python也有很好的库，但是我觉得用缺乏宏的语言编程很受局限。</p>
+</blockquote>
+<p>许多网友对Python没有宏的问题进行了讨论。有人说不支持宏是出于代码可读性的考虑。而更多的人则认同宏是一种抽象工具，任何工具都会被误用、滥用，但并不表示工具本身有问题。</p>
+<p>另一Lisp专家，《Coder at Work》和《Practical Common Lisp》作者&gt;Peter Seibel也加入了讨论（他最近忙于编辑一种杂志Code Quarterly）。他说：自己与Peter Norvig有类似的体验。虽然自己Lisp非常熟练，但是在表达算法方面Python是最佳选择。不过，相比Lisp实现，CPython的运行速度慢得惊人，甚至差5-10倍。</p>
+<p>而Peter Norvig也罕见地现出真身，给出了自己的回答，内容一如既往地经典：</p>
+<blockquote>
+<p>我是Peter Norvig。我转向Python不是因为它比Lisp更好、更令人满意、更实用，而是因为它用作伪代码更合适。许多学生说，在《人工智能》 （Norvig与Russell合著的经典教材）一书中的伪代码与我们在网上提供的Lisp代码之间进行转换太难了。于是我要寻找一种更近似伪代码的语 言，发现Python是最合适的。然后我就自学了Python，熟练到足以实现教材中示例的地步。我发现Python对于一些类型的小问题非常合适，有些 库也是我与其他的一些代码（包括在Google内和网上其他地方的代码）集成非常需要的。 我认为Lisp对更大的项目和编译速度很重要的应用而言仍然具有优势。但是在主要目的是交流而非编程的时候（比如针对数量众多的学生），Python更有 优势。</p>
+</blockquote>
+<p>就更一般意义上的编程而言，在Google和其他地方，我认为语言的选择并不如其他方面的选择那么重要：如果你有了正确的总体架构、正确的程序员团队、正确的开发过程（能够快速开发、持续改善），那么很多语言都能胜任；但如果以上的东西你没有，那无论选择什么语言，你都会陷入一团糟。</p>
+<p>还有人找出今年2月Norvig在一次采访（无法直接访问）中类似的话，透露了Google内部的一些信息：</p>
+<ol>
+<li><p>Google最开始似乎核心程序员都是用C++的，效率很高。这部分形成了公司的文化。</p>
+</li>
+<li><p>Google早期的Lisp程序员(Erann Gat) 注意到其他程序员和自己的效率差不多，甚至更好。关键还是在人，与20年前相比，现在语言的选择不那么重要了。</p>
+</li>
+<li><p>Lisp是为单个程序员或者一小组程序员进行探索性工作而专门设计的……如果我想自己在周末修改代码，会更愿意用Lisp，但是如果有几百个程序员一起改代码，那就不是编程语言的问题，而是社会问题了。</p>
+</li>
+<li><p>库。</p>
+</li>
+</ol>
+<p>其他人举出的材料中，最有意思的应该来自Lisp之父、计算机科学巨人约翰麦卡锡。<a href="http://smuglispweeny.blogspot.com/2008/02/ooh-ooh-my-turn-why-lisp.html" target="_blank">这篇博客</a>（无法直接访问）里生动讲述了这位图灵奖得主在某次听Peter Norvig改而鼓吹Python的演讲后的情景：</p>
+<p>Norvig演讲后，进入提问环节。出乎我的意料，他点了一位皱巴巴的老头。老头的胡子和头发都花白了，而且乱糟糟的，看 上去像是来此参观但是迷路了，到这里来休息一下，好奇地听听我们在说什么。我第一个念头是，估计他已经被这么艰深的话题弄晕了。但是马上想到，不对啊，这 里离斯坦福很近，这老头的年纪也对，难道是……</p>
+<p>只听Norvig说：“是，John，你有什么问题？”我记不清Lisp之父当时怎么问的了，但不超过十个词，就是问 Python是否能如Lisp那样优雅地像数据一样处理代码。“不，John，不行。”Norvig回答，然后静等麦卡锡继续发问。但是，老人什么也没有 再说。此时真是无言胜千语啊……</p>
+<p>看来，在大师眼中，数据与代码等同处理是最重要的语言特性之一。他还曾经在访谈中这样评价Ruby（提问者说Ruby从Lisp中借鉴了很多）：“Ruby能像数据那样使用列表结构吗？那每次算加和减的时候，都得进行解析啰？这方面Ruby还不如1960年的Lisp。”</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/龙纹身女孩和-sql/">
+  <time datetime="2014-05-14T03:39:02.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/龙纹身女孩和-sql/">龙纹身女孩和 SQL</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>我喜欢大卫·芬奇(David Fincher)拍的电影《龙纹身女孩》，他成功的把小说《龙纹身女孩》搬上了荧幕，超出了我的预期。我本以为这又是一部肤浅的、愤世嫉俗的用来敛钱的好莱坞电影，事实情况却是，这是一部情节紧张，能引起共鸣的电影，只是里面的淫杀犯罪让人毛骨悚然。我最喜欢的一个情节是龙纹身女孩用SQL来查找40年前的凶杀案的过程。</p>
+<p><img src="http://waakaakaa.qiniudn.com/07063334_bQur.jpg" alt="image"></p>
+<p>我们从电影里可以看到她使用笔记本电脑，轻而易举的进入瑞典警察局数据库，当她敲入像‘unsolved(未破案)’和‘decapitation(斩首)’等关键词时，屏幕上翻滚着绿色的检索出的信息，虽然我们看不清她使用的完整的查询语句：</p>
+<p><img src="http://waakaakaa.qiniudn.com/07063335_Gdmf.jpg" alt="image"></p>
+<p>处于一种天生的好奇，我忍不住截取了这些镜头画面，用Photoshop拼接了一下，下面是我得到的结果：</p>
+<p><img src="http://waakaakaa.qiniudn.com/07063335_FVKP.jpg" alt="image"></p>
+<p>你马上能发现，这不是Oracle SQL——很显然 AS 关键字在Oracle里不能用在表假名上。事实上，如果我们回去看看她那个令人兴奋的查询结果输出时，你会看到 mysql 的提示符，而且还有 use [dbname] 连接数据库的语法，下面是一个更详细的画面：</p>
+<p><img src="http://waakaakaa.qiniudn.com/07063335_0rrP.jpg" alt="image"></p>
+<p>我们实际上可以把她用的left join关键词表的SQL语句整理出来。</p>
+<p>最终我们获得了一个全屏的输出结果信息：</p>
+<p><img src="http://waakaakaa.qiniudn.com/07063336_bdtZ.jpg" alt="image"></p>
+<p>下面就是我们Oracle“WTF研究会”部门重新构造出的她使用的SQL：</p>
+<pre><code>SELECT DISTINCT v.fname, v.lname, i.year, i.location, i.report_file
+FROM   Incident AS i
+       LEFT JOIN V(ictim?)<span class="keyword">...</span>  -- presumably v.incident_id = i.id
+       LEFT JOIN Keyword AS k ON k.incident_id = i.id
+WHERE  i.year BETWEEN <span class="number">1947</span> AND <span class="number">1966</span>
+AND    i.type = <span class="string">'HOMICIDE'</span>
+AND    v.sex = <span class="string">'F'</span>
+AND    i.status = <span class="string">'UNSOLVED'</span>
+AND    <span class="keyword">...</span>
+       OR v.fname IN (<span class="string">'Mari'</span>, <span class="string">'Magda'</span>)
+       OR SUBSTR <span class="keyword">...</span>
+AND    (k.keyword IN (<span class="string">'rape'</span>, <span class="string">'decapitation'</span>, <span class="string">'dismemberment'</span>, <span class="string">'fire'</span>,     <span class="string">'altar'</span>, <span class="string">'priest'</span>, <span class="string">'prostitute'</span>)
+       <span class="keyword">...</span>
+       AND SUBSTR(v.fname, <span class="number">1</span>, <span class="number">1</span>) = <span class="string">'R'</span> AND SUBSTR(v.lname, <span class="number">1</span>, <span class="number">1</span>) = <span class="string">'L'</span>);
+
++--------+---------+------+-----------+----------------------------------+
+| fname  | name    | year | location  | report_file                      |
++--------+---------+------+-----------+----------------------------------+
+| Anna   | Wedin   | <span class="number">1956</span> | Mark      | FULL POLICE REPORT NOT DIGITIZED |
+| Linda  | Janson  | <span class="number">1955</span> | Mariestad | FULL POLICE REPORT NOT DIGITIZED |
+| Simone | Grau    | <span class="number">1958</span> | Goteborg  | FULL POLICE REPORT NOT DIGITIZED |
+| Lea    | Persson | <span class="number">1962</span> | Uddevalla | FULL POLICE REPORT NOT DIGITIZED |
+| Kajsa  | Severin | <span class="number">1962</span> | Dals-Ed   | FULL POLICE REPORT NOT DIGITIZED |
++--------+---------+------+-----------+----------------------------------+
+</code></pre><p>你也许会很惊讶，很奇怪，这样一个顶级的黑客为什么要outer-join的方式连接Victims(被害人)表和Keywords(关键词)表呢，还使用这样的文字过滤方式，岂不知MySQL里是有 like 语法的，更奇怪的是输出结果里根本没有姓和名分别以’R L’打头的受害人。</p>
+<p>[本文英文原文链接：<a href="http://oracle-wtf.blogspot.co.uk/2012/05/girl-with-ansi-tattoo.html" target="_blank">The Girl With The ANSI Tattoo</a> ]</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/通天塔导游---细数各种编程语言优缺点/">
+  <time datetime="2014-05-14T03:17:16.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/通天塔导游---细数各种编程语言优缺点/">通天塔导游 - 细数各种编程语言优缺点</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><img src="http://waakaakaa.qiniudn.com/151449_fUz3_28.jpg" alt="image"></p>
+<p>(译注：圣经记载：在远古的时候，人类都使用一种语言，全世界的人决定一起造一座通天的塔，就是巴别塔，后来被上帝知道了，上帝就让人们使用不同的 语言，这个塔就没能造起来。 巴别塔不建自毁，与其说上帝的分化将人类的语言复杂化，不如说是人类自身心灵和谐不再的分崩离析。之所以后来有了翻译，不仅是为了加强人类之间的交流，更 寄达了一种愿望，希望能以此消除人际的隔阂，获求来自心灵的和谐及慰藉。真正的译者，把握血脉，抚平创痕，通传天籁，开启心门。)</p>
+<p>这是我写的旋风式的编程语言简介—我本来为亚马逊开发者杂志本月的期刊写的，但是发现我写的东西没法…见人。</p>
+<p>首先，我偶尔一不小心口出脏话，或者对上帝不恭的话，所以对很官方很正式的亚马逊上发表是不合适的; 所以我就把它塞到我的博客里了，我的博客反正没人看的。除了你以外。是的，只有你会看，你好啊。</p>
+<p>其次，这是一项进行中的工程，现在只是东打一耙西搞一下，还没有精加工过的。又一个把它写到博客里的很大的理由。不需要很好，或很完整。就是我今天想说的一些话。请随便！</p>
+<p>我的旋风式简介会讲C，C++，Lisp，Java，Perl，(我们在亚马逊用到的所有语言)，Ruby (我就是喜欢)，和Python，把Python加进来是因为—好吧，你看了就知道了，现在我可不说。</p>
+<h1 id="C">C</h1>
+<p>你必须懂C。为哈? 因为出于所有现实的理由，这个世界上你过去，现在，将来会用到的每一台计算机都是一台冯·诺曼机器，而C是一种轻量级的，很有表达力的语法，能很好的展现冯·诺曼机器的能力。</p>
+<p>冯·诺曼架构就是你每天都用的计算机的架构的标准：一个CPU，内存，硬盘，一条总线。多核计算机并没有带来本质上的变化。冯·诺曼机是一个很方便，很便宜，上世纪五十年代的实现图灵机的技术，图灵机是执行计算的最知名的抽象模型。</p>
+<p>世 上还有其他的计算的机器。比如，Lisp机器，是上世纪50年代对Lisp计算模型的实现。Lisp模型是基于lambda代数的一种计算语言表示法，后 者是与图灵机同构的一种模型。不像图灵机，lambda代数能被人类读和写。但是这二者是同等能力的。它们同样精确的表示了计算机能干什么。</p>
+<p>Lisp机现在不是很流行了，除了在跳蚤市场里。从谁更受欢迎来说，冯·诺曼机器赢了。还有一些其他的计算机，比如神经网络计算机，译者也不知道怎么翻的计算机(cellular automata)，但是这些都不够大众化，至少现在是这样的。</p>
+<p>所以你必须知道C。</p>
+<p>还 有一个你必须知道C的原因是，Unix是用C写的。巧的是，Windows也是。基本上所有的其他操作系统都是用C写的。因为这些操作系统都是冯·诺曼机 的操作系统，你还能用别的吗? 任何跟C很不一样的东西都会跟硬件的实际能力相差太远而导致无法满足性能上的需要，至少对一个操作系统来说是这样—至少在上个世纪是这样，碰巧这些系统都 是上个世纪的。</p>
+<p>你还应该知道Lisp。你不必用它来干实际工作，虽然它在很多GNU的软件里都会很用得着。尤其是，你应该学会Scheme，Lisp的一种小巧化的，纯洁的方言。GNU的版本叫Guile。</p>
+<p>他们在麻省理工和加州伯克利教新学生一到两个学期的Scheme，这些学生都对他们为哈要学这么奇怪的语言抓破脑袋。实话实说，作为第一门学习的语言，这是一个很烂的选择，第二门也是很烂。你应该学会它，最终，但不是作为第一门或第二门语言。</p>
+<p>这是很难的哦。这是很大的一步。学会怎么用Lisp写出像C语言的程序是不够的，那没有意义。C和Lisp一个就像红外线，一个就像紫外线，它们分布在光谱的最两端。它俩一个牛逼的地方刚好是另一个傻逼了的地方。</p>
+<p>如 果说，C是最靠近计算机是如何工作的语言模型，Lisp就是最能反映计算(注意，这里没有了“机”字，计算机和计算是很不同的！译者注)是如何工作的模 型。你不需要懂很多Lisp，真的。紧咬Scheme就哦了，因为它是最简单最干净的。其他的Lisp已经发展成了很大，很复杂(很好很强大? 译者：-)的编程环境，就像C++和Java，要有很多库啊，工具啊等等之类。那些，你不需要知道。但是你应该能用Scheme写程序。如果你能够做出 The Little Schemer和The Seasoned Schemer这两本书里的所有习题，你懂得就够多了，我认为。</p>
+<p>但是对于你天天要做的编程工作，你应该基于以下条款选择你的语言：库，文档，工具支持，操作系统集成，资源，和一堆其他的东西。这些条款跟计算机如何工作关系很小，但是跟人类如何工作关系甚大。</p>
+<p>人们还在用很直白的C语言写东西。很多东西。你应该懂C！</p>
+<h1 id="C++">C++</h1>
+<p>C++ 是地球上最蠢的语言，即使是从蠢这个字的真正意义上出发。C++很无厘头。它不知道自己是什么东西。它没有内视(面向对象里的一个概念，译者注)。C也没 有，但是C不是“面向对象”的，而面向对象很大程度上是关于要让你的程序知道它自己。对象就像演员。所以面向对象语言应该有运行时的自省机制，知道自己是 个什么类的对象。C++不是这样的，真的，你不会那样用它。</p>
+<p>关于C：写一个C的编译器是那么的简单，以至于你可以用C写一个关于C的工 具，用起来就像是有内省机制。而C++呢，基本上是不可解析的，所以如果你想写一个很牛逼的工具用来—比如，告诉你你的虚函数的原型，或者帮你重构你的代 码，你将不得不依赖别人的工具集，因为你自己在除非脑子进屎的情况下是根本不会去写一个C++的解析器的。而市面上所有的C++的解析器都很傻逼。</p>
+<p>C++很蠢，你不能用蠢语言创造一个好系统。语言决定世界，蠢语言决定蠢世界。</p>
+<p>所有的计算都基于抽象。你用低级的东西创造出高级的东西。但是你不能用分子创造出一个城市。尝试使用太低级别的抽象只会给你带来麻烦。</p>
+<p>我们就惹上麻烦了 (是指亚马逊的员工，还是所有C++的程序员? 我也不知道，译者注)。</p>
+<p>理智的情况下，你用C写的最大的东东就是一个操作系统。而操作系统其实不是很大的，真的。它们看起来很大，但那是因为它们有很多应用软件，操作系统本身的内核是蛮小的。</p>
+<p>你 用C++能写的最大的东东是…也是操作系统。好吧，或许稍微再大点儿。让我们说，再大三倍吧。或者10倍吧。但是操作系统内核最多也就，那啥，一百万行代 码? 所以我说你能用C++写的最大的系统大概也就是一千万行代码吧，再大的话就开始不行了，这玩意儿你没法控制了，就像恐怖片里的…</p>
+<p>我说的一千万行是指如果你那时候还能让你的系统编译通过的话。</p>
+<p>我们(在亚马逊，译者注)有五千万行C++代码。不，现在还要更多了。我已经不知道有多少行了。上个圣诞节是五千万行，那是九个月前，而它以每季度八百万行的规模增长。增长率本身也增长，妈呀。</p>
+<p>我们想这个系统里干点啥好像要一万年。一个亚马逊工程师有一次这样描述我们的代码库：“一座很大的屎山，你见过的最大的山，每次你想修正一个bug，你的工作就是爬到屎山的正中心去。”</p>
+<p>伙计们，那哥们可是在四年前说的这话。他现在已经到更环保绿色的牧场上去了。真是太可惜了，他可是个实实在在的高手啊。</p>
+<p>这 都是C++的错。别跟我争论。就是的。我们用的是世上最蠢的语言。这简直有点老板级的蠢，你说呢? (译者注，meta在计算机术语里通常表示更高一个层次，比如，meta-language，比普通的language高一个层次，意思是关于语言的语 言。哲学里应该会经常用到这个词。我不懂哲学，但是我觉得老板们总是比我们高一级，所以meta-dump我就翻译成老板级的蠢喽。：-)</p>
+<p>说 了以上这些难听的话，话得说回来了。用C++写出漂亮的代码显然是可以的，我的意思是说，这样的代码应该大部分还是C，偶尔很有品味的，很有节制的用一点 C++。但是这种代码几乎从来不会被写出来。C++是个很好玩的游乐场，而如果你把它玩儿得门儿清的话你会觉得自己特牛，所以你总是被诱惑把你知道的所有 的东西都用上。但是那是很难做好的，因为从一开始这个语言就太狗屎了，最终，你会弄得一塌糊涂，即使你很能干。</p>
+<p>我知道，我说的都是异端邪 说，该被钉到十字架上的。随便吧。我在大学里的时候老喜欢C++了，因为我那时候就只知道这一门语言。当我听到我的语言教授，Craig Chambers，绝对的厌憎C++，我想：“为啥呢? 我觉得它挺好的啊”。而当我听到STL(标准模板库)的发明者被采访时说他恨OOP(面向对象编程)时，我更是认为他肯定是磕药了。怎么会有人恨OOP 呢，而这个人竟然还是STL的发明者?</p>
+<p>亲不敬，熟生厌(语出圣经，译者注)。说的是在大多数情况下，跟一件事物熟悉了之后你就失去对它的膜拜尊敬了; 在计算机语言里情况不是这样的。光对一门语言熟悉不会导致你看轻这门语言。你必须成为另一门更优秀的语言的专家(才能让你明白原来那门语言有多么多的问题)。</p>
+<p>所 以如果你不喜欢我针对C++大放厥词，请你去学另一门语言并成为一个专家(我推荐Lisp)，只有那时你才有足够的武器与我争论。然而，那时你将不会跟我 争了。你上了我的当了。你也会跟我一样变得不喜欢C++了，你或许会觉得我这个人很恶心，把你骗得不喜欢自己曾经的最爱了。所以或许你应该把我说的一切都 忘了。C++挺好的其实，真的。它就是很棒棒(译者注，作者在这里用了ducky，这是一个女性喜欢用的夸某物好的词，近来也为玻璃们喜爱)。忘了我说的 话。C++不错的。</p>
+<h1 id="Lisp">Lisp</h1>
+<p>(我打赌这一节会让你觉得惊讶，即使你已经关注我的博客有一阵了 (译者注，作者也可能是说，即使你成为亚马逊的员工有一阵了)。)</p>
+<p>亚马逊创业之初，我们有很多明星级的工程师。我不认识他们所有人，但是我认识几个。</p>
+<p>比如? Shel Kaphan。大拿。Greg Linden。大拿。Eric Benson。即使在他加入亚马逊之前就已经有自己响亮的名气了。也是大拿。</p>
+<p>他 们写了Obidos服务器。是Obidos让亚马逊成功的。只是后来那些生产大便很拿手的工程师，网页开发者，搞前端的人—这些人因为生产大便很拿手而总 是能让经理们满意—只是在后来这些人把Obidos搞糟了。(他们的大便)把整条河都堵了，打个比方说的话。但是Obidos是亚马逊最初的成功的一块关 键的基石。</p>
+<p>这些最早的牛人们在亚马逊神圣的代码库里只允许两种语言：C 和 Lisp。</p>
+<p>你自己去想吧。</p>
+<p>当 然，他们所有人都使用Emacs。靠，Eric Benson是XEmacs的作者之一。这个世界上所有伟大的工程师都在用Emacs[注1]。那种世界因你而不同级别的伟大。不是坐在你旁边的格子里的 那哥们那种伟大。也不是Fred，走廊尽头那哥们。我说的是我们这个行业里最伟大的软件开发者，那些能改变这个工业的面貌的人。像James Gosling们(Java语言设计者)，Donald Knuth们(这个人没有听说过的话赶紧改行吧，别搞计算机了)，Paul Graham们[注2]，Jamie Zawinski们，Eric Benson们。真正的工程师用Emacs。你必须很有点聪明才能把Emacs用好，而如果你能成为一个Emacs大师的话它会给你难以置信的牛力。有机 会的话你应该站到Paul Nordstrom的肩后看看他是怎么工作的，如果你不相信我的话。对那些一辈子都在用烂Visual。Net之类的集成开发环境的人来说，一定会大开眼 界的。</p>
+<p>Emacs是那种你可以用100年的编辑器。</p>
+<p>Shel，Eric，Greg，和其他像他们那样的人，我没有足够幸运能跟他们直接一起工作：他们禁止在这里使用C++，他们禁止使用Perl。(或者Java，为完整起见)。他们是明白人。</p>
+<p>现在我们都在用C++，Java和Perl了，所有的代码都用这些语言。我们的前辈们已经到更环保的牧场上去了 (指没有大便的牧场，译者注)。</p>
+<p>Shel 用C写了Mailman，客服部的人把它用Lisp封装了一下。Emacs-Lisp。你不需要知道Mailman是什么东西。除非你是个Amazon的 老员工，或许不是搞技术的，而且你曾经不得不让客户哈皮 (只有在这种情况下你才需要知道Mailman，译者注)。不是间接的，因为你用C++写的一个狗屎功能跑不起来了，让客户很生气，于是你不得不去搞定它 以恢复客户的哈皮度。不，我是说直接的，意思是，你必须跟他们聊。我们可爱的，不识字的，呱呱其谈的，心地善良的，充满希望的，困惑的，能帮点小忙的，愤 怒的，哈皮的客户们，真正的客户们，那些从咱们这里买东西的人，我们的客户们。(如果你必须跟他们打交道的话，)那你就会知道Mailman这个东西。</p>
+<p>Mailman是客服部的客户电子邮件处理软件，我们用了它有…四，五年? 反正是很长时间。它是用Emacs写的，所有人都爱死它了。</p>
+<p>人 们现在还很爱它。直到今天，我依旧不得不听我们一些非技术员工跟我长篇大论的叨叨他们是多么的怀念Mailman。我可绝不是满嘴喷粪。上个圣诞节我参加 了一个Amazon的派对，一个我不知道自己怎么会被邀请的派对，里面全是些西装笔挺的商务人士，谁都长得比我帅，比我光鲜。以及一些我在公司里曾经打过 交道的人(这句不知道怎么译)。四个美女认出了我是在客服部里干的，把我包围了，跟我说了十五分钟她们是多么的怀念Mailman和Emacs，而现在的 亚马逊(我们用JSP花了好多年准备换掉Mailman的那一套软件)是怎么的不能满足她们，让她们觉得跟以前一样爽。</p>
+<p>这一切都太梦幻了，我觉得她们可能是喝多了。</p>
+<p>Shel 是个天才。Emacs是天才。连非技术人员都爱Emacs。我现在就是在Emacs里打这些文字。我绝不情愿在任何其他地方打字。这不只是关于让你的效率 得到飞跃，通过那些地球上其他地方找不到的快捷键和文本编辑功能。我每分钟打一百三到一百四十个英文单词，在Emacs里，当我在写没有格式要求的文本的 时候。我测过这个时间速度。自己写了一个测打字速度的Emacs应用。但我想跟你说的不只是这个。</p>
+<p>Emacs有的是一种你叫不出名字来的品质。</p>
+<p>我 们现在不用Mailman了。那是因为我们有一种叫得出名字的品质—就是，烂。我们很烂。我们(当时)找不到Emacs-Lisp足够牛的人把 Mailman继续搞下去。今天这应该不难了; 亚马逊现在到处都是Emacs Lisp的黑客。但是在那时候，客服部的人没法从别人那里得到帮助。于是他们就用他们当时手头有的资源去搞这件事。他们当时没有足够多的Emacs- Lisp的人。有一段时间，他们甚至找来Bob Glickstein当合同工，那个给O’Reilly写了那本Gnu Emacs扩展的书的家伙，坐在一个小办公室里给Emacs写Mailman的扩展。</p>
+<p>客服应用部是Amazon的第一个两块比萨饼的团队 (我也不知道什么意思，看下文)。这个团队是完全自立的。不管是那时还是现在。没人跟他们说话，没人帮他们。没有枪，没有炮，他们自己造。他们没有网页工 程师，没有支持工程师。屁也没有。有的只是一堆骨灰级的工程师和一个能带新人的文化。这就是他们需要的一切了。</p>
+<p>但他们最终不得不让Mailman光荣退休。妈哎。而我呢今天还听到人们说他们是多么的怀念它。甚至在派对上。</p>
+<p>我想今天按人头比例来说，客服部仍然拥有比亚马逊任何其他团队更多的Lisp黑客。可能他们用到Lisp的机会不多了，但是Eric Raymond说过，即使你很少用Lisp写程序，学习Lisp会是意义深远的一个经历，能让你下辈子都成为一个更好的工程师。</p>
+<p>卡尔，宗教现在已经不是大众的精神鸦片了。现在鸦片是集成开发环境了。(卡尔。马克思。这个人不知道的话应该打屁屁)。</p>
+<h1 id="Java">Java</h1>
+<p>Java是过去的10年中计算行业里发生过的最好的同时也是最坏的事。</p>
+<p>一 方面，Java把你从C++编程的很多枯燥易错的细节中解救出来了。没有数组越界了，没有core dump了。抛出来的异常能让你精确定位到出错的那一行代码，而且99%的时候都是正确的那一行出错了的代码。对象们在需要的时候能智能地把它们自己打印 出来。等等等等。</p>
+<p>另一方面，除了是一种语言，一个虚拟机，一个巨无霸的类库，一个安全模型，一个可移植的字节码格式，Java还是一个宗教。邪教。所以你不能太相信对它太虔诚的人。想要招一个好的Java工程师是一项很有技术挑战的活。</p>
+<p>但是总的来说，Java是软件工程史上的一大进步。</p>
+<p>从 C++到Java不只是语法上的改变。这是一种需要一段时间去好好体会的一种震撼性的世界观的转变。这有点像突然你被配了一个执行助理。你知道老总们为什 么总是好像有时间去开会，总是知道公司现在运行的情况，总是写出很酷酷的文档吗? 老总们常常忘记其实他们不是一个人在战斗，他们都是两个全职的人，他们和他们的执行助理们。有一个执行助理把你从琐事中解救出来让你有时间去思考那些真的 需要你去解决的问题; 没有的话你将不得不花一半的时间在那些无聊的世俗的事情上。切换到Java编程语言就把你变成了两个程序员—一个处理那些你不需要关心的东西，另一个可以 集中精力在问题本身上。这是一个很震人的改变，一个你应该很快就能习惯能喜欢上的改变。</p>
+<p>就像Jamie Zawinski(Netscape牛人，开发Mozilla浏览器，好像学历是高中毕业?)在他著名的“Java真烂”那篇文章里说的：“先说那些好东 西：Java没有free()函数。我必须一开始就承认，其他的东西都没什么了不起。(没有free)是能让我原谅其他所有东西的特性，不管其他东西有多 烂。讲完这一点后，我的文章里其他一切几乎都完全没有重要性了。”</p>
+<p>Jamie的文章写在1997年，按Java年来算的话是很早以前了，跟他写这篇文章时比Java已经有很大的改善; 一些他抱怨的东西甚至已经被fix了。</p>
+<p>但是大多数还是没有被fix。Java作为一门语言还是有点烂。但就如Jamie指出的，Java“是今天为止最好的语言。我的意思是说，它是今天市面上那些烂得底儿掉地一堆语言比起来有那么一点能被我接受。”</p>
+<p>真的，你应该读读他那篇文章。</p>
+<p>Java几乎每一方面都很好，除了它的语言本身，而这是JWZ抱怨的主要对象。但那是一个很大的抱怨。再好的库也救不了一个烂语言。相信我：你可能比我知道多得多的东西，但是我知道好兵救不了烂将。在Geoworks搞了五年汇编语言都会了我这个道理。</p>
+<p>跟C++比，Java作为一个语言还过得去。好吧，别扯了，Java要好很多。因为它有(内建)的字符串。哥们，你说一个没有内建的字符串的语言是人用的吗。</p>
+<p>但是Java跟C++比少了一些好东西，比如(函数调用时)传引用，栈上的对象，typedef，宏，以及运算符重载。一些时不时地会很称手的东西。</p>
+<p>哦， 还有多重继承，我现在老了，反而挺欣赏了的多重继承。如果你认为我这个观点僵硬不灵活的家伙是多态教义很好的反例的话，我倒是可以给你举几个为什么你需要 多态继承的好例子，或者至少像Ruby那样的mixin或者自动的派遣。下次问问我白龙马的事情。今天我要告诉你为什么Java的interface是个 烂货。</p>
+<p>几年前Gosling自己都说，如果一切都能重来的话，他不会搞出个interface的概念。</p>
+<p>但是那正是Java的问题。当James说出那句话的时候，人们被雷到了。我甚至能感觉到那股雷劲儿，能感觉到Sun公司市场部和法务部的鸟人是多么想把James灭口，然后告诉大家他没那么说过。</p>
+<p>Java 的问题就是人们都被那帮人搞的广告效应蒙住了眼。C++，Perl，任何流行语言都有这个问题。这是很严重的，因为如果没有一些说大话吹牛逼的广告，一个 语言是不会流行起来的。所以如果一个语言的设计者说他的语言没有被设计得很完美的话，就是赶紧用麻醉枪射击这胡说八道的家伙并关闭会议的时候了。</p>
+<p>语言们需要放点儿卫星才能活，我只希望人们不要被卫星耀瞎了眼。</p>
+<p>我 学了面向对象编程， 我自己也对此大吹大擂。当我加入亚马逊时，我不能告诉你我有什么智慧或者经验，但我可以给你背诵出所有关于OOP的魔咒。多重继承是邪恶的，因为大家都这 么说; 运算符重载是邪恶的，诸如此类。我甚至有点模糊地知道为什么是邪恶的，但实际上不知道。后来我明白了，这些都不邪恶，不是烂玩意儿，烂的是开发者，是我。 我现在还是烂，但是希望每年都不烂一点起来。</p>
+<p>上礼拜我碰到一个来面试的，他告诉我多继是邪恶的，因为，比如，你可以从头，胳膊，腿，躯干 多重继承出一个人来。他既是对的，又是错的。那样的多继情形当然邪恶，但那都是因为他自己太邪恶了。那样继承出来的“东西”远远就能看见有多蠢，如果他还 把这玩意儿弄进门来那就更邪恶了。</p>
+<p>不良开发者，占了这世上开发者的大多数，他们能用你扔给他们随便什么语言写出不良的代码。</p>
+<p>说 了这些，还是得说回来，多继不是请客吃饭那么轻松的事儿; mixin看起来是更好的解决方案，但是还没人完美的解决这个问题。但我还是认为Java比C++好，即使它没有多继。因为我知道不管我的出发点是多么 好，某一天我还是会被一堆不懂怎么写好代码的人包围，让他们用Java比用C++会带来更少的伤害。</p>
+<p>此外，Java除了语言本身外还有老多其他的重要有用的东西。且Java语言本身也在进化，虽然像冰川一样慢，所以我们还是能看到希望。Java正是我们应该在亚马逊推荐使用的语言。</p>
+<p>你就是得小心点儿，因为各其他任何语言一样，你能很容易找出一堆人，他们很懂一门语言及其编程环境，但对品味，计算或者其他任何重要的东西却一无所知。</p>
+<p>当你有怀疑时，还是雇那种会好几门语言的Java程序员，那种厌憎J2EE/EJB之类松松跨跨的所谓框架的，那种使用Emacs的。这都是一些实战经验。</p>
+<h1 id="Perl">Perl</h1>
+<p>Perl，怎么说呢?</p>
+<p>Perl是个老朋友。老老朋友。我开始写Perl代码的时候，可能是1995年? 而它为我很好的服务了差不多10年的时间。</p>
+<p>它就像你骑了十万二十万英里的老自行车，你心里永远有一块地方装着它，虽然现在你已经换了一辆更加现代化的只有五磅重的自行车，而且这一辆也不像老的那辆顶得你屁眼疼了。</p>
+<p>Perl受欢迎原因有仨：</p>
+<p>用Perl你很快就能搞定你的问题。而这是最终的衡量标准。<br>Perl 有世上最好的市场推广。你可以写一本介绍他们市场推广有多绝的书。Sun公司砸大笔钱给Java推市场，Perl在受欢迎程度来说能跟Java齐头并进， 但Perl纯粹是依靠Larry Wall和他那帮哥们的三寸不烂之舌做市场。哈佛商学院的人应该去研究Perl的市场是怎么做出来的。真的让人瞠目结舌。<br>直到差不多，呃，现在，Perl没有真正的竞争者。<br>有 比Perl“好”的语言。操，有很多比Perl好的语言，如果你定义“好”为“不是给疯子用的”的话。Lisp，Smalltalk，Python，妈 呀，我可能可以列出二三十种比Perl“好”的语言。从这些语言不像这个夏天在台湾街头爆了肚皮的抹香鲸这个角度来说。鲸鱼肠子到处都是，汽车上，机车 上，行人身上。这就是Perl。让人着迷，真的。</p>
+<p>但是Perl有很多很多好的特性，直到最近，都是其他语言没有的。它们弥补了Perl肠子在外的不足。你可以从爆了肚皮的鲸鱼可以做很多有用的东西出来，比如香水。这很有用。Perl也是这样。</p>
+<p>当其他的那些语言(尤其是Lisp和Smalltalk)都想假装操作系统并不存在，列表(Lisp的)和对象(Smalltalk的)就是把屎搞出来的唯一存在，Perl却走了截然相反的路子。Larry说：Unix和字符串是搞出屎来的唯一存在。</p>
+<p>对很多任务来说，他绝对是正确的。所以Perl绝对是Unix系统管理和字符串处理的史上最强语言，除了一个，刚出来的一个，从哥斯拉(电影哥斯拉看过没)之地出来的一个。我一会儿会讲到那一个。</p>
+<p>可 惜，Larry太太太太在意Unix系统管理和字符串处理以致他压根忘了列表和对象，等他明白过来想改正的时候已经晚了。实际上，在Perl早期的…好 吧，对鲸鱼肠子我实在不想用“设计”这个词，就说生命周期中吧，他犯的几个关键错误让把列表和对象加进来变得如此尴尬，以致Perl已经进化成一个真正的 Rube Goldberg机器，至少当你想在Perl里用列表和对象的时候。(Rube Goldberg是一漫画家，常画一些很复杂的机器，但只完成简单的工作，比如一个小球滚过很多关卡，最后把门打开。译者注)。</p>
+<p>列表和对象也他妈的是很重要的，Larry！(farging应该是作者不想说fucking那么直白，译者注)</p>
+<p>Perl 没法表达列表因为Larry一早犯了一个悲剧性的愚蠢的错误，把列表全抹平。于是(1，2，(3，4))魔术般地变成(1，2，3，4)。不是说你会想让 它这样工作，而是Larry刚好那天在搞一个这样会更方便的问题。于是Perl的数据结构从此就变得爆炸了的鲸鱼了。</p>
+<p>今天你看Perl的 书，小教程或PPT的时候，不花三分之一的时间在“引用”上是不可能的。这就是Larry可怜的，坏了的，Goldberg(漫画家，想起来没? 译者注)式的对他那抹平列表的疯狂错误的解决方案。但是Perl的市场宣传做得那么难以置信地好以致它让你觉得这是你身上发生过的最好的东西。你可以对任 何东西取它的引用。这很有趣！闻起来也很香（说肠子呢，译者注，呵呵）！</p>
+<p>Perl不能支持面向对象编程因为Larry压根不相信这玩意 儿。这可能没什么大不了; 我也不是很确定我是不是信这个OOP。但是那么为啥他又要试着把对象加进Perl呢? Perl的面向对象是个半成品，且在Perl社区里没多少人重视。它就是不像字符串处理或Unix集成那样充满灵感。</p>
+<p>当然了，Perl还 有其他很多怪怪的特性。比如它的“上下文”，这是Larry要有N个变量名字空间的喜剧式决定的一个恐怖片式的产物。这些空间由sigil来区分(就是 Perl里变量名前面的‘$’，‘@’，‘%’字符)，看着像是从shell脚本里拷贝来的。在Perl里，所有的运算符，所有的函数，所有的操作其行为 都是六取一的随机的，取决于当前的“上下文”。没有一些规则或助记法能帮你搞定这些特定操作在特定上下文里的特定行为。你得把它们全记在脑子里。</p>
+<p>想要个例子? 这儿有一个：在一个值量(scalar，对应于vector，向量)上下文里对一个哈希取值你得到一个字符串，里面是个分数，分子是目前已分配的键，分母是总共有多少个桶。鲸鱼肠子，我告诉你。</p>
+<p>但就像我说的—直到最近，没啥能像Perl那样把屎搞定。</p>
+<h1 id="Ruby">Ruby</h1>
+<p>每 过15年左右，一门语言就会被更好的代替。C被C++代替，至少对大应用开发而又需要性能和数据类型的人们来说。C++被Java代替，而Java无疑在 7年后又会被更好的东西代替—好吧，我说的是完全代替C++的7年后，这到目前为止还没有发生，主要是因为微软能在Java霸占桌面系统之前狙击它。但是 在服务器上的应用而言，C++的阵地已经慢慢让给Java了。</p>
+<p>Perl有一天也会消逝。那是因为一门新的语言Ruby刚刚终于被翻译成英 语了。没错，它是在日本发明的，这么多地儿，没想到日本人搞出来了，还以为他们只是硬件和制造上占有名气，而不是他们的软件业，所以大家都跟你一样惊奇。 为什么呢，大家可能都在想。但是我认为这都是跟打字有关。我根本不能想象他们以前能打字打得足够快，英文字母只有26个，他们却有上万个字。但是 Emacs几年前支持多字节字符了，所以我猜他们现在打字速度他妈的快多了。(所以能搞出Ruby来了，译者猜作者是这个意思) (是的，他们也用Emacs—事实上日本人负责了Emacs多字节支持的大部工作，而且搞得坚不可摧。)</p>
+<p>不管怎么样，Ruby从Perl那里偷师了所有的好东西; 实际上，Matz，Ruby的作者(Yukihiro Matsumoto，如果我没记错的话，但是他外号“Matz”)，觉得他从Perl那里偷的有点太多了，他的鞋上也粘了些鲸鱼肠子。但是只是一丢丢。</p>
+<p>最重要的是，Ruby拿来了Perl的串处理和Unix集成，一点没改，就是说语法都是一样的，于是乎啥也不说了，你就拥有了Perl最好的那部分。这是个不错的开局，特别是如果你不把Perl剩下的东西也拿进来的话。</p>
+<p>但是之后Matz还从Lisp那里拿来的最好的列表处理，Smalltalk和其他语言那里拿来了最好的面向对象，CLU那里拿来了最好的迭代器，以及基本上是每个人每个事的最好的东西。</p>
+<p>而 他让这些东西全部都跑起来，跑得那么顺，你都不会注意到这些东西在那儿。我比其他任何语言都快就学会了Ruby，我总共会三十到四十门语言; 而我花了大概三天时间就能用Ruby比Perl还流畅地工作了，当了八年的Perl黑客后。这些东西是这么的和谐你都能自己猜它们是怎么工作的，而且大多 数时候你都能猜对。漂亮。有趣。靠谱。</p>
+<p>如果把语言比成自行车，那么AWK就是一辆粉系的儿童自行车，前面有个白色小框，还插块小 旗，Perl就是沙滩车(还记得那有多酷吧? 唉。)，而Ruby则是一辆七千五美金的钛合金山地自行车。从Perl飞跃到Ruby意义不下于从C++到Java的飞跃。却没有任何缺陷，因为Ruby 几乎是Perl功能的一个超集，而Java却拿掉了一些人们想要的东西，且没有真正的提供一个替代品。</p>
+<p>下次我会写更多关于Ruby的东 西。我先需要灵感。去读读Lucky Stiff的(poignant) guide to Ruby吧。那本书是一本有灵感的书。真的，读一下。超赞。我不理解产生它的那种头脑，但它很有趣，很犀利，且全是关于Ruby的。好像。你会看到的。</p>
+<h1 id="Python">Python</h1>
+<p>啊，Python怎么说呢，一个不错的语言，这么多年来一直旁边在等待它的机会? Python社区很长时间以来是那些勇敢地吞下红药片从Perl骇客帝国中醒来的人的避难营。</p>
+<p>啊，有点像Smalltalk的人们，他们永远在等待替代C++，没想到半路杀出Java一下把它们操翻了，漂亮地，永久地。哎哟。Ruby正在对Python做着同样的事，现在，今天。可能会在一夜之间吧。</p>
+<p>Python本来可以统治世界，可惜它有两个致命缺陷：空格，和冷淡。</p>
+<p>空 格很简单，就是说Python是用缩进来表达代码块之间的嵌套。它强制你必须按一定格式把所有的东西缩进，他们这样做是为了让所有人写的代码看上去一样。 不料蛮多程序员讨厌这点，因为他们觉得自己的自由被拿走了; 感觉就像Python侵犯了宪法赋予他们的可以随便缩进格式和全写在一行上的权利。</p>
+<p>Python 的作者，Guido Van Rossum，也在早期犯过一些很傻地技术错误—没有像Larry的失误那么严重，但是还是有几个。比如，最早Python没有字面变量范围，但它同时也 没有动态变量范围，而动态变量范围可能会有它一些问题，但它还是有用的。Python却没有这些，只有全局的和本地(函数)的两种范围。所以即使它是一个 真正的OO系统，类甚至不能访问它们自己的动态成员变量。你必须给成员函数传“self”参数，一大堆self参数很快就会把你搞疯掉，即使你不在意空格 问题。</p>
+<p>等等之类。</p>
+<p>但在我看来，Python不行其实是因为冷淡。这阻止了它成为首选脚本语言，或者首选一切语言。靠，人们现在还在用Tcl作嵌入解释执行器，虽然Python比Tcl好得不要太多—除了，我说，这个冷淡问题。</p>
+<p>此处开始我不知所云。呵呵，这样吧，把原文贴在最后面。</p>
+<p>注1，Eric告诉我当时几乎全是Jamie Zawinski，当他们在Lucid工作的时候。</p>
+<p>注2，我写了这个之后很多人告诉我Paul Graham是用VI的，想不到。</p>
+<p>注3，为了有据可查，我个人根本不介意空格问题。我认为因为这个而不喜欢Python是很傻的。我只是说有一堆比例让人惊奇的其他工程师讨厌空格问题。</p>
+<p>What’s the frost thing, you ask? Well, I used to have a lot of exceptionally mean stuff written here, but since Python’s actually quite pleasant to work with (if you can overlook its warts), I no longer think it’s such a great idea to bash on Pythonistas。The “frost thing” is just that they used to have a tendency to be a bit, well, frosty。Why?</p>
+<p>Because they were so tired of hearing about the whitespace thing！</p>
+<p>I think that’s why Python never reached Perl’s level of popularity, but maybe I’m just imagining things。</p>
+<p>Coda</p>
+<p>That was the ADJ article I really wanted to write。Or at least something like it。For some reason, though, my true feelings only seem to come out during insomniac attacks between 3am and 6am。Time for bed！2 hours ‘til my next meeting。</p>
+<p>这才是我真正想给亚马逊开发者杂志写的文章。或者至少是这样的。出于某些原因，我的真感情好像只有在我凌晨三点到六点失眠的时候都会流露。该睡觉了！我下个会议再过两小时就开始了。</p>
+<p>(发布于2004年9月，小小的更新在3/28/2006)</p>
+<p>本文转载自：<a href="http://code.google.com/p/windows-config/wiki/TourDeBabel" target="_blank">http://code.google.com/p/windows-config/wiki/TourDeBabel</a></p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/最常被程序员们谎称读过的计算机书籍/">
+  <time datetime="2014-05-14T03:12:05.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/14/最常被程序员们谎称读过的计算机书籍/">最常被程序员们谎称读过的计算机书籍</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>马克·吐温曾经说过，所谓经典小说，就是指很多人希望读过，但很少人真正花时间去读的小说。这种说法同样适用于“经典”的计算机书籍。</p>
+<p>在<a href="http://stackoverflow.com/" target="_blank">Stack Overflow</a>(以及其它很多软件论坛)上，诸如”<a href="http://www.aqee.net/what-is-the-single-most-influential-book-every-programmer-should-read/" target="_blank">程序员最应该读的计算机书籍有哪些?</a>“这样的问题会周期性的出现。这样的问题不断的被提出、被回答，只是形式不同罢了。相同的几本书总是会出现在清单的前几名内，所以，如果想知道人们谈论的都是些什么，你有必要去读一读这些书的。</p>
+<p>大多数程序员真正读过的计算机书籍</p>
+<ol>
+<li>代码大全(Code Complete)——两届Software Jolt Award震撼大奖得主！</li>
+<li>程序员修炼之道（The Pragmatic Programmer）</li>
+<li>C程序设计语言( C Programming Language)(第2版)</li>
+<li>重构:改善既有代码的设计（Refactoring: Improving the Design of Existing Code）</li>
+<li>人月神话（The Mythical Man-Month）</li>
+<li>编码——隐匿在计算机软硬件背后的语言（Code: The Hidden Language of Computer Hardware and Software）</li>
+<li>Head First 设计模式（Head First Design Patterns）</li>
+<li>编程珠玑（Programming Pearls）</li>
+<li>Effective Java中文版（Effective Java (2nd Edition)）or Effective C++（第三版）中文版</li>
+<li>Test Driven Development: By Example</li>
+</ol>
+<p>上面的这些书我自己都读过，所以我不难相信很多不是很优秀的程序员也都读过它们。如果你对编程有足够的兴趣，能够来到这里读这篇博客，你很可能读过 其中的大部分，甚至还有很多不在这个清单中的，所以我就不浪费时间每本书都评论一番了。我想说的是，这个清单上的每本书都是它各自领域里的奇书。所以，很 多有愿望不断提高自己的编程技术的程序员都读过这些书，这就不足为怪了。</p>
+<p>在人们备受推崇的计算机书籍中，还有一类书受到了独特的待遇。我称下面这个清单为“最常被程序员们谎称读过的计算机书籍”。这并不是说推荐这些书的 人都没有真正读过它们。我只是有相当的信心怀疑更多的人只是在口头上宣称读过下列书籍，而实际上很少人真正读过它们。下面就是这个清单。</p>
+<p><strong>最常被程序员们谎称读过的计算机书籍</strong></p>
+<ol>
+<li><strong>算法导论（Introduction to Algorithms）(CLRS)</strong> 这本书的名称是所有出版过的计算机书籍中最让人误解一个。它被广泛的使用在很多大学里，通常被当作毕业生必需的算法课程。于是，只要在大学里上过计算机课 程的学生几乎都有一本这样的书。然而，除非你拥有计算机硕士学位(而且是算法研究领域的)，我怀疑你顶多只读过算法导论（Introduction to Algorithms）里节选的几章内容。这个书名让人误解，是因为”Introduction”这个词让人以为它很适合初级程序员。实际上不是。这本书对算法做尽可能详尽综合的介绍，就像其它一些随处可见的类似的书一样。请不要再把这本书推荐给初学者。</li>
+<li><strong>编译原理(Compilers: Principles, Techniques, and Tools)(the Dragon Book)</strong>.这本恐龙封面的书涵盖了开发一个编译器你所需要的全部的知识。它的内容包括词汇分析，语法分析，类型检查，代码优化，以及其它很多高深的题 目。请不要把这本书推荐给初级程序员，他们需要的只是分析简单的包含数学公式或HTML的字符串。除非你真的需要实现一个能够实用的编译器(或解释器)， 你根本不需要掌握这本“恐龙”书的全部强大威力。把它推荐给一个遇到简单文本分析问题的人，这证明你根本没有读过它。</li>
+<li><strong>计算机程序设计艺术(The Art of Computer Programming)(TAOCP)</strong> 我经常听到人们把这本书描述为“每个程序员必读”的系列计算机书籍。我认为这明显不是实情。在我说出这样大不敬的话、被你们用板砖拍死之前，请让我做解释 一下。这不是一本让你一页一页翻着读的书。这是一本参考大全书。把它放在你的书架上看起来会很不错(实际上也它确实很好)，但如果想把它通读一遍，你需要 几年时间，而且最后什么都没记住。这并不是说手边放这样一本书没有什么价值。它是一本参考书，当我遇到难题，走投无路时，很多次我都在这本书里找到办法。 但这本书终究是被我当作参考书。它复杂难懂，很理论，里面的例子都是汇编语言的。好的一面是，如果你想在这本书里寻找针对某一问题的解决方案，如果你找不 到，那就说明这个问题无解。它是一本对它所涉及到的领域做了最最详尽介绍的一本书。</li>
+<li><strong>Design Patterns: Elements of Reusable Object-Oriented Software(Gang of Four)</strong>这本书是唯一一本在这个清单里我从头到尾读过的书，读的结果是，我不知道该把这本书归到哪个类别。它出现在这个清单里，并不是因为我认为只有很少人真正读过它。很多人都读过。只是因为有更多推荐过这本书的人自己却没有读过。Design Patterns这边书的问题在于，很多书里给出的信息，你在其它很多地方都能看到。这样就使得一个初学者在维基百科上读了几篇关于设计模式的内容后，就敢在面试中宣称自己看过这本书。这就是为什么Singleton成 了一种新的全局变量的原因。如果有更多的人花时间读过这本也叫做Gang of Four的书的原著，那世界上就不会有这么多人会把17种设计模式硬塞到一个日志(logging)框架里了。这本书最精彩的部分是每章里描述如何正确的 使用一种模式的段落。遗憾的是，这些精华却在很多其它设计模式资料里被漏掉了。</li>
+<li><strong>C++程序设计语言(The C++ Programming Language)</strong>这本书不像一本编程教材，更像一本编程语言参考。有很多的迹象表明有人确实读过这本书，否则我们不可能有这么多的C++ 编译器可选择。编程初学者(或者甚至其它语言的专家)，如果想学C++，不应该直接去啃C++程序设计语言(The C++ Programming Language)这本书。告诉他们去读《C++ Primer中文版》。</li>
+</ol>
+<p>正如我之前说的，我知道你们当中会有一些人真正的读过这些书。那这篇文章不是针对你的，针对的是那些企图通过假装读过这些书来表现自己的民众。 如果你自己没有读过这些计算机书籍，请不要推荐给别人。这样做会耽误别人的时间，误人子弟，因为一些阅历更丰富的人可能会有更好的书(更针对某一领域，更容易理解，跟某种编程语言或某种编程水平更契合的书)来推荐。除此之外，你也能避免被那些真正读过计算机程序设计艺术(The Art of Computer Programming)的人用MMIX知识给拷问住造成的尴尬(如果你不知道我在说什么，那我指的就是你)。</p>
+<p>[本文英文原文链接：<a href="http://www.billthelizard.com/2008/12/books-programmers-dont-really-read.html" target="_blank">Books Programmers Claim to Have Read</a> ]</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/13/想提升工作效率，就別再做这七件事/">
+  <time datetime="2014-05-13T14:05:07.000Z">
+    5月 13 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/13/想提升工作效率，就別再做这七件事/">想提升工作效率，就別再做这七件事</a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>原文出处： <a href="https://medium.com/business-marketing/a988c17383a6" target="_blank">medium</a>   译文出处： <a href="http://www.inside.com.tw/2014/05/06/7-things-you-need-to-stop-doing-to-be-more-productive" target="_blank">inside - elaine</a>。</p>
+<p>试想一位小公司老板每日孜孜不倦地工作，为何不能从为数众多的竞争者脱颖而出？</p>
+<p>一位创业家可以不眠不休一天工作24 小时，整整一周不休假。 然而，时间有限，且竞争者却永远可以投入更多钱与心力，让竞争更剧烈。 那么，为什么某些小型新创公司可以完成许多大型企业无法完成的事情呢？</p>
+<ul>
+<li>Instagram──只有13 名员工却被Facebook 用几十亿买下的公司。</li>
+<li>Snapchat──只有30 名员工却拒绝科技巨人Facebook、Google 的并购交易。</li>
+</ul>
+<p>它们的成功部分来自于幸运──其余则是因为效率 。</p>
+<p><img src="http://waakaakaa.qiniudn.com/13070427_yMGK.jpg" alt="image"></p>
+<blockquote>
+<p>成功的关键不是努力工作，而是用聪明的方式工作。</p>
+</blockquote>
+<p>有效率并不是指良好的时间管理，而是──管理您的精力。 人们都需要学习如何花费最少的精力能够得到最大效益。</p>
+<p>要提升生产力，下面这些事情绝对要避免：</p>
+<h1 id="一、停止加班，提升效率！">一、停止加班，提升效率！</h1>
+<p>1926年，福特汽车工业亨利福特（Henry Ford）执行了一项实验发现有趣的结果：当把一日的工时从10 小时降到8 小时，从一周工作6 天减少至一周5 天，人们的生产力将会提高（注一）。</p>
+<p><img src="http://waakaakaa.qiniudn.com/13070428_YiKB.jpg" alt="image"></p>
+<p>当您工作得越多，不论是短期或长期而言，您的效率、生产力都会降低。 1980 年由The Business Roundtable 的一篇研究〈Scheduled Overtime Effect on Construction Projects〉指出（注二）：</p>
+<blockquote>
+<p>当每周工作时间超过60 小时，并持续超过两个月，生产力下降的累积效应将使完工日期推迟，而人数相同但每周只工作40 小时的团队执行同样工作，甚至还会更早完工。</p>
+</blockquote>
+<p>在AlterNet的一篇文章中，Sara Robinson回顾美军执行的一项研究，这项发现「每晚都减少1小时睡眠，持续一周，将导致认知功能退化，等同于喝酒使血液酒精浓度升高至0.10 。</p>
+<blockquote>
+<p>当个人过于劳累，使其以比平常还要负面的角度看事情，导致普遍地心情低落。 比心情更重要的是，其思维往往伴随着减少「主动思考与行动」──包括控制冲动、自我感觉良好、同情他人与情绪智力──的意愿（注三）。</p>
+</blockquote>
+<p>维持高程度的生产力，避免让自己过度工作并睡眠充足很重要。 下次您思想为何工作缺乏生产力，原因很简单，您有可能缺乏睡眠。</p>
+<h1 id="二、不要太常说「yes」">二、不要太常说「yes」</h1>
+<p>根据80/20 法则（Pareto Principle），20% 的努力创造80% 的成果，20% 的成果消耗80% 的时间。 不是努力工作，我们应该把注意力放在创造80% 的结果并放弃其余的。 我们应该把更多时间放在最重要的任务。 我们应该停止对低效能与无效能的任务说：「好的，我来做」 。</p>
+<blockquote>
+<p>「成功的人」与「非常成功的人」之间的差异在于，非常成功的人对几乎所有的事情都说不。<br>— Warren Buffet</p>
+</blockquote>
+<p>激发一个问题：什么事情要说yes，什么事情说no？ 如果您不能想出某些值得花时间的地方，就考虑作个小测试找出答案：追踪您作的所有事情，可能的话持续优化处理的过程。</p>
+<p>通常人们说「yes」的频率比实际上应该的次数还要多，因为说「yes」比说「no」要简单太多，没有想要当坏人。</p>
+<p><img src="http://waakaakaa.qiniudn.com/13070428_cBNK.jpg" alt="image"></p>
+<p>2012 研究发表在Journal of Consumer Research，研究者将120 个学生分成两组。 一组被训练为说「我不能（I can’t）」，然而其他被训练为「我不要（I don’t）」。 结果很有趣：</p>
+<blockquote>
+<p>对自己说「我不能吃X」的学生，61% 都会选择吃巧克力糖，同时，对自己说「我不要吃X」的学生，只有36 % 会选择吃巧克力糖。 光是简单的词汇替换，就能显著增加人们选择更健康食品的机率。 （延伸阅读： <a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://www.inside.com.tw/2013/10/29/a-scientific-guide-to-effectively-saying-no&amp;usg=ALkJrhgMw7cVfeXo4d_hKEbt95D-zMiMGQ" target="_blank">拒当YES MAN，说「不」让生活更美好</a> 。）</p>
+</blockquote>
+<h1 id="三、停止什么都事必躬亲，让其他人帮忙">三、停止什么都事必躬亲，让其他人帮忙</h1>
+<p>在我职涯的某个点，我管理一个非常大的社群，而我无法处理得很好。 我试图每一件事情都自己来。 我疲倦不堪，但社群最终接管我的职责并自行治理。 因此我也学习到社群的力量，以及为什么品牌需要使用者创造的内容（user-generated content）。</p>
+<p>消费者知道他们想要什么，以及他们想要如何让它更好，更甚于任何行销人员。 根据<a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://www.reelseo.com/earned-media-rankings-youtube-octoly/&amp;usg=ALkJrhgzhU-mCRf3wGDSLoVVuvTFdroUwg" target="_blank">Octoly</a> ，一支使用者自制影片的观看次数要比品牌自制影片多上十倍。 当寻找关于一个特定品牌的资讯，超过半数（51 %）的美国人相信使用者自制内容大过于品牌官网（16%）与媒体报导（14 %），对行销人员来说，寻求社群的帮忙至关重要。</p>
+<p><img src="http://waakaakaa.qiniudn.com/13070428_SSg9.jpg" alt="image"></p>
+<p>除此之外， 当您需要时，很重要地是愿意求助，让其他人来帮您。 因为这样可以让您有更多时间将焦点放在更重要的任务上。</p>
+<p>大多数的时候，即使您的朋友不能帮助您提升生产力。 光是陪在您身边就足够， 研究证实：分心的人在其他人也在场的情况，尽管那些人没有协助或指导，也可以完成更多的工作事项。</p>
+<h1 id="四、停止完美主义">四、停止完美主义</h1>
+<p>Dalhousie University心理学教授Simon Sherry博士Simon Sherry执行一项完美主义与生产力的研究 ，她指出：我们发现完美主义是绊倒教授的研究生产力的大石头。 完美主义倾向越高的教授就越没有效率。</p>
+<p>当一位完美主义者有以下问题：</p>
+<p>他们在一项花费的时间比任务要求所花费的时间还多。<br>他们会拖延并等到最佳的时刻。 在企业中，如果这是最完美的时刻，就代表已经太迟了。<br>他们过度聚焦在细节，反而忽略整体。</p>
+<h1 id="五、停止作重复的事情，并使它自动化">五、停止作重复的事情，并使它自动化</h1>
+<p>根据一项Tethy Solutions的研究 ，一个5人团队分别花3%、20%、25%、30%与70%的时间处理相同的事情，导入工作自动化软体两个月后，分别将处理重复事情的时间降至3%、10%、15%、15% 与10%。</p>
+<p><img src="http://waakaakaa.qiniudn.com/13070428_tuQA.jpg" alt="image"></p>
+<p>人们时常忘记时间就是金钱，因此经常土法炼钢地处理事情，因为这样比较容易，且不需要花费心力研究。 假设您办了一个Instagram 活动，号召网友上传的照片总数只有30 张，您可以手动一张一张处理。 但如果总共有从5个不同平台上传的30000张照片与影片时，您就需要一个好的数位管理系统了（例如<a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://www.filemobile.com/&amp;usg=ALkJrhiH_0Hf9V6834m_3cfnbJrlPZ0B4Q" target="_blank">Filemobile</a> ）。</p>
+<p>给行销人员的小撇步 ：到GitHub或Google app script library,通常会发现免费且可马上使用的开源程式码，让您找到省去手动处理重覆工作的软体/程式。</p>
+<h1 id="六、停止猜测，并开始用数据支撑决策">六、停止猜测，并开始用数据支撑决策</h1>
+<p>如果您可以在搜寻引擎上优化网站，那么您也可以优化您的人生，让它成长并发挥最大的潜能。</p>
+<p>不同领域的研究其实都可供参考，举例来说，宾州州立大学心理系助理教授Robert Matchock 所执行的研究发现，大部分的人们最容易分心的时间是从中午到下午四点。 此数据便提供您作工作相关决策的考量。 假使您无法从现有研究找到答案，那么您也可以自行执行简单的测试。</p>
+<p>举例来说，Filemobile就制定了许多测试，试图找出<a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://blog.filemobile.com/twitter-image-preview/&amp;usg=ALkJrhhq8qKSuTXA5DdkH3vMrob9nwYdcQ" target="_blank">如何优化Twitter的图片呈现</a> 。</p>
+<p>不断询问您自己：要如何测量并优化所有事情呢？</p>
+<h1 id="七、停止工作，并拥有无所事事的时间">七、停止工作，并拥有无所事事的时间</h1>
+<p>大部分的人都没有了解到，当我们专注在某件事上，基本上就像是把自己锁在一个箱子里。 很重要的是要每隔一段时间离开工作现场，享受独处的时光。 独处时光对大脑与灵魂都有益处（注四）：</p>
+<blockquote>
+<p>一项哈佛研究指出，当人们相信他们是单独经验某项事情时，脑海的记忆会更持久且更精确。 另外一个研究也指出体验相当程度的孤独会让一个人更能够同理他人……相当程度的孤独可以帮助青少年改善心情与获得好成绩。</p>
+</blockquote>
+<p>我们不会因为熬夜而更有效率。 就像是生命中的每件事情，需要耗费心力。 如果您什么都不做只是坐着等，不会有什么改变，所以我们要更了解自己的限制与潜能，并将精力作有效的配置，过一个更成功、更快乐的人生。</p>
+<p>注释：</p>
+<p>注一、注二：Calculating Loss of Productivity Due to Overtime Using Published Charts — Fact or Fiction</p>
+<p>注三： <a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://www.amazon.ca/The-Secret-World-Sleep-Surprising/dp/0230107591&amp;usg=ALkJrhgXdjeqJJv7m0F5gnGL2Gv2WMOF_w" target="_blank">The Secret World of Sleep: The Surprising Science of the Mind at Rest</a></p>
+<p>注四： <a href="http://translate.googleusercontent.com/translate_c?depth=1&amp;hl=zh-CN&amp;ie=UTF8&amp;prev=_t&amp;rurl=translate.google.com.hk&amp;sl=zh-CN&amp;tl=zh-CN&amp;u=http://www.boston.com/bostonglobe/ideas/articles/2011/03/06/the_power_of_lonely/&amp;usg=ALkJrhgbCWPtJybh1b8ljBHlC7hyg2yXYA" target="_blank">The power of lonely</a></p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+    <article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/07/introduction-to-mou/">
+  <time datetime="2014-05-07T09:13:30.000Z">
+    5月 7 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title"><a href="/2014/05/07/introduction-to-mou/"></a></h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h1 id="Mou">Mou</h1>
+<p><img src="http://mouapp.com/Mou_128.png" alt="Mou icon"></p>
+<h2 id="Overview">Overview</h2>
+<p><strong>Mou</strong>, the missing Markdown editor for <em>web developers</em>.</p>
+
+    
+  </div>
+  <footer class="end-sep">
+    
+      
+        <div class="alignleft">
+          <a href="/2014/05/07/introduction-to-mou/#more" class="more-link">阅读全文</a>
+        </div>
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+    <a href="/archives/" class="prev">上一页</a>
+  
+  
+    <a href="/archives/page/3/" class="next">下一页</a>
+  
+  <div class="clearfix"></div>
+</nav>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

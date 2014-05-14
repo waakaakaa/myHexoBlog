@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Vim学习指南 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="英文原文：Learn Vim Progressively
+你想尽可能快地自学vim(为大家所熟知的最好的编辑器) 。这是我学习的方法：从细处入手然后慢慢掌握所有技巧。
+Vim 六十亿美元的编辑器
+
+设计优良，强壮，快速。
+
+学习vim并把它作为你的下一个文本编辑器，据我所知没有比它更好的编辑器，学起来难但出奇的好用。
+我建议你按下附4个步骤学习Vim：
+
+适应
+感觉舒适
+感觉很好，强壮，快速
+使用">
+  
+  <meta content="article" property="og:type">
+<meta content="Vim学习指南" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/vim学习指南/" property="og:url">
+<meta content="http://waakaakaa.qiniudn.com/19135039_AdpL.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="英文原文：Learn Vim Progressively
+你想尽可能快地自学vim(为大家所熟知的最好的编辑器) 。这是我学习的方法：从细处入手然后慢慢掌握所有技巧。
+Vim 六十亿美元的编辑器
+
+设计优良，强壮，快速。
+
+学习vim并把它作为你的下一个文本编辑器，据我所知没有比它更好的编辑器，学起来难但出奇的好用。
+我建议你按下附4个步骤学习Vim：
+
+适应
+感觉舒适
+感觉很好，强壮，快速
+使用" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/vim学习指南/">
+  <time datetime="2014-05-14T05:38:38.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Vim学习指南</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>英文原文：<a href="http://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/" target="_blank">Learn Vim Progressively</a></p>
+<p>你想尽可能快地自学vim(为大家所熟知的最好的编辑器) 。这是我学习的方法：从细处入手然后慢慢掌握所有技巧。</p>
+<p>Vim 六十亿美元的编辑器</p>
+<blockquote>
+<p>设计优良，强壮，快速。</p>
+</blockquote>
+<p>学习vim并把它作为你的下一个文本编辑器，据我所知没有比它更好的编辑器，学起来难但出奇的好用。</p>
+<p>我建议你按下附4个步骤学习Vim：</p>
+<ol>
+<li>适应</li>
+<li>感觉舒适</li>
+<li>感觉很好，强壮，快速</li>
+<li>使用vim的高级技能</li>
+</ol>
+<p>本课程结束时你将成为一个vim高手。</p>
+<p>但在我们开始之前，先提醒一下。刚开始学习vim会有点痛苦，它很费时间，有点像玩乐器一样。不要指望能像其他编辑器一样花3天以内的时间便能很好的使用它，事实上，这肯定要花2周而不是3天。</p>
+<h1 id="第一层次_–_适应">第一层次 – 适应</h1>
+<ol>
+<li>安装vim</li>
+<li>运行vim</li>
+<li>什么也别做，读！</li>
+</ol>
+<p>在标准的编辑器里，写一些东西到屏幕上只需要在键盘上输入就足够了，在Vim中不是这样。Vim在普通模式里，让我们转到插入模式，键入字符i。</p>
+<p>你应该感觉好一点了，能像在标准编辑器里输入了，回到普通模式只需按ESC键即可。</p>
+<p>你现在知道了如何在插入和普通模式之间转换，下面是你在普通模式下需要记住的指令：</p>
+<p>&gt;</p>
+<ul>
+<li>i→ 插入模式. 按ESC键返回普通模式</li>
+<li>x→ 删除光标所在的字符</li>
+<li>:wq→ 保存退出(:w 保存，:q 退出)</li>
+<li>dd→ 删除(拷贝)当前行</li>
+<li>p→ 粘贴<br>&gt;<br>推荐<br>&gt;</li>
+<li>hjkl(高度推荐) → 基本的光标移动 (←↓↑→)， hj按行移动。</li>
+<li>:help <command>→ 显示关于<command>的帮助，可以使用help不带<command>获得常规帮助。</li>
+</ul>
+<p>只有5个命令，一开始只需掌握这些，当适应了这些命令后（大概需要一天或更多的诗句），你可以转到第二层级了。</p>
+<p>但首先，稍回顾一下普通模式。在标准编辑器里，要复制的话你需要使用ctrl键（Ctrl-c）。实际上，当你按<br>下ctrl键时所有的按键的意义都改变了。在vim普通模式下就像在ctrl键自动按下的情况下使用编辑器。</p>
+<p>最后的补充：</p>
+<ul>
+<li>我使用<C-λ>代替Ctrl-λ</li>
+<li>命令后附带回车，比如我若是写:q，我是指:q<enter></li>
+</ul>
+<h1 id="第二层_-_爽一把">第二层 - 爽一把</h1>
+<p>你懂的，命令是由需求所定。是时候学习更多命令了。下面这些是我的建议：</p>
+<ol>
+<li>插入模式变种命令：<br>&gt;<ul>
+<li>a→ 在光标后插入</li>
+<li>o→ 在当前行之后插入新行</li>
+<li>O→ 在当前行之前插入新行</li>
+<li>cw→ 替换从光标到单词结束</li>
+</ul>
+</li>
+<li>基本移动命令<br>&gt;<ul>
+<li>0→ 跳到第一列</li>
+<li>^→ 跳到本行第一个非空字符</li>
+<li>$→ 跳到本行末尾</li>
+<li>g_→ 跳到本行最后一个非空字符</li>
+<li>/pattern→ 搜索pattern</li>
+</ul>
+</li>
+<li>复制/粘贴<br>&gt;<ul>
+<li>P→ 在当前位置之前粘贴，记住 p 是在当前位置之前粘贴.</li>
+<li>yy→ 复制当前行，与dd和P命令相比更简单。</li>
+</ul>
+</li>
+<li>取消/恢复<br>&gt;<ul>
+<li>u→ 取消</li>
+<li><C-r>→ 恢复</li>
+</ul>
+</li>
+<li>加载/保存/退出/修改 文件(缓存)<br>&gt;<ul>
+<li>:e &lt;文件路径&gt;→ 打开</li>
+<li>:w→ 保存</li>
+<li>:saveas &lt;文件路径&gt;→ 保存到这个文件</li>
+<li>:x,ZZ或者:wq→ 保存和退出 (:x 如果可能的话，只保存)</li>
+<li>:q!→ 退出但不保存，使用:qa!，即使在缓存中还有已经修改的也会退出。</li>
+<li>:bn(对比:bp) → 显示下一个(上一个)文件缓存</li>
+</ul>
+</li>
+</ol>
+<p>花些时间学习所有这些命令。一旦完成后，你应该就能完成在像在其它编辑器中所有事情。也许，你可能还会觉得有点笨手笨脚。但是跟着我进入下一个层次，你就会发现为什么vim值得你额外付出的努力。</p>
+<h1 id="第三层次_-_更好，更强，更快">第三层次 - 更好，更强，更快</h1>
+<p>恭喜进入第三层次！现在我们开始一些有趣的事。在第三层次中，我们只会谈论那些和vi编辑器兼容的命令</p>
+<p><strong>更好</strong></p>
+<p>让我们看看vim是如何帮助我们做重复工作的:</p>
+<ol>
+<li>.→ (点)会重做最后一个命令,</li>
+<li>N&lt;命令&gt; → 会重做这个命令N次.</li>
+</ol>
+<p>一些例子，打开文件然后输入:</p>
+<p>&gt;</p>
+<ul>
+<li>2dd→ 会删除2行</li>
+<li>3p→ 会粘贴文本3次</li>
+<li>100idesu [ESC]→ 会写入“desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu desu”</li>
+<li>.→ 在最后一个命令之后会在此写入100个”desu”.</li>
+<li>3.→ 会写入3个“desu”(并不是300个, 聪明极了).</li>
+</ul>
+<p><strong>更强</strong></p>
+<p>掌握高效率使用vim是十分重要的。请不要跳过这节。</p>
+<ol>
+<li>NG→ 跳到第N行</li>
+<li>gg→ 是1G的快捷方式 - 跳到文件的开始</li>
+<li>G→ 跳到最后一行</li>
+<li>单词间移动:</li>
+</ol>
+<p>&gt;</p>
+<ol>
+<li>w→ 跳到下一个单词的开头,</li>
+<li>e→ 跳到这个单词的末尾.<br>&gt;<br>默认，单词是有字母和下划线组成。这里我们所谓的单词就是由空格分隔的。如果你只想考虑单词，就使用大写的字符吧:<br>&gt;</li>
+<li>W→跳到下一个单词的开头,</li>
+<li>E→ 跳到这个单词的末尾.<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135039_AdpL.jpg" alt="image"></li>
+</ol>
+<p>现在，我们谈论高效率移动：</p>
+<p>&gt;</p>
+<ul>
+<li>%: 跳到对应的(, (, [ 处.</li>
+<li>*(对比#) : 跳到当前光标的下一个(上一个) 相同单词的地方</li>
+</ul>
+<p>信我，最后3个命令价比黄金。</p>
+<p><strong>更快</strong></p>
+<p>记住了vi移动的重要性？这里就是原因。大多数命令使用下面这种通用格式：</p>
+<p>&lt;开始位置&gt;&lt;命令&gt;&lt;结束位置&gt;</p>
+<p>例如： 0y$意味着</p>
+<ul>
+<li>0→ 跳到本行开头</li>
+<li>y→ 从这里开始复制</li>
+<li>$→ 直到本行结束</li>
+</ul>
+<p>我们也可以使用ye，从当前位置复制到单词的末尾。但是y2/foo 会一直复制到第二个foo出现的地方。</p>
+<p>但对于y（复制）， d(删除), v(visual 选择)， gU(大写)， gu(小写)等等命令都是真实的。</p>
+<h1 id="第四层次_–_Vim_超能量">第四层次 – Vim 超能量</h1>
+<p>使用上述的命令，是否觉得很爽了。但是现在，这里才是杀手锏。正因为其中有些特性，我才使用vim的。</p>
+<p><strong>在当前行移动:0^$g_fFtT,;</strong></p>
+<p>&gt;</p>
+<ul>
+<li>0→ 跳到第一列</li>
+<li>^→ 跳到当前行的第一个字符</li>
+<li>$→ 跳到最后一列</li>
+<li>g_→ 跳到这行的最后一个字符</li>
+<li>fa→ 跳到这行a字母的下一个出现的地方。（对比 ; ）会查找下一个（上一个）地方</li>
+<li>t,→ 跳到，字符的前一个字符.</li>
+<li>3fa→ 在这行中查找a出现的第三个位置.</li>
+<li>F 和 T→ 与f和t相似， 但是方向相反.<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135039_vFzT.jpg" alt="image"></li>
+</ul>
+<p>一个有用的提示：dt”→删除所有的直到”。</p>
+<p><strong>区域选择 ： &lt;命令&gt;a&lt;对象&gt; 或 &lt;命令&gt;i&lt;对象&gt;</strong></p>
+<p>这些命令仅仅能用在可视化模式的一个操作后。但是他们相当的有用。他们的主要模式有：</p>
+<p>&lt;命令&gt;a&lt;对象&gt; 和 &lt;命令&gt;i&lt;对象&gt;</p>
+<p>命令可以是任何命令，例如 , d(删除),y(拉取),v(进入可视化模式)。对象可以是: w一个单词，W一个单词 (扩展的)，s一个句子，p一个段落。而且也可以是普通的字符， 例如”，’，)，}，]。</p>
+<p>假设现在光标在 (map (+) (“foo”)) 这个字符串的第一个o上。</p>
+<p>&gt;</p>
+<ul>
+<li>vi”→ 将会选择 foo</li>
+<li>va”→ 将会选择 “foo”</li>
+<li>vi)→ 将会选择 “foo”</li>
+<li>va)→ 将会选择 (“foo”)</li>
+<li>v2i)→ 将会选择 map (+) (“foo”)</li>
+<li>v2a)→ 将会选择 (map (+) (“foo”))<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135040_FZZt.png" alt="image"></li>
+</ul>
+<p><strong>矩形选择块:<C-v></strong></p>
+<p>矩形选择块能够方便的对多行代码进行注释。 如:0<C-v><C-d>I— [ESC]</p>
+<p>&gt;</p>
+<ul>
+<li>^→ 将光标定位到这行第一个非空格字符</li>
+<li><C-v>→ 选择开始位置</li>
+<li><C-d>→ 向下移动 (也可使用 jjj 或者 % ， 其他…)</li>
+<li>I— [ESC]→ 用 — 来注释每一行<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135040_1Cyy.gif" alt="image"></li>
+</ul>
+<p>提示：如果你的剪贴板在Windows中是非空的话，那么你就不得不使用<C-q>来代替<C-v>。</p>
+<p><strong>实现:<C-n>和<C-p>.</strong></p>
+<p>在插入模式中：只要打出单词的首字母，然后按<C-p>，神奇的事情就发生了…</p>
+<p><img src="http://waakaakaa.qiniudn.com/19135042_T1fu.gif" alt="image"></p>
+<p><strong>宏命令 : qa 做的一些事,@a,@@</strong></p>
+<p>qa 把你的动作记录在了寄存器 a 中。然后@a 就会将存在寄存器中的动作重现，就好像你从新打了一边。@@是将你最后一次执行的宏命令再次执行的快捷键。</p>
+<p>&gt;<br>事例<br>&gt;<br>在只有数字1的一行上， 像这样键入命令:<br>&gt;</p>
+<ul>
+<li>qaYp<C-a>q→<ul>
+<li>qa开始记录。</li>
+<li>Yp记录这一行。</li>
+<li><C-a>增加数字大小。</li>
+<li>q停止记录。</li>
+</ul>
+</li>
+<li>@a→ 在1下面写2</li>
+<li>@@→ 在2下面写3</li>
+<li>现在键入 100@@ 就将会产生一个到 103 的自增列。<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135042_jJUW.gif" alt="image"></li>
+</ul>
+<p><strong>可视化模式选择： v, V, <C-v></strong></p>
+<p>我们已经看到过<C-v>例子，这里还有v和V。一旦已经选择好了，你可以：</p>
+<p>&gt;</p>
+<ul>
+<li>J→ 让所有行连接在一起</li>
+<li>&lt;(对比&gt;) → 向左（右）对齐.</li>
+<li>=→ 自动对齐<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135043_Npsr.gif" alt="image"></li>
+</ul>
+<p>在可视化模式所选择的行的末尾添加一些东西：</p>
+<p>&gt;</p>
+<ul>
+<li><C-v></li>
+<li>跳到目的行 (jjj 或者 <C-d> 或者 /patternor%等等…)</li>
+<li>$跳到行末尾</li>
+<li>A, 写入一些文本，[按] ESC 键.<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135046_NfIl.gif" alt="image"></li>
+</ul>
+<p><strong>分割：： split 和 vsplit</strong></p>
+<p>这些是很重要的命令，所以你应该在:help split看看。</p>
+<p>&gt;</p>
+<ul>
+<li>:split→ 创建一个水平分割窗口t (:vsplit 创建一个竖直分割窗口)</li>
+<li><C-w><dir>:  dir是hjklor←↓↑→中任何一个。用来切换分割窗口。</li>
+<li><C-w>_(对比<C-w>|) : 用来最大化水平（竖直）分割窗口的大小</li>
+<li><C-w>+(对比<C-w>-) : 增加 (减小) 分割窗口<br>&gt;<br><img src="http://waakaakaa.qiniudn.com/19135046_ivZR.gif" alt="image"></li>
+</ul>
+<h1 id="小结">小结</h1>
+<p>这些是我经常使用的90%的命令。我建议你每天学习一到两个命令。在两到三周之后，你将会感觉到vim在你手上使用的是如此的强大。</p>
+<p>学习vim更多的是记忆训练。值得高兴的是vim诞生了一些非常好的工具和优秀的文档。当你非常熟悉大部分基本命令之后就可以使用vimtutor了。另外，你应该仔细的阅读这页 ::help usr_02.txt.</p>
+<p>然后，你要去学习了解寄存器，插件已经其它的功能。学习vim就像学钢琴一样，所有的都要掌握好。</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

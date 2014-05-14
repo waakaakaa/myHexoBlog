@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Every Programmer Should Know These Latency Numbers | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Latency numbers every programmer should know
+L1 cache reference ......................... 0.5 ns
+Branch mispredict ............................ 5 ns
+L2 cache reference ........................... 7 ns">
+  
+  <meta content="article" property="og:type">
+<meta content="Every Programmer Should Know These Latency Numbers" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/14/every-programmer-should-know-these-latency-numbers/" property="og:url">
+<meta content="http://i.imgur.com/k0t1e.png" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Latency numbers every programmer should know
+L1 cache reference ......................... 0.5 ns
+Branch mispredict ............................ 5 ns
+L2 cache reference ........................... 7 ns" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/14/every-programmer-should-know-these-latency-numbers/">
+  <time datetime="2014-05-14T03:56:45.000Z">
+    5月 14 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Every Programmer Should Know These Latency Numbers</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h3 id="Latency_numbers_every_programmer_should_know">Latency numbers every programmer should know</h3>
+<pre><code>L1 <span class="keyword">cache</span> reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">0.5</span> ns
+Branch mispredict <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">5</span> ns
+L2 <span class="keyword">cache</span> reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">7</span> ns
+Mutex lock/unlock <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">25</span> ns
+Main memory reference <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">100</span> ns
+Compress <span class="number">1</span>K <span class="built_in">bytes</span> <span class="keyword">with</span> Zippy <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">3</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">3</span> µs
+Send <span class="number">2</span>K <span class="built_in">bytes</span> over <span class="number">1</span> Gbps network <span class="attribute">...</span><span class="attribute">...</span><span class="built_in">.</span> <span class="number">20</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">20</span> µs
+SSD random read <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">150</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">150</span> µs
+Read <span class="number">1</span> MB sequentially from memory <span class="attribute">...</span><span class="built_in">..</span> <span class="number">250</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">250</span> µs
+Round trip within same datacenter <span class="attribute">...</span><span class="attribute">...</span> <span class="number">500</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">0.5</span> ms
+Read <span class="number">1</span> MB sequentially from SSD<span class="subst">*</span> <span class="attribute">...</span><span class="built_in">..</span> <span class="number">1</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">1</span> ms
+Disk seek <span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span><span class="attribute">...</span> <span class="number">10</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">10</span> ms
+Read <span class="number">1</span> MB sequentially from disk <span class="attribute">...</span><span class="built_in">.</span> <span class="number">20</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">20</span> ms
+Send packet CA<span class="subst">-&gt;</span>Netherlands<span class="subst">-&gt;</span>CA <span class="attribute">...</span><span class="built_in">.</span> <span class="number">150</span>,<span class="number">000</span>,<span class="number">000</span> ns <span class="subst">=</span> <span class="number">150</span> ms
+</code></pre><p>Assuming ~1GB/sec SSD</p>
+<p><img src="http://i.imgur.com/k0t1e.png" alt="Visual representation of latencies"></p>
+<p>Visual chart provided by <a href="https://gist.github.com/ayshen" target="_blank">ayshen</a></p>
+<p>Data by <a href="http://research.google.com/people/jeff/" target="_blank">Jeff Dean</a></p>
+<p>Originally by <a href="http://norvig.com/21-days.html#answers" target="_blank">Peter Norvig</a></p>
+<p>Lets multiply all these durations by a billion:</p>
+<p>Magnitudes:</p>
+<h3 id="Minute:">Minute:</h3>
+<pre><code>L1 cache <span class="keyword">reference</span> <span class="number">0.5</span> s One heart beat (<span class="number">0.5</span> s)
+Branch mispredict <span class="number">5</span> s Yawn
+L2 cache <span class="keyword">reference</span> <span class="number">7</span> s Long yawn
+Mutex lock/unlock <span class="number">25</span> s Making a coffee
+</code></pre><h3 id="Hour:">Hour:</h3>
+<pre><code>Main memory reference <span class="number">100</span> s Brushing your teeth
+Compress <span class="number">1</span>K <span class="keyword">bytes</span> <span class="operator">with</span> Zippy <span class="number">50</span> <span class="built_in">min</span> One episode <span class="operator">of</span> <span class="operator">a</span> TV show (including ad breaks)
+</code></pre><h3 id="Day:">Day:</h3>
+<pre><code>Send <span class="number">2</span>K bytes <span class="keyword">over</span> <span class="number">1</span> Gbps network <span class="number">5.5</span> hr From lunch <span class="keyword">to</span> <span class="keyword">end</span> <span class="keyword">of</span> work <span class="property">day</span>
+</code></pre><h3 id="Week">Week</h3>
+<pre><code>SSD <span class="built_in">random</span> <span class="built_in">read</span> <span class="number">1.7</span> days A <span class="keyword">normal</span> weekend
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> memory <span class="number">2.9</span> days A <span class="keyword">long</span> weekend
+Round trip <span class="operator">within</span> same datacenter <span class="number">5.8</span> days A medium vacation
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> SSD <span class="number">11.6</span> days Waiting <span class="keyword">for</span> almost <span class="number">2</span> weeks <span class="keyword">for</span> <span class="operator">a</span> delivery
+</code></pre><h3 id="Year">Year</h3>
+<pre><code>Disk <span class="built_in">seek</span> <span class="number">16.5</span> weeks A semester <span class="operator">in</span> university
+Read <span class="number">1</span> MB sequentially <span class="built_in">from</span> disk <span class="number">7.8</span> months Almost producing <span class="operator">a</span> <span class="built_in">new</span> human being
+The above <span class="number">2</span> together <span class="number">1</span> year
+</code></pre><h3 id="Decade">Decade</h3>
+<pre><code>Send packet CA-&gt;Netherlands-&gt;CA <span class="number">4.8</span> years Average <span class="built_in">time</span> <span class="keyword">it</span> takes <span class="built_in">to</span> complete <span class="operator">a</span> bachelor<span class="string">'s degree</span>
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
