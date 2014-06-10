@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>检查和收集 Linux 硬件信息的 7 个命令 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="英文原文：7 Linux commands to check/gather hardware information in linux system
+在Linux系统中，有许多命令可用于查询主机的硬件信息。一些命令只针对特定的硬件组件，比如CPU、内存，一些命令可以查询多个硬件信息。
+这篇文章只是简单的让每个人了解查询硬件信息的基本命令使用，包括lscpu、hwinfo、lshw、lspci、ls">
+  
+  <meta content="article" property="og:type">
+<meta content="检查和收集 Linux 硬件信息的 7 个命令" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/15/检查和收集-linux-硬件信息的-7-个命令/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="英文原文：7 Linux commands to check/gather hardware information in linux system
+在Linux系统中，有许多命令可用于查询主机的硬件信息。一些命令只针对特定的硬件组件，比如CPU、内存，一些命令可以查询多个硬件信息。
+这篇文章只是简单的让每个人了解查询硬件信息的基本命令使用，包括lscpu、hwinfo、lshw、lspci、ls" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/15/检查和收集-linux-硬件信息的-7-个命令/">
+  <time datetime="2014-05-15T02:25:27.000Z">
+    5月 15 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">检查和收集 Linux 硬件信息的 7 个命令</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>英文原文：<a href="http://www.itsprite.com/linux-7-linux-commands-to-checkgather-hardware-information-in-linux-system/" target="_blank">7 Linux commands to check/gather hardware information in linux system</a></p>
+<p>在Linux系统中，有许多命令可用于查询主机的硬件信息。一些命令只针对特定的硬件组件，比如CPU、内存，一些命令可以查询多个硬件信息。</p>
+<p>这篇文章只是简单的让每个人了解查询硬件信息的基本命令使用，包括lscpu、hwinfo、lshw、lspci、lsblk、lsusb等等。</p>
+<p><strong>1. lscpu用于查询CPU信息</strong></p>
+<pre><code>[root@devops ~]# lscpu
+Architecture:          x86_64
+CPU op-mode(s):        <span class="number">32</span>-bit, <span class="number">64</span>-bit
+<span class="keyword">Byte</span> <span class="keyword">Order</span>:            Little Endian
+CPU(s):                <span class="number">1</span>
+<span class="keyword">On</span>-line CPU(s) list:   <span class="number">0</span>
+<span class="keyword">Thread</span>(s) per core:    <span class="number">1</span>
+Core(s) per socket:    <span class="number">1</span>
+CPU socket(s):         <span class="number">1</span>
+NUMA node(s):          <span class="number">1</span>
+Vendor ID:             GenuineIntel
+CPU family:            <span class="number">6</span>
+Model:                 <span class="number">45</span>
+Stepping:              <span class="number">7</span>
+CPU MHz:               <span class="number">2194.842</span>
+BogoMIPS:              <span class="number">4389.68</span>
+Hypervisor vendor:     Xen
+Virtualization type:   full
+L1d cache:             <span class="number">32</span><span class="keyword">K</span>
+L1i cache:             <span class="number">32</span><span class="keyword">K</span>
+L2 cache:              <span class="number">256</span><span class="keyword">K</span>
+L3 cache:              <span class="number">15360</span><span class="keyword">K</span>
+NUMA node0 CPU(s):     <span class="number">0</span>
+</code></pre><p><strong>2. lshw显示硬件信息表</strong></p>
+<p>这个命令应用普遍，它可通过个人需求而列出多种不同的硬件参数：CPU、内存、硬盘、USB控制器、lshw卡片等等，本质上就是从/proc目录不同文件中中提取对应的硬件信息。</p>
+<p>按照下面的步骤去安装lshw工具，然后就可以使用了。</p>
+<pre><code> wget http://ezix<span class="preprocessor">.org</span>/software/files/lshw-B<span class="number">.02</span><span class="number">.14</span><span class="preprocessor">.tar</span><span class="preprocessor">.gz</span>
+ tar -zxvf lshw-B<span class="number">.02</span><span class="number">.14</span><span class="preprocessor">.tar</span><span class="preprocessor">.gz</span>
+ cd lshw-B<span class="number">.02</span><span class="number">.14</span>
+ make &amp;&amp; make install
+</code></pre><p>示例：</p>
+<pre><code>[root<span class="variable">@devops</span> lshw-B<span class="number">.02</span><span class="number">.14</span>]# lshw -short
+H/W path          Device       Class      Description
+=====================================================
+                               <span class="keyword">system</span>     HVM domU
+/<span class="number">0</span>                             bus        Motherboard
+/<span class="number">0</span>/<span class="number">0</span>                           <span class="keyword">memory</span>     <span class="number">96</span>KiB BIOS
+/<span class="number">0</span>/<span class="number">1</span>                           processor  Intel(R) Xeon(R) CPU E5-<span class="number">2430</span> <span class="number">0</span> @ <span class="number">2.20</span>GHz
+/<span class="number">0</span>/<span class="number">2</span>                           <span class="keyword">memory</span>     System Memory
+/<span class="number">0</span>/<span class="number">2</span>/<span class="number">0</span>                         <span class="keyword">memory</span>     <span class="number">512</span>MiB DIMM RAM
+/<span class="number">0</span>/<span class="number">2</span>/<span class="number">1</span>                         <span class="keyword">memory</span>     <span class="number">512</span>MiB DIMM RAM
+/<span class="number">0</span>/<span class="number">3</span>                           <span class="keyword">memory</span>     <span class="number">96</span>KiB BIOS
+/<span class="number">0</span>/<span class="number">4</span>                           processor  CPU
+/<span class="number">0</span>/<span class="number">5</span>                           <span class="keyword">memory</span>     System Memory
+/<span class="number">0</span>/<span class="number">6</span>                           <span class="keyword">memory</span>     
+/<span class="number">0</span>/<span class="number">7</span>                           <span class="keyword">memory</span>     
+/<span class="number">0</span>/<span class="number">100</span>                         bridge     <span class="number">440</span>FX - <span class="number">82441</span>FX PMC [Natoma]
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1</span>                       bridge     <span class="number">82371</span>SB PIIX3 ISA [Natoma/Triton II]
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.1</span>        scsi1        storage    <span class="number">82371</span>SB PIIX3 IDE [Natoma/Triton II]
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.1</span>/<span class="number">0.0</span><span class="number">.0</span>  /dev/cdrom1  disk       SCSI CD-ROM
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.2</span>                     bus        <span class="number">82371</span>SB PIIX3 USB [Natoma/Triton II]
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.2</span>/<span class="number">1</span>      usb1         bus        UHCI Host Controller
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.2</span>/<span class="number">1</span>/<span class="number">2</span>                 input      QEMU USB Tablet
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">1.3</span>                     bridge     <span class="number">82371</span>AB/EB/MB PIIX4 ACPI
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">2</span>                       display    GD <span class="number">5446</span>
+/<span class="number">0</span>/<span class="number">100</span>/<span class="number">3</span>                       generic    Xen Platform Device
+/<span class="number">1</span>                eth0         network    Ethernet interface
+/<span class="number">2</span>                eth1         network    Ethernet interface
+[root<span class="variable">@devops</span> lshw-B<span class="number">.02</span><span class="number">.14</span>]#
+</code></pre><p><strong>3. hwinfo-硬件信息</strong></p>
+<p>hwinfo类似于lshw，也能查询硬件信息，且应用广泛。它也能输出多个硬件部分的详细或者简要信息，但是不同的是有时hwinfo比lshw的信息更详细。</p>
+<p>默认情况下，Linux系统没有安装hwinfo工具，所以你需要按照以下步骤自己安装：</p>
+<p><strong>CentOS 6</strong></p>
+<pre><code><span class="preprocessor">#rpm -Uvh http://mirror.symnds.com/distributions/gf/el/6/gf/x86_64/gf-release-6-6.gf.el6.noarch.rpm</span>
+<span class="preprocessor">#yum list hwinfo</span>
+<span class="preprocessor">#yum install hwinfo</span>
+</code></pre><p><strong>CentOS 5</strong></p>
+<pre><code><span class="preprocessor">#rpm -Uvh http://mirror.symnds.com/distributions/gf/el/5/gf/x86_64/gf-release-5-6.gf.el5.noarch.rpm</span>
+<span class="preprocessor">#yum list hwinfo</span>
+<span class="preprocessor">#yum install hwinfo</span>
+
+[root@devops tmp]<span class="preprocessor"># rpm -Uvh http://mirror.symnds.com/distributions/gf/el/6/gf/x86_64/gf-release-6-6.gf.el6.noarch.rpm</span>
+Retrieving http://mirror<span class="preprocessor">.symnds</span><span class="preprocessor">.com</span>/distributions/gf/el/<span class="number">6</span>/gf/x86_64/gf-release-<span class="number">6</span>-<span class="number">6.</span>gf<span class="preprocessor">.el</span>6<span class="preprocessor">.noarch</span><span class="preprocessor">.rpm</span>
+<span class="label">warning:</span> /var/tmp/rpm-tmp<span class="preprocessor">.m</span>2mMAO: Header V4 RSA/SHA1 Signature, key ID <span class="number">13</span>a4d2a9: NOKEY
+Preparing...                <span class="preprocessor">########################################### [100%]</span>
+   <span class="number">1</span>:gf-release             <span class="preprocessor">########################################### [100%]</span>
+[root@devops tmp]<span class="preprocessor"># yum list hwinfo</span>
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * extras: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * updates: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+gf                                                                                                    
+
+ <span class="number">00</span>:<span class="number">00</span>     
+gf/primary_db                                                                                     
+
+ <span class="number">00</span>:<span class="number">00</span>     
+Available Packages
+hwinfo<span class="preprocessor">.x</span>86_64
+[root@devops tmp]<span class="preprocessor"># yum list hwinfo</span>
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * extras: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * updates: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+gf                                                                                                   
+
+ <span class="number">00</span>:<span class="number">00</span>     
+gf/primary_db                                                                                          
+
+ <span class="number">00</span>:<span class="number">00</span>     
+Available Packages
+hwinfo<span class="preprocessor">.x</span>86_64                                                <span class="number">20.2</span>-<span class="number">1.</span>gf<span class="preprocessor">.el</span>6
+</code></pre><p>示例：</p>
+<pre><code>[root@devops tmp]<span class="preprocessor"># hwinfo -short</span>
+<span class="label">oops:</span> don&amp;<span class="preprocessor">#039;t know what to do with "short"</span>
+[root@devops tmp]<span class="preprocessor"># hwinfo --short</span>
+<span class="label">cpu:</span>                                                            
+                       Intel(R) Xeon(R) CPU E5-<span class="number">2430</span> <span class="number">0</span> @ <span class="number">2.20</span>GHz, <span class="number">2194</span> MHz
+<span class="label">keyboard:</span>
+  /dev/input/event3    AT Translated <span class="keyword">Set</span> <span class="number">2</span> keyboard
+  /dev/ttyS0           serial console
+<span class="label">mouse:</span>
+  /dev/input/mice      Adomax QEMU USB Tablet
+  /dev/input/mice      Macintosh mouse button emulation
+  /dev/input/mice      ImExPS/<span class="number">2</span> Generic Explorer Mouse
+graphics card:
+                       Cirrus Logic GD <span class="number">5446</span>
+<span class="label">storage:</span>
+                       Intel <span class="number">82371</span>SB PIIX3 IDE [Natoma/Triton II]
+                       Xen Virtual Storage <span class="number">0</span>
+                       Xen Virtual Storage <span class="number">1</span>
+                       Xen Virtual Storage <span class="number">2</span>
+<span class="label">network:</span>
+  eth0                 Xen Virtual Ethernet Card <span class="number">0</span>
+  eth1                 Xen Virtual Ethernet Card <span class="number">1</span>
+network interface:
+  lo                   Loopback network interface
+  eth0                 Ethernet network interface
+  eth1                 Ethernet network interface
+<span class="label">disk:</span>
+  /dev/xvda            Disk
+  /dev/xvdb            Disk
+<span class="label">partition:</span>
+  /dev/xvda1           Partition
+  /dev/xvdb1           Partition
+<span class="label">cdrom:</span>
+  /dev/sr0             QEMU DVD-ROM
+usb controller:
+                       Qumranet Qemu virtual machine
+<span class="label">bios:</span>
+                       BIOS
+<span class="label">bridge:</span>
+                       Qumranet Qemu virtual machine
+                       Qumranet Qemu virtual machine
+                       Qumranet Qemu virtual machine
+<span class="label">hub:</span>
+                       Linux <span class="number">2.6</span><span class="number">.32</span>-<span class="number">279.</span>el6<span class="preprocessor">.x</span>86_64 uhci_hcd UHCI Host Controller
+<span class="label">memory:</span>
+                       Main Memory
+<span class="label">unknown:</span>
+                       FPU
+                       DMA controller
+                       PIC
+                       Timer
+                       Keyboard controller
+                       XenSource Xen Platform Device
+[root@devops tmp]<span class="preprocessor">#</span>
+</code></pre><p><strong>4. lspci</strong></p>
+<p>lsppci命令可列出PCI总线的信息以及连接到PCI总线上的设备信息，比如VGA适配器、SATA控制器、其他模块等等。lspci工具是pciutils包的一部分，所以在安装lspci之前，你需要安装pciutils包。</p>
+<p>安装pciutils包使用下面的命令：</p>
+<pre><code>#yum install pciutils
+
+[root@devops tmp]# yum install pciutils
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors.aliyun.com
+ * extras: mirrors.aliyun.com
+ * updates: mirrors.aliyun.com
+Setting up Install Process
+Resolving Dependencies
+-<span class="ruby">-&gt; <span class="constant">Running</span> transaction check
+</span>-<span class="ruby">--&gt; <span class="constant">Package</span> pciutils.x86_64 <span class="number">0</span><span class="symbol">:</span><span class="number">3.1</span>.<span class="number">10</span>-<span class="number">2</span>.el6 will be installed
+</span>-<span class="ruby">-&gt; <span class="constant">Processing</span> <span class="constant">Dependency</span><span class="symbol">:</span> pciutils-libs = <span class="number">3.1</span>.<span class="number">10</span>-<span class="number">2</span>.el6 <span class="keyword">for</span> <span class="symbol">package:</span> pciutils-<span class="number">3.1</span>.<span class="number">10</span>-<span class="number">2</span>.el6.x86_64
+</span>-<span class="ruby">-&gt; <span class="constant">Running</span> transaction check
+</span>-<span class="ruby">--&gt; <span class="constant">Package</span> pciutils-libs.x86_64 <span class="number">0</span><span class="symbol">:</span><span class="number">3.1</span>.<span class="number">4</span>-<span class="number">11</span>.el6 will be updated
+</span>-<span class="ruby">--&gt; <span class="constant">Package</span> pciutils-libs.x86_64 <span class="number">0</span><span class="symbol">:</span><span class="number">3.1</span>.<span class="number">10</span>-<span class="number">2</span>.el6 will be an update
+</span>-<span class="ruby">-&gt; <span class="constant">Finished</span> <span class="constant">Dependency</span> <span class="constant">Resolution</span>
+</span>
+Dependencies Resolved
+
+Installing:
+ pciutils                         x86_64                    3.1.10-2.el6               
+
+      85 k
+Updating for dependencies:
+ pciutils-libs                    x86_64                    3.1.10-2.el6                 
+
+      34 k
+
+.....  
+
+Dependency Updated:
+  pciutils-libs.x86_64 0:3.1.10-2.el6                                                                            
+
+Complete!
+</code></pre><p>示例：</p>
+<pre><code>[root<span class="variable">@devops</span> tmp]<span class="comment"># lspci </span>
+<span class="number">00</span><span class="symbol">:</span><span class="number">00</span>.<span class="number">0</span> <span class="constant">Host</span> <span class="symbol">bridge:</span> <span class="constant">Intel</span> <span class="constant">Corporation</span> <span class="number">440</span>FX - <span class="number">82441</span>FX <span class="constant">PMC</span> [<span class="constant">Natoma</span>] (rev <span class="number">02</span>)
+<span class="number">00</span><span class="symbol">:</span><span class="number">01</span>.<span class="number">0</span> <span class="constant">ISA</span> <span class="symbol">bridge:</span> <span class="constant">Intel</span> <span class="constant">Corporation</span> <span class="number">82371</span>SB <span class="constant">PIIX3</span> <span class="constant">ISA</span> [<span class="constant">Natoma</span>/<span class="constant">Triton</span> <span class="constant">II</span>]
+<span class="number">00</span><span class="symbol">:</span><span class="number">01</span>.<span class="number">1</span> <span class="constant">IDE</span> <span class="symbol">interface:</span> <span class="constant">Intel</span> <span class="constant">Corporation</span> <span class="number">82371</span>SB <span class="constant">PIIX3</span> <span class="constant">IDE</span> [<span class="constant">Natoma</span>/<span class="constant">Triton</span> <span class="constant">II</span>]
+<span class="number">00</span><span class="symbol">:</span><span class="number">01</span>.<span class="number">2</span> <span class="constant">USB</span> <span class="symbol">controller:</span> <span class="constant">Intel</span> <span class="constant">Corporation</span> <span class="number">82371</span>SB <span class="constant">PIIX3</span> <span class="constant">USB</span> [<span class="constant">Natoma</span>/<span class="constant">Triton</span> <span class="constant">II</span>] (rev <span class="number">01</span>)
+<span class="number">00</span><span class="symbol">:</span><span class="number">01</span>.<span class="number">3</span> <span class="constant">Bridge</span><span class="symbol">:</span> <span class="constant">Intel</span> <span class="constant">Corporation</span> <span class="number">82371</span>AB/<span class="constant">EB</span>/<span class="constant">MB</span> <span class="constant">PIIX4</span> <span class="constant">ACPI</span> (rev <span class="number">01</span>)
+<span class="number">00</span><span class="symbol">:</span><span class="number">02</span>.<span class="number">0</span> <span class="constant">VGA</span> compatible <span class="symbol">controller:</span> <span class="constant">Cirrus</span> <span class="constant">Logic</span> <span class="constant">GD</span> <span class="number">5446</span>
+<span class="number">00</span><span class="symbol">:</span><span class="number">03</span>.<span class="number">0</span> <span class="constant">Unassigned</span> <span class="class"><span class="keyword">class</span> [<span class="title">ff80</span>]: <span class="title">XenSource</span>, <span class="title">Inc</span>. <span class="title">Xen</span> <span class="title">Platform</span> <span class="title">Device</span> (<span class="title">rev</span> 01)</span>
+[root<span class="variable">@devops</span> tmp]<span class="comment">#</span>
+</code></pre><p><strong>5. lsusb-列出USB总线信息</strong></p>
+<p>这个命令可列出USB控制器的设备信息。</p>
+<p>lsusb工具是usbutils包的一部分，所以你需要按照如下命令安装：</p>
+<pre><code><span class="preprocessor">#yum install usbutils</span>
+
+[root@devops tmp]<span class="preprocessor"># yum install usbutils</span>
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+ * base: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * extras: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+ * updates: mirrors<span class="preprocessor">.aliyun</span><span class="preprocessor">.com</span>
+Setting up Install Process
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package usbutils<span class="preprocessor">.x</span>86_64 <span class="number">0</span>:<span class="number">003</span>-<span class="number">4.</span>el6 will be installed
+--&gt; Processing Dependency: libusb-<span class="number">1.0</span><span class="preprocessor">.so</span><span class="number">.0</span>()(<span class="number">64</span>bit) for package: usbutils-<span class="number">003</span>-<span class="number">4.</span>el6<span class="preprocessor">.x</span>86_64
+--&gt; Running transaction check
+---&gt; Package libusb1<span class="preprocessor">.x</span>86_64 <span class="number">0</span>:<span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+============================================
+
+============
+ Package                     Arch                      Version                              
+
+      Size
+=======================================================
+============
+<span class="label">Installing:</span>
+ usbutils                    x86_64                    <span class="number">003</span>-<span class="number">4.</span>el6                                  
+
+      <span class="number">71</span> k
+Installing for dependencies:
+ libusb1                     x86_64                    <span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6                      
+
+      <span class="number">80</span> k
+
+Transaction Summary
+================================================================
+
+============
+Install       <span class="number">2</span> Package(s)
+
+Total download size: <span class="number">152</span> k
+Installed size: <span class="number">377</span> k
+Is this ok [<span class="built_in">y</span>/N]: <span class="built_in">y</span>
+Downloading Packages:
+(<span class="number">1</span>/<span class="number">2</span>): libusb1-<span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6<span class="preprocessor">.x</span>86_64<span class="preprocessor">.rpm</span>                                                     
+
+ <span class="number">00</span>:<span class="number">00</span>     
+(<span class="number">2</span>/<span class="number">2</span>): usbutils-<span class="number">003</span>-<span class="number">4.</span>el6<span class="preprocessor">.x</span>86_64<span class="preprocessor">.rpm</span>                                               
+
+ <span class="number">00</span>:<span class="number">00</span>     
+--------------------------------------------------------
+
+------------
+Total                                                                                     
+
+ <span class="number">00</span>:<span class="number">00</span>     
+Running rpm_check_debug
+Running Transaction Test
+Transaction Test Succeeded
+Running Transaction
+  Installing : libusb1-<span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6<span class="preprocessor">.x</span>86_64                                                                  
+
+       <span class="number">1</span>/<span class="number">2</span> 
+  Installing : usbutils-<span class="number">003</span>-<span class="number">4.</span>el6<span class="preprocessor">.x</span>86_64                                                                         
+
+       <span class="number">2</span>/<span class="number">2</span> 
+  Verifying  : usbutils-<span class="number">003</span>-<span class="number">4.</span>el6<span class="preprocessor">.x</span>86_64                                                                         
+
+       <span class="number">1</span>/<span class="number">2</span> 
+  Verifying  : libusb1-<span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6<span class="preprocessor">.x</span>86_64                                                                  
+
+       <span class="number">2</span>/<span class="number">2</span> 
+
+<span class="label">Installed:</span>
+  usbutils<span class="preprocessor">.x</span>86_64 <span class="number">0</span>:<span class="number">003</span>-<span class="number">4.</span>el6                                                                                    
+
+Dependency Installed:
+  libusb1<span class="preprocessor">.x</span>86_64 <span class="number">0</span>:<span class="number">1.0</span><span class="number">.9</span>-<span class="number">0.6</span><span class="preprocessor">.rc</span>1<span class="preprocessor">.el</span>6                                                                             
+
+Complete!
+</code></pre><p>示例：</p>
+<pre><code>[root<span class="variable">@devops</span> tmp]<span class="comment"># lsusb</span>
+<span class="constant">Bus</span> <span class="number">001</span> <span class="constant">Device</span> <span class="number">001</span><span class="symbol">:</span> <span class="constant">ID</span> <span class="number">1</span><span class="symbol">d6b:</span><span class="number">0001</span> <span class="constant">Linux</span> <span class="constant">Foundation</span> <span class="number">1.1</span> root hub
+<span class="constant">Bus</span> <span class="number">001</span> <span class="constant">Device</span> <span class="number">002</span><span class="symbol">:</span> <span class="constant">ID</span> <span class="number">0627</span><span class="symbol">:</span><span class="number">0001</span> <span class="constant">Adomax</span> <span class="constant">Technology</span> <span class="constant">Co</span>., <span class="constant">Ltd</span> 
+[root<span class="variable">@devops</span> tmp]<span class="comment">#</span>
+</code></pre><p><strong>6. lsblk-列出块设备的信息</strong></p>
+<pre><code>[root<span class="variable">@devops</span> tmp]<span class="comment"># lsblk</span>
+<span class="constant">NAME</span>    <span class="constant">MAJ</span><span class="symbol">:MIN</span> <span class="constant">RM</span>   <span class="constant">SIZE</span> <span class="constant">RO</span> <span class="constant">TYPE</span> <span class="constant">MOUNTPOINT</span>
+xvda    <span class="number">202</span><span class="symbol">:</span><span class="number">0</span>    <span class="number">0</span>    <span class="number">20</span>G  <span class="number">0</span> disk 
+└─xvda1 <span class="number">202</span><span class="symbol">:</span><span class="number">1</span>    <span class="number">0</span>    <span class="number">20</span>G  <span class="number">0</span> part /
+xvdb    <span class="number">202</span><span class="symbol">:</span><span class="number">16</span>   <span class="number">0</span>    <span class="number">10</span>G  <span class="number">0</span> disk 
+└─xvdb1 <span class="number">202</span><span class="symbol">:</span><span class="number">17</span>   <span class="number">0</span>    <span class="number">10</span>G  <span class="number">0</span> part /alidata
+sr<span class="number">0</span>      <span class="number">11</span><span class="symbol">:</span><span class="number">0</span>    <span class="number">1</span>   <span class="number">362</span>K  <span class="number">0</span> rom
+</code></pre><p><strong>7. lsscsi-列出SCSI的设备信息</strong></p>
+<p>列出SCSI/SDAT设备的信息，比如硬盘驱动器、光盘驱动器。</p>
+<pre><code>[root<span class="variable">@devops</span> tmp]<span class="comment"># lsscsi</span>
+[<span class="number">1</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span>]    cd/dvd  <span class="constant">QEMU</span>     <span class="constant">QEMU</span> <span class="constant">DVD</span>-<span class="constant">ROM</span>     <span class="number">0</span>.<span class="number">10</span>  /dev/sr<span class="number">0</span> 
+[root<span class="variable">@devops</span> tmp]<span class="comment">#</span>
+</code></pre><p>完毕！Enjoy this！</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

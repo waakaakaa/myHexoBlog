@@ -1,0 +1,468 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Learn X in Y minutes:Where X=clojure | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Get the code: learnclojure.clj
+Clojure is a Lisp family language developed for the Java Virtual Machine. It has a much stronger emphasis on pure functional programming than Common Lisp, but includes s">
+  
+  <meta content="article" property="og:type">
+<meta content="Learn X in Y minutes:Where X=clojure" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/22/learn-x-in-y-minuteswhere-x=clojure/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Get the code: learnclojure.clj
+Clojure is a Lisp family language developed for the Java Virtual Machine. It has a much stronger emphasis on pure functional programming than Common Lisp, but includes s" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/22/learn-x-in-y-minuteswhere-x=clojure/">
+  <time datetime="2014-05-22T03:46:32.000Z">
+    5月 22 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Learn X in Y minutes:Where X=clojure</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>Get the code: <a href="http://learnxinyminutes.com/docs/files/learnclojure.clj" target="_blank">learnclojure.clj</a></p>
+<p>Clojure is a Lisp family language developed for the Java Virtual Machine. It has a much stronger emphasis on pure <a href="https://en.wikipedia.org/wiki/Functional_programming" target="_blank">functional programming</a> than Common Lisp, but includes several <a href="https://en.wikipedia.org/wiki/Software_transactional_memory" target="_blank">STM</a> utilities to handle state as it comes up.</p>
+<p>This combination allows it to handle concurrent processing very simply, and often automatically.</p>
+<p>(You need a version of Clojure 1.2 or newer)</p>
+<pre><code>; Comments start with semicolons.
+
+; Clojure is written in <span class="string">"forms"</span>, which are just
+; lists of things inside parentheses, separated by whitespace.
+;
+; The clojure reader  assumes that the first thing is a
+; <span class="keyword">function</span> <span class="keyword">or</span> <span class="keyword">macro</span> to call, <span class="keyword">and</span> the rest are arguments.
+
+; The first call in a file should be ns, to <span class="keyword">set</span> the namespace
+(ns learnclojure)
+
+; More basic examples:
+
+; str will create a <span class="keyword">string</span> out of all its arguments
+(str <span class="string">"Hello"</span> <span class="string">" "</span> <span class="string">"World"</span>) ; =&gt; <span class="string">"Hello World"</span>
+
+; Math is straightforward
+(+ <span class="number">1</span> <span class="number">1</span>) ; =&gt; <span class="number">2</span>
+(- <span class="number">2</span> <span class="number">1</span>) ; =&gt; <span class="number">1</span>
+(* <span class="number">1</span> <span class="number">2</span>) ; =&gt; <span class="number">2</span>
+(/ <span class="number">2</span> <span class="number">1</span>) ; =&gt; <span class="number">2</span>
+
+; Equality is =
+(= <span class="number">1</span> <span class="number">1</span>) ; =&gt; <span class="keyword">true</span>
+(= <span class="number">2</span> <span class="number">1</span>) ; =&gt; <span class="keyword">false</span>
+
+; You need not for logic, too
+(not <span class="keyword">true</span>) ; =&gt; <span class="keyword">false</span>
+
+; Nesting forms works as you expect
+(+ <span class="number">1</span> (- <span class="number">3</span> <span class="number">2</span>)) ; = <span class="number">1</span> + (<span class="number">3</span> - <span class="number">2</span>) =&gt; <span class="number">2</span>
+
+; Types
+;;;;;;;;;;;;;
+
+; Clojure uses Java's object types for booleans, strings <span class="keyword">and</span> numbers.
+; Use `class` to inspect them.
+(class <span class="number">1</span>) ; Integer literals are java.lang.Long by default
+(class <span class="number">1</span>.); Float literals are java.lang.Double
+(class <span class="string">""</span>); Strings always double-quoted, <span class="keyword">and</span> are java.lang.<span class="keyword">String</span>
+(class <span class="keyword">false</span>) ; Booleans are java.lang.Boolean
+(class nil); The <span class="string">"null"</span> value is called nil
+
+; <span class="keyword">If</span> you want to create a literal list of data, use ' to stop it from
+; being evaluated
+'(+ <span class="number">1</span> <span class="number">2</span>) ; =&gt; (+ <span class="number">1</span> <span class="number">2</span>)
+; (shorthand for (quote (+ <span class="number">1</span> <span class="number">2</span>)))
+
+; You can eval a quoted list
+(eval '(+ <span class="number">1</span> <span class="number">2</span>)) ; =&gt; <span class="number">3</span>
+
+; Collections &amp; Sequences
+;;;;;;;;;;;;;;;;;;;
+
+; Lists are linked-list data structures, <span class="keyword">while</span> Vectors are array-backed.
+; Vectors <span class="keyword">and</span> Lists are java classes too!
+(class [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]); =&gt; clojure.lang.PersistentVector
+(class '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)); =&gt; clojure.lang.PersistentList
+
+; A list would be written as just (<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>), but we have to quote
+; it to stop the reader thinking it's a <span class="keyword">function</span>.
+; Also, (list <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) is the same as '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+
+; <span class="string">"Collections"</span> are just groups of data
+; Both lists <span class="keyword">and</span> vectors are collections:
+(coll? '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) ; =&gt; <span class="keyword">true</span>
+(coll? [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]) ; =&gt; <span class="keyword">true</span>
+
+; <span class="string">"Sequences"</span> (seqs) are abstract descriptions of lists of data.
+; Only lists are seqs.
+(seq? '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) ; =&gt; <span class="keyword">true</span>
+(seq? [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]) ; =&gt; <span class="keyword">false</span>
+
+; A seq need only provide an entry when it is accessed.
+; So, seqs which can be lazy -- they can define infinite series:
+(range <span class="number">4</span>) ; =&gt; (<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+(range) ; =&gt; (<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> ...) (an infinite series)
+(take <span class="number">4</span> (range)) ;  (<span class="number">0</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+
+; Use cons to add an item to the beginning of a list <span class="keyword">or</span> vector
+(cons <span class="number">4</span> [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]) ; =&gt; (<span class="number">4</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+(cons <span class="number">4</span> '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)) ; =&gt; (<span class="number">4</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+
+; Conj will add an item to a collection in the most efficient way.
+; For lists, they insert at the beginning. For vectors, they insert at the end.
+(conj [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>] <span class="number">4</span>) ; =&gt; [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>]
+(conj '(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) <span class="number">4</span>) ; =&gt; (<span class="number">4</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+
+; Use concat to add lists <span class="keyword">or</span> vectors together
+(concat [<span class="number">1</span> <span class="number">2</span>] '(<span class="number">3</span> <span class="number">4</span>)) ; =&gt; (<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>)
+
+; Use filter, map to interact with collections
+(map inc [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]) ; =&gt; (<span class="number">2</span> <span class="number">3</span> <span class="number">4</span>)
+(filter even? [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>]) ; =&gt; (<span class="number">2</span>)
+
+; Use reduce to reduce them
+(reduce + [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span>])
+; = (+ (+ (+ <span class="number">1</span> <span class="number">2</span>) <span class="number">3</span>) <span class="number">4</span>)
+; =&gt; <span class="number">10</span>
+
+; Reduce can take an initial-value argument too
+(reduce conj [] '(<span class="number">3</span> <span class="number">2</span> <span class="number">1</span>))
+; = (conj (conj (conj [] <span class="number">3</span>) <span class="number">2</span>) <span class="number">1</span>)
+; =&gt; [<span class="number">3</span> <span class="number">2</span> <span class="number">1</span>]
+
+; Functions
+;;;;;;;;;;;;;;;;;;;;;
+
+; Use fn to create new functions. A <span class="keyword">function</span> always returns
+; its last statement.
+(fn [] <span class="string">"Hello World"</span>) ; =&gt; fn
+
+; (You need extra parens to call it)
+((fn [] <span class="string">"Hello World"</span>)) ; =&gt; <span class="string">"Hello World"</span>
+
+; You can create a var using def
+(def x <span class="number">1</span>)
+x ; =&gt; <span class="number">1</span>
+
+; Assign a <span class="keyword">function</span> to a var
+(def hello-world (fn [] <span class="string">"Hello World"</span>))
+(hello-world) ; =&gt; <span class="string">"Hello World"</span>
+
+; You can shorten this process by using defn
+(defn hello-world [] <span class="string">"Hello World"</span>)
+
+; The [] is the list of arguments for the <span class="keyword">function</span>.
+(defn hello [name]
+  (str <span class="string">"Hello "</span> name))
+(hello <span class="string">"Steve"</span>) ; =&gt; <span class="string">"Hello Steve"</span>
+
+; You can also use this shorthand to create functions:
+(def hello2 <span class="comment">#(str "Hello " %1))</span>
+(hello2 <span class="string">"Fanny"</span>) ; =&gt; <span class="string">"Hello Fanny"</span>
+
+; You can have multi-variadic functions, too
+(defn hello3
+  ([] <span class="string">"Hello World"</span>)
+  ([name] (str <span class="string">"Hello "</span> name)))
+(hello3 <span class="string">"Jake"</span>) ; =&gt; <span class="string">"Hello Jake"</span>
+(hello3) ; =&gt; <span class="string">"Hello World"</span>
+
+; Functions can pack extra arguments up in a seq for you
+(defn count-args [&amp; args]
+  (str <span class="string">"You passed "</span> (count args) <span class="string">" args: "</span> args))
+(count-args <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>) ; =&gt; <span class="string">"You passed 3 args: (1 2 3)"</span>
+
+; You can mix regular <span class="keyword">and</span> packed arguments
+(defn hello-count [name &amp; args]
+  (str <span class="string">"Hello "</span> name <span class="string">", you passed "</span> (count args) <span class="string">" extra args"</span>))
+(hello-count <span class="string">"Finn"</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)
+; =&gt; <span class="string">"Hello Finn, you passed 3 extra args"</span>
+
+
+; Maps
+;;;;;;;;;;
+
+; Hash maps <span class="keyword">and</span> array maps share an interface. Hash maps have faster lookups
+; but don't retain key order.
+(class {:a <span class="number">1</span> :b <span class="number">2</span> :c <span class="number">3</span>}) ; =&gt; clojure.lang.PersistentArrayMap
+(class (hash-map :a <span class="number">1</span> :b <span class="number">2</span> :c <span class="number">3</span>)) ; =&gt; clojure.lang.PersistentHashMap
+
+; Arraymaps will automatically become hashmaps through most operations
+; <span class="keyword">if</span> they get big enough, so you don't need to worry.
+
+; Maps can use any hashable type as a key, but usually keywords are best
+; Keywords are like strings with some efficiency bonuses
+(class :a) ; =&gt; clojure.lang.Keyword
+
+(def stringmap {<span class="string">"a"</span> <span class="number">1</span>, <span class="string">"b"</span> <span class="number">2</span>, <span class="string">"c"</span> <span class="number">3</span>})
+stringmap  ; =&gt; {<span class="string">"a"</span> <span class="number">1</span>, <span class="string">"b"</span> <span class="number">2</span>, <span class="string">"c"</span> <span class="number">3</span>}
+
+(def keymap {:a <span class="number">1</span>, :b <span class="number">2</span>, :c <span class="number">3</span>})
+keymap ; =&gt; {:a <span class="number">1</span>, :c <span class="number">3</span>, :b <span class="number">2</span>}
+
+; By the way, commas are always treated as whitespace <span class="keyword">and</span> do nothing.
+
+; Retrieve a value from a map by calling it as a <span class="keyword">function</span>
+(stringmap <span class="string">"a"</span>) ; =&gt; <span class="number">1</span>
+(keymap :a) ; =&gt; <span class="number">1</span>
+
+; Keywords can be used to retrieve their value from a map, too!
+(:b keymap) ; =&gt; <span class="number">2</span>
+
+; Don't try this with strings.
+;(<span class="string">"a"</span> stringmap)
+; =&gt; Exception: java.lang.<span class="keyword">String</span> cannot be cast to clojure.lang.IFn
+
+; Retrieving a non-present key returns nil
+(stringmap <span class="string">"d"</span>) ; =&gt; nil
+
+; Use assoc to add new keys to hash-maps
+(def newkeymap (assoc keymap :d <span class="number">4</span>))
+newkeymap ; =&gt; {:a <span class="number">1</span>, :b <span class="number">2</span>, :c <span class="number">3</span>, :d <span class="number">4</span>}
+
+; But remember, clojure types are immutable!
+keymap ; =&gt; {:a <span class="number">1</span>, :b <span class="number">2</span>, :c <span class="number">3</span>}
+
+; Use dissoc to <span class="keyword">remove</span> keys
+(dissoc keymap :a :b) ; =&gt; {:c <span class="number">3</span>}
+
+; Sets
+;;;;;;
+
+(class <span class="comment">#{1 2 3}) ; =&gt; clojure.lang.PersistentHashSet</span>
+(<span class="keyword">set</span> [<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">3</span> <span class="number">2</span> <span class="number">1</span> <span class="number">3</span> <span class="number">2</span> <span class="number">1</span>]) ; =&gt; <span class="comment">#{1 2 3}</span>
+
+; Add a member with conj
+(conj <span class="comment">#{1 2 3} 4) ; =&gt; #{1 2 3 4}</span>
+
+; <span class="keyword">Remove</span> one with disj
+(disj <span class="comment">#{1 2 3} 1) ; =&gt; #{2 3}</span>
+
+; Test for existence by using the <span class="keyword">set</span> as a <span class="keyword">function</span>:
+(<span class="comment">#{1 2 3} 1) ; =&gt; 1</span>
+(<span class="comment">#{1 2 3} 4) ; =&gt; nil</span>
+
+; There are more functions in the clojure.sets namespace.
+
+; Useful forms
+;;;;;;;;;;;;;;;;;
+
+; Logic constructs in clojure are just macros, <span class="keyword">and</span> look like
+; everything <span class="keyword">else</span>
+(<span class="keyword">if</span> <span class="keyword">false</span> <span class="string">"a"</span> <span class="string">"b"</span>) ; =&gt; <span class="string">"b"</span>
+(<span class="keyword">if</span> <span class="keyword">false</span> <span class="string">"a"</span>) ; =&gt; nil
+
+; Use let to create temporary bindings
+(let [a <span class="number">1</span> b <span class="number">2</span>]
+  (&gt; a b)) ; =&gt; <span class="keyword">false</span>
+
+; Group statements together with do
+(do
+  (print <span class="string">"Hello"</span>)
+  <span class="string">"World"</span>) ; =&gt; <span class="string">"World"</span> (prints <span class="string">"Hello"</span>)
+
+; Functions have an implicit do
+(defn print-<span class="keyword">and</span>-say-hello [name]
+  (print <span class="string">"Saying hello to "</span> name)
+  (str <span class="string">"Hello "</span> name))
+(print-<span class="keyword">and</span>-say-hello <span class="string">"Jeff"</span>) ;=&gt; <span class="string">"Hello Jeff"</span> (prints <span class="string">"Saying hello to Jeff"</span>)
+
+; So does let
+(let [name <span class="string">"Urkel"</span>]
+  (print <span class="string">"Saying hello to "</span> name)
+  (str <span class="string">"Hello "</span> name)) ; =&gt; <span class="string">"Hello Urkel"</span> (prints <span class="string">"Saying hello to Urkel"</span>)
+
+; Modules
+;;;;;;;;;;;;;;;
+
+; Use <span class="string">"use"</span> to get all functions from the module
+(use 'clojure.<span class="keyword">set</span>)
+
+; Now we can use <span class="keyword">set</span> operations
+(intersection <span class="comment">#{1 2 3} #{2 3 4}) ; =&gt; #{2 3}</span>
+(difference <span class="comment">#{1 2 3} #{2 3 4}) ; =&gt; #{1}</span>
+
+; You can choose a subset of functions to import, too
+(use '[clojure.<span class="keyword">set</span> :only [intersection]])
+
+; Use require to import a module
+(require 'clojure.<span class="keyword">string</span>)
+
+; Use / to call functions from a module
+; Here, the module is clojure.<span class="keyword">string</span> <span class="keyword">and</span> the <span class="keyword">function</span> is blank?
+(clojure.<span class="keyword">string</span>/blank? <span class="string">""</span>) ; =&gt; <span class="keyword">true</span>
+
+; You can give a module a shorter name <span class="keyword">on</span> import
+(require '[clojure.<span class="keyword">string</span> :as str])
+(str/replace <span class="string">"This is a test."</span> <span class="comment">#"[a-o]" str/upper-case) ; =&gt; "THIs Is A tEst."</span>
+; (<span class="comment">#"" denotes a regular expression literal)</span>
+
+; You can use require (<span class="keyword">and</span> use, but don't) from a namespace using :require.
+; You don't need to quote your modules <span class="keyword">if</span> you do it this way.
+(ns test
+  (:require
+    [clojure.<span class="keyword">string</span> :as str]
+    [clojure.<span class="keyword">set</span> :as <span class="keyword">set</span>]))
+
+; Java
+;;;;;;;;;;;;;;;;;
+
+; Java has a huge <span class="keyword">and</span> useful standard library, so
+; you'll want to learn how to get at it.
+
+; Use import to load a java module
+(import java.util.Date)
+
+; You can import from an ns too.
+(ns test
+  (:import java.util.Date
+           java.util.Calendar))
+
+; Use the class name with a <span class="string">"."</span> at the end to make a new instance
+(Date.) ; &lt;a date object&gt;
+
+; Use . to call methods. <span class="keyword">Or</span>, use the <span class="string">".method"</span> shortcut
+(. (Date.) getTime) ; &lt;a timestamp&gt;
+(.getTime (Date.)) ; exactly the same thing.
+
+; Use / to call static methods
+(System/currentTimeMillis) ; &lt;a timestamp&gt; (system is always present)
+
+; Use doto to make dealing with (mutable) classes more tolerable
+(import java.util.Calendar)
+(doto (Calendar/getInstance)
+  (.<span class="keyword">set</span> <span class="number">2000</span> <span class="number">1</span> <span class="number">1</span> <span class="number">0</span> <span class="number">0</span> <span class="number">0</span>)
+  .getTime) ; =&gt; A Date. <span class="keyword">set</span> to <span class="number">2000</span>-<span class="number">01</span>-<span class="number">01</span> <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>
+
+; STM
+;;;;;;;;;;;;;;;;;
+
+; Software Transactional Memory is the mechanism clojure uses to handle
+; persistent state. There are a few constructs in clojure that use this.
+
+; An atom is the simplest. Pass it an initial value
+(def my-atom (atom {}))
+
+; Update an atom with swap!.
+; swap! takes a <span class="keyword">function</span> <span class="keyword">and</span> calls it with the current value of the atom
+; as the first argument, <span class="keyword">and</span> any trailing arguments as the second
+(swap! my-atom assoc :a <span class="number">1</span>) ; Sets my-atom to the result of (assoc {} :a <span class="number">1</span>)
+(swap! my-atom assoc :b <span class="number">2</span>) ; Sets my-atom to the result of (assoc {:a <span class="number">1</span>} :b <span class="number">2</span>)
+
+; Use '@' to dereference the atom <span class="keyword">and</span> get the value
+my-atom  ;=&gt; Atom&lt;<span class="comment">#...&gt; (Returns the Atom object)</span>
+@my-atom ; =&gt; {:a <span class="number">1</span> :b <span class="number">2</span>}
+
+; Here's a simple counter using an atom
+(def counter (atom <span class="number">0</span>))
+(defn inc-counter []
+  (swap! counter inc))
+
+(inc-counter)
+(inc-counter)
+(inc-counter)
+(inc-counter)
+(inc-counter)
+
+@counter ; =&gt; <span class="number">5</span>
+
+; Other STM constructs are refs <span class="keyword">and</span> agents.
+; Refs: http://clojure.org/refs
+; Agents: http://clojure.org/agents
+</code></pre><p><strong>Further Reading</strong></p>
+<p>This is far from exhaustive, but hopefully it’s enough to get you on your feet.</p>
+<p>Clojure.org has lots of articles: <a href="http://clojure.org/" target="_blank">http://clojure.org/</a></p>
+<p>Clojuredocs.org has documentation with examples for most core functions: <a href="http://clojuredocs.org/quickref/Clojure%20Core" target="_blank">http://clojuredocs.org/quickref/Clojure%20Core</a></p>
+<p>4Clojure is a great way to build your clojure/FP skills: <a href="http://www.4clojure.com/" target="_blank">http://www.4clojure.com/</a></p>
+<p>Clojure-doc.org (yes, really) has a number of getting started articles: <a href="http://clojure-doc.org/" target="_blank">http://clojure-doc.org/</a></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>

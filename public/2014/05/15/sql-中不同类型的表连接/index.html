@@ -1,0 +1,206 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>SQL 中不同类型的表连接 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="1、简介
+在关系型数据库中，join操作是将不同的表中的数据联合在一起时非常通用的一种做法。首先让我们看看join是如何操作的，然后我们探索一下当join和where语句同时存在的时候的执行顺序问题，最后来谈一谈不同类型的join的顺序问题。
+2、建立初始的测试表结构（建表语句到这里下载）
+表建立完之后，将会看到如下三个表。
+
+我们将通过以上三个表来演示join操作。这三个表都是用来做演示的，所以">
+  
+  <meta content="article" property="og:type">
+<meta content="SQL 中不同类型的表连接" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/05/15/sql-中不同类型的表连接/" property="og:url">
+<meta content="http://waakaakaa.qiniudn.com/103306_e9CO_82993.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="1、简介
+在关系型数据库中，join操作是将不同的表中的数据联合在一起时非常通用的一种做法。首先让我们看看join是如何操作的，然后我们探索一下当join和where语句同时存在的时候的执行顺序问题，最后来谈一谈不同类型的join的顺序问题。
+2、建立初始的测试表结构（建表语句到这里下载）
+表建立完之后，将会看到如下三个表。
+
+我们将通过以上三个表来演示join操作。这三个表都是用来做演示的，所以" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/05/15/sql-中不同类型的表连接/">
+  <time datetime="2014-05-15T03:15:40.000Z">
+    5月 15 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">SQL 中不同类型的表连接</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p><strong>1、简介</strong></p>
+<p>在关系型数据库中，join操作是将不同的表中的数据联合在一起时非常通用的一种做法。首先让我们看看join是如何操作的，然后我们探索一下当join和where语句同时存在的时候的执行顺序问题，最后来谈一谈不同类型的join的顺序问题。</p>
+<p><strong>2、建立初始的测试表结构（<a href="http://www.codeproject.com/Articles/435694/Understanding-Table-Joins-using-SQL" target="_blank">建表语句到这里下载</a>）</strong></p>
+<p>表建立完之后，将会看到如下三个表。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103306_e9CO_82993.jpg" alt="image"></p>
+<p>我们将通过以上三个表来演示join操作。这三个表都是用来做演示的，所以我并没有使用主键和外键。</p>
+<p><strong>3、表的笛卡尔乘积</strong></p>
+<p>一般情况下，我们使用两个表中的相关字段进行join操作，例如，employee表中的DeptId字段对应于Department表中的DepId字段，通过这种方式进行join。</p>
+<p>下面的一个例子是不使用关联字段来做表的连接。这里TableA和TableB以笛卡尔乘积的方式连在了一起。笛卡尔乘积就是先从第一个表中取出一条记录，和第二章表中的每一条记录配合，然后再取出第二条记录，同样和第二张表的所有记录配合，直至第一张表中的所有记录都取完。所以最终的结果数量将是两张表的乘积。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103407_CPoq_82993.jpg" alt="image"></p>
+<p><strong>4、join两张表</strong></p>
+<p>当我们想做两个表的连接，而不是像上面的例子一样得到大量的无用的结果的时候，我们就得从两张表中选取一个join列。我下面给出的例子是使用id作为join列的。我们可以通过这种方式使得结果只映射我们需要的那一部分，从而过滤掉了无用数据。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103435_FDRs_82993.jpg" alt="image"></p>
+<p>注意：在笛卡尔乘积表中的第一行和第五行满足了join的映射关系，从而被作为结果，其他的都被过滤掉了。</p>
+<p><strong>5、join多张表</strong></p>
+<p>上面的例子是join两张表，如果想join多张表，我们需要在上面的结果中选择一列，然后再在新表中选择一列，将这两者作为join字段，然后指定join的规则，这样我们理论上可以join任意多张表。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103524_uGSe_82993.jpg" alt="image"></p>
+<p>首先，Table_A和Table_B做了连接，就上上面的join两张表的例子，然后将join的结果作为一张表AB。再将AB与Table_C连接。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103553_ofCc_82993.jpg" alt="image"></p>
+<p><strong>6、join类型</strong></p>
+<p>在两张不同的表做连接有3中join类型。</p>
+<ol>
+<li>full join</li>
+<li>inner join</li>
+<li>outer join(left outer join、right outer join)</li>
+</ol>
+<p>在上面两个例子中我们看到的是inner join。如果我们连接表自身就叫做self join。这个特殊类型不会混淆连接类型。</p>
+<p><strong>7、full join</strong></p>
+<p>full join和笛卡尔有些不同，笛卡尔积会获取所有可能的结果。而full join将匹配的结果与所有左边的表中不匹配右边的行和右边的表中所有不匹配左边的行加在一起，在不匹配的地方使用NULL代替。结果行数=匹配行数+左表剩余行数+右表剩余行数。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103707_a5Lt_82993.jpg" alt="image"></p>
+<p><img src="http://waakaakaa.qiniudn.com/103715_XlOu_82993.jpg" alt="image"></p>
+<p>在上面的图片中，蓝色的行是两个表匹配的行。</p>
+<p>第二行，左边绿色，右边红色的是不匹配的，左表中的行是存在的，而右表中的字段则被null填充。</p>
+<p>第三行，左边红色，右边绿色的同样是不匹配的，右表中的行是存在的，而左表中的字段则被null填充。</p>
+<p><strong>8、left join</strong></p>
+<p>左连接（left join）保证左表中的所有行都有，而当不匹配的时候以NULL填充右表字段。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103812_omnc_82993.jpg" alt="image"></p>
+<p>蓝色匹配，红色和绿色不匹配</p>
+<p><strong>9、right join</strong></p>
+<p>反过来，右连接（right join）保证右表中所有的行都有，而当不匹配的时候以NULL填充左表字段。</p>
+<p><img src="http://waakaakaa.qiniudn.com/103918_9ZGB_82993.jpg" alt="image"></p>
+<p>蓝色匹配，红色和绿色不匹配</p>
+<p><strong>10、inner join</strong></p>
+<p>inner join就是只列出匹配的行。</p>
+<p><strong>11、self join</strong></p>
+<p>表连接自身叫做self join。为了解释一下这个让我们看如下图中的employee表。EmployeeID是此表的主键，ReportsTo引用了此表的主键。我们可以想象成这样，ReportTo字段引用代表该雇员的上司，其上司同样也是雇员。</p>
+<p><img src="http://waakaakaa.qiniudn.com/104034_6UfA_82993.jpg" alt="image"></p>
+<p>看如下例子</p>
+<p>这里，有ReportTo指向的行是Manager，所以employee是左表，Manager是右表。</p>
+<p><strong>12、执行顺序</strong></p>
+<p>当连接中有where语句的时候我们需要注意连接和where的执行顺序问题。</p>
+<ol>
+<li>将where语句先于join执行，因为执行完where查询的结果将会比较少，从而join操作性能会提升。</li>
+<li>将where语句后与join执行。</li>
+</ol>
+<p>以上两者将在inner join的时候返回同样的结果，但是当使用outer join的时候至少有一种连接操作的返回结果不同。看下面例子。</p>
+<p><img src="http://waakaakaa.qiniudn.com/104203_qlXI_82993.jpg" alt="image"></p>
+<p><img src="http://waakaakaa.qiniudn.com/104332_G4d9_82993.jpg" alt="image"></p>
+<p><img src="http://waakaakaa.qiniudn.com/104345_t1jS_82993.jpg" alt="image"></p>
+<p>所以记住当外连接的时候尽量先执行join操作然后执行where语句。</p>
+<p><strong>13、连接的顺序</strong></p>
+<p>当你想将inner join和outer join同时使用的时候join的顺序也是非常重要的。</p>
+<p>什么是连接的顺序？如果我像这样连接三张表【X inner Y】left Z，顺序就是先inner join再left join。</p>
+<p>让我们回到上面的例子中，你想得到的结果是获取所有客户的名字，不管他们是否有订单。如果他们确实有一些订单，还要列出了客户订购的数量。</p>
+<p>看如下的查询【先outer join再inner join】</p>
+<p><img src="http://waakaakaa.qiniudn.com/104419_CpoO_82993.jpg" alt="image"></p>
+<ol>
+<li>在Orders和Customers中进行了right join。右连接能保证你获取所有Customer的信息，不管他是否有order。</li>
+<li>现在上面的结果将和Order Details连接。但是我们需要注意的是，在右连接的结果中有两行roderid为null的，因为这两个customer并没有任何order，而在后面做inner join的时候，由于orderid为null，inner join将跳过这两行，从而导致这两个customer的信息被过滤掉了。<br>再让我们看看下面的这个查询【先inner join再outer join】</li>
+</ol>
+<p><img src="http://waakaakaa.qiniudn.com/104459_m47U_82993.jpg" alt="image"></p>
+<p>让我们分析一下为什么这才是我们想要的结果。</p>
+<p>首先Order和Order Details表做inner join，所有匹配的结果都将被列出来，然后将此结果作为左表，Customer表作为右表，右表的所有行都将被列出来，不管其匹配与否（言外之意，那两个没有order的customer也将被列出来）。</p>
+<p>所以，在我们同时使用inner join和outer join的时候一定要对连接的顺序做慎重考虑。</p>
+<p><strong>14、获取同样数据的其他办法</strong></p>
+<p>看如下查询</p>
+<p><img src="http://waakaakaa.qiniudn.com/104551_IGzJ_82993.jpg" alt="image"></p>
+<ol>
+<li>首先查询出Customers将其作为左表</li>
+<li>然后将Orders表查询出来，仍然作为左表</li>
+<li>然后查询出Order Details表将其作为右表与Orders表进行inner join。</li>
+<li>最后Customers表将于第三步查询出的结果进行左连接。别忘了左连接将保证Customers表不丢失任何记录。</li>
+</ol>
+<p><a href="http://oschina.net/" target="_blank">OSChina.NET</a>原创翻译/<a href="http://www.codeproject.com/Articles/435694/Understanding-Table-Joins-using-SQL" target="_blank">原文链接</a></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+</body>
+</html>
