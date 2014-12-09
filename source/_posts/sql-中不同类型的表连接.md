@@ -6,6 +6,8 @@ date: 2014-05-15 11:15:40
 
 在关系型数据库中，join操作是将不同的表中的数据联合在一起时非常通用的一种做法。首先让我们看看join是如何操作的，然后我们探索一下当join和where语句同时存在的时候的执行顺序问题，最后来谈一谈不同类型的join的顺序问题。
 
+<!-- more -->
+
 **2、建立初始的测试表结构（[建表语句到这里下载](http://www.codeproject.com/Articles/435694/Understanding-Table-Joins-using-SQL)）**
 
 表建立完之后，将会看到如下三个表。

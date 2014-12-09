@@ -8,6 +8,8 @@ date: 2014-05-15 10:25:27
 
 这篇文章只是简单的让每个人了解查询硬件信息的基本命令使用，包括lscpu、hwinfo、lshw、lspci、lsblk、lsusb等等。
 
+<!-- more -->
+
 **1. lscpu用于查询CPU信息**
 
 	[root@devops ~]# lscpu

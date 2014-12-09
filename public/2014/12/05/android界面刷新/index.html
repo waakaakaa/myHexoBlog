@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android界面刷新 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Android的invalidate与postInvalidate都是用来刷新界面的，用法区别在于：">
+  
+  <meta content="article" property="og:type">
+<meta content="Android界面刷新" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/05/android界面刷新/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Android的invalidate与postInvalidate都是用来刷新界面的，用法区别在于：" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/05/android界面刷新/">
+  <time datetime="2014-12-04T20:37:46.000Z">
+    12月 5 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android界面刷新</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>Android的invalidate与postInvalidate都是用来刷新界面的，用法区别在于：</p>
+<a id="more"></a>
+
+<p>invalidate():实例化一个Handler对象，并重写handleMessage方法调用invalidate()实现界面刷新;而在线程中通过sendMessage发送界面更新消息。 </p>
+<pre><code><span class="comment">// 在onCreate()中开启线程</span>
+<span class="keyword">new</span> Thread(<span class="keyword">new</span> GameThread()).start();
+
+<span class="comment">// 实例化一个handler</span>
+Handler myHandler = <span class="keyword">new</span> Handler() {
+　　<span class="comment">// 接收到消息后处理</span>
+　　<span class="keyword">public</span> <span class="keyword">void</span> handleMessage(Message msg) {
+　　　　<span class="keyword">switch</span> (msg.what) {
+　　　　　　<span class="keyword">case</span> Activity01.REFRESH:
+　　　　　　　　mGameView.invalidate(); <span class="comment">// 刷新界面</span>
+　　　　　　　　<span class="keyword">break</span>;
+　　　　}
+
+　　　　<span class="keyword">super</span>.handleMessage(msg);
+　　}
+};
+
+<span class="class"><span class="keyword">class</span> <span class="title">GameThread</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Runnable</span> {</span>
+　　<span class="keyword">public</span> <span class="keyword">void</span> run() {
+　　　　<span class="keyword">while</span> (!Thread.currentThread().isInterrupted()) {
+　　　　　　Message message = <span class="keyword">new</span> Message();
+　　　　　　message.what = Activity01.REFRESH;
+　　　　　　<span class="comment">// 发送消息</span>
+　　　　　　Activity01.<span class="keyword">this</span>.myHandler.sendMessage(message);
+　　　　　　<span class="keyword">try</span> {
+　　　　　　　　Thread.sleep(<span class="number">100</span>);
+　　　　　　} <span class="keyword">catch</span> (InterruptedException e) {
+　　　　　　　　Thread.currentThread().interrupt();
+　　　　　　}
+　　　　}
+　　}
+}
+</code></pre><p>使用postInvalidate则比较简单，不需要handler，直接在线程中调用postInvalidate即可</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">GameThread</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Runnable</span> {</span>
+　　<span class="keyword">public</span> <span class="keyword">void</span> run() {
+　　　　<span class="keyword">while</span> (!Thread.currentThread().isInterrupted()) {
+　　　　　　<span class="keyword">try</span> {
+　　　　　　　　Thread.sleep(<span class="number">100</span>);
+　　　　　　} <span class="keyword">catch</span> (InterruptedException e) {
+　　　　　　　　Thread.currentThread().interrupt();
+　　　　　　}
+
+　　　　　　<span class="comment">// 使用postInvalidate可以直接在线程中更新界面</span>
+　　　　　　mGameView.postInvalidate();
+　　　　}
+　　}
+}
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

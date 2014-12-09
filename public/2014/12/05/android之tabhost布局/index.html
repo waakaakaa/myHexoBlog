@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android之TabHost布局 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="1.概念
+盛放Tab的容器就是TabHost。TabHost的实现有两种方式：
+第一种继承TabActivity，从TabActivity中用getTabHost()方法获取TabHost。各个Tab中的内容在布局文件中定义就行了。
+第二种方式，不继承TabActivity，在布局文件中定义TabHost即可，但是TabWidget的id必须是@android:id/tabs，FrameLayou">
+  
+  <meta content="article" property="og:type">
+<meta content="Android之TabHost布局" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/05/android之tabhost布局/" property="og:url">
+<meta content="/img/Android之TabHost布局/1.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="1.概念
+盛放Tab的容器就是TabHost。TabHost的实现有两种方式：
+第一种继承TabActivity，从TabActivity中用getTabHost()方法获取TabHost。各个Tab中的内容在布局文件中定义就行了。
+第二种方式，不继承TabActivity，在布局文件中定义TabHost即可，但是TabWidget的id必须是@android:id/tabs，FrameLayou" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/05/android之tabhost布局/">
+  <time datetime="2014-12-04T23:33:56.000Z">
+    12月 5 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android之TabHost布局</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>1.概念</p>
+<p>盛放Tab的容器就是TabHost。TabHost的实现有两种方式：</p>
+<p>第一种继承TabActivity，从TabActivity中用getTabHost()方法获取TabHost。各个Tab中的内容在布局文件中定义就行了。</p>
+<p>第二种方式，不继承TabActivity，在布局文件中定义TabHost即可，但是TabWidget的id必须是@android:id/tabs，FrameLayout的id必须是@android:id/tabcontent。</p>
+<a id="more"></a>
+
+<p> 2.案例</p>
+<p>1）继承TabActivity</p>
+<p>res/layout/main.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="comment">&lt;!-- 定义TabHost组件 --&gt;</span>
+ <span class="tag">&lt;<span class="title">TabHost</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+ 　　<span class="comment">&lt;!-- 定义第一个标签页的内容 --&gt;</span>
+ 　　<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">android:id</span>=<span class="value">"@+id/tab01"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+ 　　　　<span class="comment">&lt;!-- 定义两个TextView用于显示标签页中的内容 --&gt;</span>
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"孙悟空-2011/07/12"</span>/&gt;</span> 
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"猪八戒-2011/07/10"</span>/&gt;</span>
+ 　　<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+ 　　<span class="comment">&lt;!-- 定义第二个标签页的内容 --&gt;</span>
+ 　　<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">android:id</span>=<span class="value">"@+id/tab02"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"萨僧-2011/07/11"</span>/&gt;</span> 
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"唐僧-2011/07/10"</span>/&gt;</span>
+ 　　<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+ 　　<span class="comment">&lt;!-- 定义第三个标签页的内容 --&gt;</span>
+ 　　<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">android:id</span>=<span class="value">"@+id/tab03"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"孙悟空-2011/07/12"</span>/&gt;</span> 
+ 　　　　<span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:text</span>=<span class="value">"萨僧-2011/07/08"</span>/&gt;</span>
+ 　　<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">TabHost</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><p>HelloTabHost.java</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloTabHost</span> <span class="keyword">extends</span> <span class="title">TabActivity</span> {</span>
+
+ 　　<span class="annotation">@Override</span>
+　　 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+ 　　　　<span class="keyword">super</span>.onCreate(savedInstanceState);
+
+ 　　　　<span class="comment">//调用TabActivity的getTabHost()方法获取TabHost对象</span>
+ 　　　　TabHost tabHost = getTabHost();
+
+ 　　　　<span class="comment">//设置使用TabHost布局</span>
+ 　　　　LayoutInflater.from(<span class="keyword">this</span>).inflate(R.layout.main, tabHost.getTabContentView(),<span class="keyword">true</span>);
+
+　　　　 <span class="comment">//添加第一个标签页</span>
+ 　　　　tabHost.addTab(tabHost.newTabSpec(<span class="string">"tab01"</span>).setIndicator(<span class="string">"已接电话"</span>).setContent(R.id.tab01));
+
+ 　　　　<span class="comment">//添加第二个标签页,并在其标签上添加一个图片</span>
+ 　　　　tabHost.addTab(tabHost.newTabSpec(<span class="string">"tab02"</span>).setIndicator(<span class="string">"未接电话"</span>,getResources().getDrawable(R.drawable.icon)).setContent(R.id.tab02));
+
+ 　　　　<span class="comment">//添加第三个标签页</span>
+ 　　　　tabHost.addTab(tabHost.newTabSpec(<span class="string">"tab03"</span>).setIndicator(<span class="string">"已拨电话"</span>).setContent(R.id.tab03));
+ 　　}
+}
+</code></pre><p>运行效果：</p>
+<p><img src="/img/Android之TabHost布局/1.jpg" alt="image"><img src="/img/Android之TabHost布局/1.jpg" alt="image"></p>
+<p>2）不继承TabActivity</p>
+<p>继承普通Activity，<TabWidget>标签id必须为tabs、<FrameLayout>标签id必须为tabcontent.这个方式在通过findViewById获得TabHost之后，必须要调用setup方法。</p>
+<p>main.xml代码</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>  
+  <span class="comment">&lt;!-- TabHost必须包含一个 TabWidget和一个FrameLayout--&gt;</span>   
+  <span class="tag">&lt;<span class="title">TabHost</span> <span class="attribute">android:id</span>=<span class="value">"@+id/tabhost"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>  
+        <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>  
+            <span class="comment">&lt;!-- TabWidget的id属性必须为 @android:id/tabs--&gt;</span>              
+            <span class="tag">&lt;<span class="title">TabWidget</span> <span class="attribute">android:id</span>=<span class="value">"@android:id/tabs"</span> <span class="attribute">android:orientation</span>=<span class="value">"horizontal"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>  
+              <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>  
+            <span class="comment">&lt;!-- FrameLayout的id属性必须为 @android:id/tabcontent--&gt;</span>  
+             <span class="tag">&lt;<span class="title">FrameLayout</span> <span class="attribute">android:id</span>=<span class="value">"@android:id/tabcontent"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>  
+                <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/view1"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>/&gt;</span>  
+                <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/view2"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>/&gt;</span>  
+                <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/view3"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>/&gt;</span>  
+             <span class="tag">&lt;/<span class="title">FrameLayout</span>&gt;</span>  
+         <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>  
+    <span class="tag">&lt;/<span class="title">TabHost</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>Java代码</p>
+<pre><code>public class TabHostTest extends Activity {  
+    @Override  
+    public void onCreate(Bundle savedInstanceState) {  
+        super<span class="preprocessor">.onCreate</span>(savedInstanceState)<span class="comment">;  </span>
+        setContentView(R<span class="preprocessor">.layout</span><span class="preprocessor">.main</span>)<span class="comment">;  </span>
+        // 获取TabHost对象  
+        TabHost tabHost = (TabHost) findViewById(R<span class="preprocessor">.id</span><span class="preprocessor">.tabhost</span>)<span class="comment">;  </span>
+        // 如果没有继承TabActivity时，通过该种方法加载启动tabHost  
+        tabHost<span class="preprocessor">.setup</span>()<span class="comment">;  </span>
+        tabHost<span class="preprocessor">.addTab</span>(tabHost<span class="preprocessor">.newTabSpec</span>(<span class="string">"tab1"</span>)<span class="preprocessor">.setIndicator</span>(<span class="string">"第一个标签"</span>,  
+                getResources()<span class="preprocessor">.getDrawable</span>(R<span class="preprocessor">.drawable</span><span class="preprocessor">.icon</span>))<span class="preprocessor">.setContent</span>(  
+                R<span class="preprocessor">.id</span><span class="preprocessor">.view</span>1))<span class="comment">;  </span>
+
+        tabHost<span class="preprocessor">.addTab</span>(tabHost<span class="preprocessor">.newTabSpec</span>(<span class="string">"tab3"</span>)<span class="preprocessor">.setIndicator</span>(<span class="string">"第三个标签"</span>)  
+                <span class="preprocessor">.setContent</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.view</span>3))<span class="comment">;  </span>
+
+        tabHost<span class="preprocessor">.addTab</span>(tabHost<span class="preprocessor">.newTabSpec</span>(<span class="string">"tab2"</span>)<span class="preprocessor">.setIndicator</span>(<span class="string">"第二个标签"</span>)  
+                <span class="preprocessor">.setContent</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.view</span>2))<span class="comment">;  </span>
+    }  
+}
+</code></pre><p>效果图</p>
+<p><img src="/img/Android之TabHost布局/3.gif" alt="image"></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

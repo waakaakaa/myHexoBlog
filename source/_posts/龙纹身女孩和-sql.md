@@ -1,28 +1,30 @@
-title: '龙纹身女孩和 SQL'
+title: '龙纹身女孩和SQL'
 date: 2014-05-14 11:39:02
 
 ---
 我喜欢大卫·芬奇(David Fincher)拍的电影《龙纹身女孩》，他成功的把小说《龙纹身女孩》搬上了荧幕，超出了我的预期。我本以为这又是一部肤浅的、愤世嫉俗的用来敛钱的好莱坞电影，事实情况却是，这是一部情节紧张，能引起共鸣的电影，只是里面的淫杀犯罪让人毛骨悚然。我最喜欢的一个情节是龙纹身女孩用SQL来查找40年前的凶杀案的过程。
 
-![image](http://waakaakaa.qiniudn.com/07063334_bQur.jpg)
+![image](/img/龙纹身女孩和SQL/1.jpg)
 
 我们从电影里可以看到她使用笔记本电脑，轻而易举的进入瑞典警察局数据库，当她敲入像‘unsolved(未破案)’和‘decapitation(斩首)’等关键词时，屏幕上翻滚着绿色的检索出的信息，虽然我们看不清她使用的完整的查询语句：
 
-![image](http://waakaakaa.qiniudn.com/07063335_Gdmf.jpg)
+![image](/img/龙纹身女孩和SQL/2.jpg)
+
+<!-- more -->
 
 处于一种天生的好奇，我忍不住截取了这些镜头画面，用Photoshop拼接了一下，下面是我得到的结果：
 
-![image](http://waakaakaa.qiniudn.com/07063335_FVKP.jpg)
+![image](/img/龙纹身女孩和SQL/3.jpg)
 
 你马上能发现，这不是Oracle SQL——很显然 AS 关键字在Oracle里不能用在表假名上。事实上，如果我们回去看看她那个令人兴奋的查询结果输出时，你会看到 mysql 的提示符，而且还有 use [dbname] 连接数据库的语法，下面是一个更详细的画面：
 
-![image](http://waakaakaa.qiniudn.com/07063335_0rrP.jpg)
+![image](/img/龙纹身女孩和SQL/4.jpg)
 
 我们实际上可以把她用的left join关键词表的SQL语句整理出来。
 
 最终我们获得了一个全屏的输出结果信息：
 
-![image](http://waakaakaa.qiniudn.com/07063336_bdtZ.jpg)
+![image](/img/龙纹身女孩和SQL/5.jpg)
 
 下面就是我们Oracle“WTF研究会”部门重新构造出的她使用的SQL：
 

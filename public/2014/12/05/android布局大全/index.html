@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android布局大全 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Android的界面是有布局和组件协同完成的，布局好比是建筑里的框架，而组件则相当于建筑里的砖瓦。组件按照布局的要求依次排列，就组成了用户所看见的界面。">
+  
+  <meta content="article" property="og:type">
+<meta content="Android布局大全" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/05/android布局大全/" property="og:url">
+<meta content="/img/Android布局大全/1.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Android的界面是有布局和组件协同完成的，布局好比是建筑里的框架，而组件则相当于建筑里的砖瓦。组件按照布局的要求依次排列，就组成了用户所看见的界面。" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/05/android布局大全/">
+  <time datetime="2014-12-05T10:11:50.000Z">
+    12月 5 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android布局大全</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>Android的界面是有布局和组件协同完成的，布局好比是建筑里的框架，而组件则相当于建筑里的砖瓦。组件按照布局的要求依次排列，就组成了用户所看见的界面。</p>
+<a id="more"></a>
+
+<p><img src="/img/Android布局大全/1.jpg" alt="image"></p>
+<p>所有的布局方式都可以归类为ViewGroup的5个类别，即ViewGroup的5个直接子类。其它的一些布局都扩展自这5个类。</p>
+<h3 id="LinearLayout，线性布局方式">LinearLayout，线性布局方式</h3>
+<p>这种布局比较常用，也比较简单，就是每个元素占一行，当然也可能声明为横向排放，也就是每个元素占一列。</p>
+<p>LinearLayout按照垂直或者水平的顺序依次排列子元素，每一个子元素都位于前一个元素之后。如果是垂直排列，那么将是一个N行单列的结构，每一行只会有一个元素，而不论这个元素的宽度为多少；如果是水平排列，那么将是一个单行N列的结构。如果搭建两行两列的结构，通常的方式是先垂直排列两个元素，每一个元素里再包含一个LinearLayout进行水平排列。</p>
+<p>LinearLayout中的子元素属性android:layout_weight生效，它用于描述该子元素在剩余空间中占有的大小比例。加入一行只有一个文本框，那么它的默认值就为0，如果一行中有两个等长的文本框，那么他们的android:layout_weight值可以是同为1。如果一行中有两个不等长的文本框，那么他们的android:layout_weight值分别为1和2，那么第一个文本框将占据剩余空间的三分之二，第二个文本框将占据剩余空间中的三分之一。android:layout_weight遵循数值越小，重要度越高的原则。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:background</span>=<span class="value">"#ff000000"</span> <span class="attribute">android:text</span>=<span class="value">"@string/hello"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">android:orientation</span>=<span class="value">"horizontal"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:layout_weight</span>=<span class="value">"1"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:layout_weight</span>=<span class="value">"2"</span>  <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+     <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><h3 id="Relative_Layout，相对布局">Relative Layout，相对布局</h3>
+<p>RelativeLayout按照各子元素之间的位置关系完成布局。在此布局中的子元素里与位置相关的属性将生效。例如android：layout_below,  android:layout_above, android:layout_centerVertical等。注意在指定位置关系时，引用的ID必须在引用之前，先被定义，否则将出现异常。</p>
+<p>RelativeLayout是Android五大布局结构中最灵活的一种布局结构，比较适合一些复杂界面的布局。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="tag">&lt;<span class="title">RelativeLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/text_01"</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#ffffffff"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_alignParentBottom</span>=<span class="value">"true"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/text_02"</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_above</span>=<span class="value">"@id/text_01"</span> <span class="attribute">android:layout_centerHorizontal</span>=<span class="value">"true"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:id</span>=<span class="value">"@+id/text_03"</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_toLeftOf</span>=<span class="value">"@id/text_02"</span> <span class="attribute">android:layout_above</span>=<span class="value">"@id/text_01"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>
+ <span class="tag">&lt;/<span class="title">RelativeLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><h3 id="AbsoluteLayout，绝对位置布局">AbsoluteLayout，绝对位置布局</h3>
+<p>在此布局中的子元素的android:layout_x和android:layout_y属性将生效，用于描述该子元素的坐标位置。屏幕左上角为坐标原点（0,0），第一个0代表横坐标，向右移动此值增大，第二个0代表纵坐标，向下移动，此值增大。在此布局中的子元素可以相互重叠。在实际开发中，通常不采用此布局格式，因为它的界面代码过于刚性，以至于有可能不能很好的适配各种终端。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="tag">&lt;<span class="title">AbsoluteLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#ffffffff"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_x</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_y</span>=<span class="value">"50dp"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_x</span>=<span class="value">"25dp"</span> <span class="attribute">android:layout_y</span>=<span class="value">"25dp"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:layout_x</span>=<span class="value">"125dp"</span> <span class="attribute">android:layout_y</span>=<span class="value">"125dp"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>
+ <span class="tag">&lt;/<span class="title">AbsoluteLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><h3 id="FrameLayout，帧布局">FrameLayout，帧布局</h3>
+<p>FrameLayout是五大布局中最简单的一个布局，可以说成是层布局方式。在这个布局中，整个界面被当成一块空白备用区域，所有的子元素都不能被指定放置的位置，它们统统放于这块区域的左上角，并且后面的子元素直接覆盖在前面的子元素之上，将前面的子元素部分和全部遮挡。如下，第一个TextView被第二个TextView完全遮挡，第三个TextView遮挡了第二个TextView的部分位置。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="tag">&lt;<span class="title">FrameLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:background</span>=<span class="value">"#ff000000"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+     <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:layout_width</span>=<span class="value">"50dp"</span> <span class="attribute">android:layout_height</span>=<span class="value">"50dp"</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>
+ <span class="tag">&lt;/<span class="title">FrameLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><h3 id="TableLayout，表格布局">TableLayout，表格布局</h3>
+<p>适用于N行N列的布局格式。一个TableLayout由许多TableRow组成，一个TableRow就代表TableLayout中的一行。</p>
+<p>TableRow是LinearLayout的子类，ablelLayout并不需要明确地声明包含多少行、多少列，而是通过TableRow，以及其他组件来控制表格的行数和列数， TableRow也是容器，因此可以向TableRow里面添加其他组件，没添加一个组件该表格就增加一列。如果想TableLayout里面添加组件，那么该组件就直接占用一行。在表格布局中，列的宽度由该列中最宽的单元格决定，整个表格布局的宽度取决于父容器的宽度（默认是占满父容器本身）。</p>
+<p>TableLayout继承了LinearLayout，因此他完全可以支持LinearLayout所支持的全部XML属性，除此之外TableLayout还支持以下属性：</p>
+<table>
+<thead>
+<tr>
+<th>XML属性</th>
+<th>相关用法</th>
+<th>说明      </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>andriod：collapseColumns</td>
+<td>setColumnsCollapsed（int ，boolean）</td>
+<td>设置需要隐藏的列的序列号，多个用逗号隔开</td>
+</tr>
+<tr>
+<td>android：shrinkColumns</td>
+<td>setShrinkAllColumns（boolean）</td>
+<td>设置被收缩的列的序列号，多个用逗号隔开</td>
+</tr>
+<tr>
+<td>android：stretchColimns</td>
+<td>setSretchAllColumnds（boolean）</td>
+<td>设置允许被拉伸的列的序列号，多个用逗号隔开</td>
+</tr>
+</tbody>
+</table>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+ <span class="tag">&lt;<span class="title">TableLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TableRow</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:background</span>=<span class="value">"#ffffffff"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>
+     <span class="tag">&lt;/<span class="title">TableRow</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TableRow</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>        
+     <span class="tag">&lt;/<span class="title">TableRow</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">TableRow</span> <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span> <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span> <span class="attribute">android:background</span>=<span class="value">"#fffedcba"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"3"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:background</span>=<span class="value">"#ff654321"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"2"</span>/&gt;</span>
+         <span class="tag">&lt;<span class="title">TextView</span>  <span class="attribute">android:background</span>=<span class="value">"#ffffffff"</span> <span class="attribute">android:gravity</span>=<span class="value">"center"</span> <span class="attribute">android:padding</span>=<span class="value">"10dp"</span> <span class="attribute">android:text</span>=<span class="value">"1"</span>/&gt;</span>        
+     <span class="tag">&lt;/<span class="title">TableRow</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">TableLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><h3 id="其他布局(隶属关系请看上图)">其他布局(隶属关系请看上图)</h3>
+<ol>
+<li><p>列表视图（List View）<br>List View是可滚动的列表。以列表的形式展示具体内容，并且能够根据数据的长度自适应显示。<br>具体应用请看：用法一  <a href="http://www.cnblogs.com/allin/archive/2010/05/11/1732200.html" target="_blank">http://www.cnblogs.com/allin/archive/2010/05/11/1732200.html</a>，用法二  <a href="http://blog.csdn.net/koupoo/article/details/7018727" target="_blank">http://blog.csdn.net/koupoo/article/details/7018727</a>　　　　　　</p>
+</li>
+<li><p>网格视图（Grid View）<br>Grid View一个ViewGroup以网格显示它的子视图（view）元素，即二维的、滚动的网格。具体应用查看：<a href="http://www.cnblogs.com/linzheng/archive/2011/01/19/1938760.html" target="_blank">http://www.cnblogs.com/linzheng/archive/2011/01/19/1938760.html</a></p>
+</li>
+<li><p>标签布局（Tab Layout）<br>以标签的方式显示它的子视图元素，就像在Firefox中的一个窗口中显示多个网页一样。为了狂创建一个标签UI（tabbed UI），需要使用到TabHost和TabWidget。TabHost必须是布局的根节点，它包含为了显示标签的TabWidget和显示标签内容的FrameLayout。具体应用查看：<a href="http://www.cnblogs.com/devinzhang/archive/2012/01/18/2325887.html" target="_blank">http://www.cnblogs.com/devinzhang/archive/2012/01/18/2325887.html</a></p>
+</li>
+</ol>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

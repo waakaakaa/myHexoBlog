@@ -6,6 +6,8 @@ date: 2014-05-15 11:34:41
 
 此页图解git中的最常用命令。如果你稍微理解git的工作原理，这篇文章能够让你理解的更透彻。 如果你想知道这个站点怎样产生，请前往[GitHub repository](http://github.com/MarkLodato/visual-git-guide)。
 
+<!-- more -->
+
 正文
 ===
 

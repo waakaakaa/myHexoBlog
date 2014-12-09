@@ -1,0 +1,509 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android之Adapter用法总结 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="概念
+Adapter是连接后端数据和前端显示的适配器接口，是数据和UI（View）之间一个重要的纽带。在常见的View(ListView,GridView)等地方都需要用到Adapter。如下图直观的表达了Data、Adapter、View三者的关系：">
+  
+  <meta content="article" property="og:type">
+<meta content="Android之Adapter用法总结" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/05/android之adapter用法总结/" property="og:url">
+<meta content="/img/Android之Adapter用法总结/1.jpg" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="概念
+Adapter是连接后端数据和前端显示的适配器接口，是数据和UI（View）之间一个重要的纽带。在常见的View(ListView,GridView)等地方都需要用到Adapter。如下图直观的表达了Data、Adapter、View三者的关系：" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/05/android之adapter用法总结/">
+  <time datetime="2014-12-04T18:33:19.000Z">
+    12月 5 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android之Adapter用法总结</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <h1 id="概念">概念</h1>
+<p>Adapter是连接后端数据和前端显示的适配器接口，是数据和UI（View）之间一个重要的纽带。在常见的View(ListView,GridView)等地方都需要用到Adapter。如下图直观的表达了Data、Adapter、View三者的关系：</p>
+<a id="more"></a>
+
+<p><img src="/img/Android之Adapter用法总结/1.jpg" alt="image"></p>
+<p>Android中所有的Adapter一览：</p>
+<p><img src="/img/Android之Adapter用法总结/2.png" alt="image"></p>
+<p>由图可以看到在Android中与Adapter有关的所有接口、类的完整层级图。在我们使用过程中可以根据自己的需求实现接口或者继承类进行一定的扩展。比较常用的有 BaseAdapter，SimpleAdapter，ArrayAdapter，SimpleCursorAdapter等。</p>
+<ol>
+<li>BaseAdapter是一个抽象类，继承它需要实现较多的方法，所以也就具有较高的灵活性；</li>
+<li>ArrayAdapter支持泛型操作，最为简单，只能展示一行字。</li>
+<li>SimpleAdapter有最好的扩充性，可以自定义出各种效果。</li>
+<li>SimpleCursorAdapter可以适用于简单的纯文字型ListView，它需要Cursor的字段和UI的id对应起来。如需要实现更复杂的UI也可以重写其他方法。可以认为是SimpleAdapter对数据库的简单结合，可以方便地把数据库的内容以列表的形式展示出来。</li>
+</ol>
+<h1 id="应用案例">应用案例</h1>
+<h2 id="ArrayAdapter">ArrayAdapter</h2>
+<p>列表的显示需要三个元素：</p>
+<ol>
+<li>ListView：用来展示列表的View。</li>
+<li>适配器:用来把数据映射到ListView上的中介。</li>
+<li>数据：具体的将被映射的字符串，图片，或者基本组件。</li>
+</ol>
+<p>案例一</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayAdapterActivity</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> {</span>
+     <span class="annotation">@Override</span>
+     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+         <span class="keyword">super</span>.onCreate(savedInstanceState);
+         <span class="comment">//列表项的数据</span>
+         String[] strs = {<span class="string">"1"</span>,<span class="string">"2"</span>,<span class="string">"3"</span>,<span class="string">"4"</span>,<span class="string">"5"</span>};
+         ArrayAdapter&lt;String&gt; adapter = <span class="keyword">new</span> ArrayAdapter&lt;String&gt;(<span class="keyword">this</span>,android.R.layout.simple_expandable_list_item_1,strs);
+         setListAdapter(adapter);
+     }
+ }
+</code></pre><p>案例二</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyListView</span> <span class="keyword">extends</span> <span class="title">Activity</span> {</span>
+    <span class="keyword">private</span> ListView listView;
+    <span class="comment">//private List&lt;String&gt; data = new ArrayList&lt;String&gt;();</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState){
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+
+        listView = <span class="keyword">new</span> ListView(<span class="keyword">this</span>);
+        listView.setAdapter(<span class="keyword">new</span> ArrayAdapter&lt;String&gt;(<span class="keyword">this</span>, android.R.layout.simple_expandable_list_item_1,getData()));
+        setContentView(listView);
+    }
+
+    <span class="keyword">private</span> List&lt;String&gt; <span class="title">getData</span>(){
+
+        List&lt;String&gt; data = <span class="keyword">new</span> ArrayList&lt;String&gt;();
+        data.add(<span class="string">"测试数据1"</span>);
+        data.add(<span class="string">"测试数据2"</span>);
+        data.add(<span class="string">"测试数据3"</span>);
+        data.add(<span class="string">"测试数据4"</span>);
+
+        <span class="keyword">return</span> data;
+    }
+}
+</code></pre><p>上面代码使用了ArrayAdapter(Context context, int textViewResourceId, List<T> objects)来装配数据，要装配这些数据就需要一个连接ListView视图对象和数组数据的适配器来两者的适配工作，ArrayAdapter的构造需要三个参数，依次为this,布局文件（注意这里的布局文件描述的是列表的每一行的布局，android.R.layout.simple_list_item_1是系统定义好的布局文件只显示一行文字，数据源(一个List集合)。同时用setAdapter（）完成适配的最后工作。效果图如下：</p>
+<p><img src="/img/Android之Adapter用法总结/3.png" alt="image"></p>
+<h2 id="SimpleAdapter">SimpleAdapter</h2>
+<p>SimpleAdapter的扩展性最好，可以定义各种各样的布局出来，可以放上ImageView（图片），还可以放上Button（按钮），CheckBox（复选框）等等。下面的代码都直接继承了ListActivity，ListActivity和普通的Activity没有太大的差别，不同就是对显示ListView做了许多优化，方面显示而已。</p>
+<p>案例一</p>
+<p>simple.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+    <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+        <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">ImageView
+</span>            <span class="attribute">android:id</span>=<span class="value">"@+id/img"</span>
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+            <span class="attribute">android:layout_margin</span>=<span class="value">"5dp"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">TextView
+</span>            <span class="attribute">android:id</span>=<span class="value">"@+id/title"</span>
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:textColor</span>=<span class="value">"#ffffff"</span>
+            <span class="attribute">android:textSize</span>=<span class="value">"20sp"</span>/&gt;</span>
+    <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><!-- -->
+
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleAdapterActivity</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> {</span>
+     <span class="annotation">@Override</span>
+     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+         <span class="keyword">super</span>.onCreate(savedInstanceState);
+
+     SimpleAdapter adapter = <span class="keyword">new</span> SimpleAdapter(<span class="keyword">this</span>, getData(), R.layout.simple, <span class="keyword">new</span> String[] { <span class="string">"title"</span>,  <span class="string">"img"</span> }, <span class="keyword">new</span> <span class="keyword">int</span>[] { R.id.title, R.id.img });
+     setListAdapter(adapter);
+ }
+
+<span class="keyword">private</span> List&lt;Map&lt;String, Object&gt;&gt; <span class="title">getData</span>() {
+     <span class="comment">//map.put(参数名字,参数值)</span>
+     List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+     Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+     map.put(<span class="string">"title"</span>, <span class="string">"摩托罗拉"</span>);
+     map.put(<span class="string">"img"</span>, R.drawable.icon);
+     list.add(map);
+
+     map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+     map.put(<span class="string">"title"</span>, <span class="string">"诺基亚"</span>);
+     map.put(<span class="string">"img"</span>, R.drawable.icon);
+     list.add(map);
+
+     map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+     map.put(<span class="string">"title"</span>, <span class="string">"三星"</span>);
+     map.put(<span class="string">"img"</span>, R.drawable.icon);
+     list.add(map);
+     <span class="keyword">return</span> list;
+     }  
+
+}
+</code></pre><p>案例二</p>
+<p>下面的程序是实现一个带有图片的类表。首先需要定义好一个用来显示每一个列内容的xml，</p>
+<p>vlist.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+    <span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>             <span class="attribute">android:orientation</span>=<span class="value">"horizontal"</span> 
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">ImageView</span> 
+            <span class="attribute">android:id</span>=<span class="value">"@+id/img"</span> 
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_margin</span>=<span class="value">"5px"</span>/&gt;</span>
+
+        <span class="tag">&lt;<span class="title">LinearLayout</span> 
+            <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>  
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>  
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+
+            <span class="tag">&lt;<span class="title">TextView</span> 
+                <span class="attribute">android:id</span>=<span class="value">"@+id/title"</span> 
+                <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+                <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+                <span class="attribute">android:textColor</span>=<span class="value">"#FFFFFFFF"</span> 
+                <span class="attribute">android:textSize</span>=<span class="value">"22px"</span> /&gt;</span>
+
+            <span class="tag">&lt;<span class="title">TextView</span> 
+                <span class="attribute">android:id</span>=<span class="value">"@+id/info"</span>  
+                <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+                <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+                <span class="attribute">android:textColor</span>=<span class="value">"#FFFFFFFF"</span> 
+                <span class="attribute">android:textSize</span>=<span class="value">"13px"</span> /&gt;</span>
+
+        <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+     <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><!-- -->
+
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> MyListView3 extends ListActivity {
+    <span class="comment">// private List&lt;String&gt; data = new ArrayList&lt;String&gt;();</span>
+    @Override
+    <span class="keyword">public</span> <span class="keyword">void</span> onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        SimpleAdapter adapter = <span class="keyword">new</span> SimpleAdapter(<span class="keyword">this</span>,getData(),R.layout.vlist,
+                <span class="keyword">new</span> String[]{<span class="string">"title"</span>,<span class="string">"info"</span>,<span class="string">"img"</span>},
+                <span class="keyword">new</span> <span class="keyword">int</span>[]{R.id.title,R.id.info,R.id.img});
+        setListAdapter(adapter);
+    }
+
+    <span class="keyword">private</span> List&lt;Map&lt;String, Object&gt;&gt; getData() {
+        List&lt;Map&lt;String, Object&gt;&gt; <span class="built_in">list</span> = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+
+        Map&lt;String, Object&gt; <span class="built_in">map</span> = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+        <span class="built_in">map</span>.put(<span class="string">"title"</span>, <span class="string">"G1"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"info"</span>, <span class="string">"google 1"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"img"</span>, R.drawable.i1);
+        <span class="built_in">list</span>.add(<span class="built_in">map</span>);
+
+        <span class="built_in">map</span> = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+        <span class="built_in">map</span>.put(<span class="string">"title"</span>, <span class="string">"G2"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"info"</span>, <span class="string">"google 2"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"img"</span>, R.drawable.i2);
+        <span class="built_in">list</span>.add(<span class="built_in">map</span>);
+
+        <span class="built_in">map</span> = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+        <span class="built_in">map</span>.put(<span class="string">"title"</span>, <span class="string">"G3"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"info"</span>, <span class="string">"google 3"</span>);
+        <span class="built_in">map</span>.put(<span class="string">"img"</span>, R.drawable.i3);
+        <span class="built_in">list</span>.add(<span class="built_in">map</span>);
+
+        <span class="keyword">return</span> <span class="built_in">list</span>;
+    }
+}
+</code></pre><p>使用simpleAdapter的数据用一般都是HashMap构成的List，list的每一节对应ListView的每一行。HashMap的每个键值数据映射到布局文件中对应id的组件上。因为系统没有对应的布局文件可用，我们可以自己定义一个布局vlist.xml。下面做适配，new一个SimpleAdapter参数一次是：this，布局文件（vlist.xml），HashMap的 title 和 info，img。布局文件的组件id，title，info，img。布局文件的各组件分别映射到HashMap的各元素上，完成适配。</p>
+<p>运行效果如下图：</p>
+<p><img src="/img/Android之Adapter用法总结/4.png" alt="image"></p>
+<h2 id="SimpleCursorAdapter">SimpleCursorAdapter</h2>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleCursorAdapterActivity</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> {</span>
+     <span class="annotation">@Override</span>
+     <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+         <span class="keyword">super</span>.onCreate(savedInstanceState);
+         <span class="comment">//获得一个指向系统通讯录数据库的Cursor对象获得数据来源</span>
+         Cursor cur = getContentResolver().query(People.CONTENT_URI, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);
+         startManagingCursor(cur);
+         <span class="comment">//实例化列表适配器</span>
+
+         ListAdapter adapter = <span class="keyword">new</span> SimpleCursorAdapter(<span class="keyword">this</span>, android.R.layout.simple_list_item_1, cur, <span class="keyword">new</span> String[] {People.NAME}, <span class="keyword">new</span> <span class="keyword">int</span>[] {android.R.id.text1});
+         setListAdapter(adapter);
+     }
+}
+</code></pre><p>一定要以数据库作为数据源的时候,才能使用SimpleCursorAdapter，这里特别需要注意的一点是：不要忘了在AndroidManifest.xml文件中加入权限</p>
+<pre><code><span class="tag">&lt;<span class="title">uses-permission</span> <span class="attribute">android:name</span>=<span class="value">"android.permission.READ_CONTACTS"</span>&gt;</span><span class="tag">&lt;/<span class="title">uses-permission</span>&gt;</span>
+</code></pre><p>效果如下：</p>
+<p><img src="/img/Android之Adapter用法总结/5.jpg" alt="image"></p>
+<h2 id="BaseAdapter">BaseAdapter</h2>
+<p>有时候，列表不光会用来做显示用，我们同样可以在在上面添加按钮。添加按钮首先要写一个有按钮的xml文件，然后自然会想到用上面的方法定义一个适配器，然后将数据映射到布局文件上。但是事实并非这样，因为按钮是无法映射的，即使你成功的用布局文件显示出了按钮也无法添加按钮的响应，这时就要研究一下ListView是如何现实的了，而且必须要重写一个类继承BaseAdapter。下面的示例将显示一个按钮和一个图片，两行字如果单击按钮将删除此按钮的所在行。并告诉你ListView究竟是如何工作的。</p>
+<p>vlist2.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+    <span class="tag">&lt;<span class="title">LinearLayout</span> 
+        <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>             <span class="attribute">android:orientation</span>=<span class="value">"horizontal"</span> 
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>&gt;</span>
+
+        <span class="tag">&lt;<span class="title">ImageView</span> 
+            <span class="attribute">android:id</span>=<span class="value">"@+id/img"</span> 
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_margin</span>=<span class="value">"5px"</span>/&gt;</span>
+
+        <span class="tag">&lt;<span class="title">LinearLayout</span> 
+            <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> 
+            <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+            <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+
+           <span class="tag">&lt;<span class="title">TextView</span> 
+               <span class="attribute">android:id</span>=<span class="value">"@+id/title"</span> 
+               <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+               <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+               <span class="attribute">android:textColor</span>=<span class="value">"#FFFFFFFF"</span> 
+               <span class="attribute">android:textSize</span>=<span class="value">"22px"</span> /&gt;</span>
+
+           <span class="tag">&lt;<span class="title">TextView</span> 
+               <span class="attribute">android:id</span>=<span class="value">"@+id/info"</span> 
+               <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+               <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+               <span class="attribute">android:textColor</span>=<span class="value">"#FFFFFFFF"</span> 
+               <span class="attribute">android:textSize</span>=<span class="value">"13px"</span> /&gt;</span>
+
+       <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+
+       <span class="tag">&lt;<span class="title">Button</span> 
+           <span class="attribute">android:id</span>=<span class="value">"@+id/view_btn"</span> 
+           <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>  
+           <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+           <span class="attribute">android:text</span>=<span class="value">"@string/s_view_btn"</span> 
+           <span class="attribute">android:layout_gravity</span>=<span class="value">"bottom|right"</span> /&gt;</span>
+
+    <span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">xml</span>&gt;</span>
+</code></pre><!-- -->
+
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyListView4</span> <span class="keyword">extends</span> <span class="title">ListActivity</span> {</span>   
+
+   <span class="keyword">private</span> List&lt;Map&lt;String, Object&gt;&gt; mData;
+
+   <span class="annotation">@Override</span>
+   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+       <span class="keyword">super</span>.onCreate(savedInstanceState);
+       mData = getData();
+       MyAdapter adapter = <span class="keyword">new</span> MyAdapter(<span class="keyword">this</span>);
+       setListAdapter(adapter);
+   }
+
+   <span class="keyword">private</span> List&lt;Map&lt;String, Object&gt;&gt; <span class="title">getData</span>() {
+       List&lt;Map&lt;String, Object&gt;&gt; list = <span class="keyword">new</span> ArrayList&lt;Map&lt;String, Object&gt;&gt;();
+
+       Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+       map.put(<span class="string">"title"</span>, <span class="string">"G1"</span>);
+       map.put(<span class="string">"info"</span>, <span class="string">"google 1"</span>);
+       map.put(<span class="string">"img"</span>, R.drawable.i1);
+       list.add(map);
+
+       map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+       map.put(<span class="string">"title"</span>, <span class="string">"G2"</span>);
+       map.put(<span class="string">"info"</span>, <span class="string">"google 2"</span>);
+       map.put(<span class="string">"img"</span>, R.drawable.i2);
+       list.add(map);
+
+       map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+       map.put(<span class="string">"title"</span>, <span class="string">"G3"</span>);
+       map.put(<span class="string">"info"</span>, <span class="string">"google 3"</span>);
+       map.put(<span class="string">"img"</span>, R.drawable.i3);
+       list.add(map);
+
+       <span class="keyword">return</span> list;
+   }
+
+   <span class="comment">// ListView 中某项被选中后的逻辑</span>
+   <span class="annotation">@Override</span>
+   <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onListItemClick</span>(ListView l, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id) {
+
+       Log.v(<span class="string">"MyListView4-click"</span>, (String)mData.get(position).get(<span class="string">"title"</span>));
+   }
+
+   <span class="javadoc">/**
+    * listview中点击按键弹出对话框
+    */</span>
+   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showInfo</span>(){
+       <span class="keyword">new</span> AlertDialog.Builder(<span class="keyword">this</span>)
+       .setTitle(<span class="string">"我的listview"</span>)
+       .setMessage(<span class="string">"介绍..."</span>)
+       .setPositiveButton(<span class="string">"确定"</span>, <span class="keyword">new</span> DialogInterface.OnClickListener() {
+           <span class="annotation">@Override</span>
+           <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(DialogInterface dialog, <span class="keyword">int</span> which) {
+           }
+       })
+       .show();
+
+   }
+
+
+
+   <span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewHolder</span>{</span>
+       <span class="keyword">public</span> ImageView img;
+       <span class="keyword">public</span> TextView title;
+       <span class="keyword">public</span> TextView info;
+       <span class="keyword">public</span> Button viewBtn;
+   }
+
+
+   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAdapter</span> <span class="keyword">extends</span> <span class="title">BaseAdapter</span>{</span>
+
+       <span class="keyword">private</span> LayoutInflater mInflater;
+
+
+       <span class="keyword">public</span> <span class="title">MyAdapter</span>(Context context){
+           <span class="keyword">this</span>.mInflater = LayoutInflater.from(context);
+       }
+       <span class="annotation">@Override</span>
+       <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span>() {
+           <span class="comment">// TODO Auto-generated method stub</span>
+           <span class="keyword">return</span> mData.size();
+       }
+
+       <span class="annotation">@Override</span>
+       <span class="keyword">public</span> Object <span class="title">getItem</span>(<span class="keyword">int</span> arg0) {
+           <span class="comment">// TODO Auto-generated method stub</span>
+           <span class="keyword">return</span> <span class="keyword">null</span>;
+       }
+
+       <span class="annotation">@Override</span>
+       <span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getItemId</span>(<span class="keyword">int</span> arg0) {
+           <span class="comment">// TODO Auto-generated method stub</span>
+           <span class="keyword">return</span> <span class="number">0</span>;
+       }
+
+       <span class="annotation">@Override</span>
+       <span class="keyword">public</span> View <span class="title">getView</span>(<span class="keyword">int</span> position, View convertView, ViewGroup parent) {
+
+           ViewHolder holder = <span class="keyword">null</span>;
+           <span class="keyword">if</span> (convertView == <span class="keyword">null</span>) {
+
+               holder=<span class="keyword">new</span> ViewHolder(); 
+
+               convertView = mInflater.inflate(R.layout.vlist2, <span class="keyword">null</span>);
+               holder.img = (ImageView)convertView.findViewById(R.id.img);
+               holder.title = (TextView)convertView.findViewById(R.id.title);
+               holder.info = (TextView)convertView.findViewById(R.id.info);
+               holder.viewBtn = (Button)convertView.findViewById(R.id.view_btn);
+               convertView.setTag(holder);
+
+           }<span class="keyword">else</span> {
+
+               holder = (ViewHolder)convertView.getTag();
+           }
+
+
+           holder.img.setBackgroundResource((Integer)mData.get(position).get(<span class="string">"img"</span>));
+           holder.title.setText((String)mData.get(position).get(<span class="string">"title"</span>));
+           holder.info.setText((String)mData.get(position).get(<span class="string">"info"</span>));
+
+           holder.viewBtn.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+
+               <span class="annotation">@Override</span>
+               <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(View v) {
+                   showInfo();                
+               }
+           });
+
+
+           <span class="keyword">return</span> convertView;
+       }
+
+   }     
+}
+</code></pre><p>下面将对上述代码，做详细的解释，listView在开始绘制的时候，系统首先调用getCount（）函数，根据他的返回值得到listView的长度（这也是为什么在开始的第一张图特别的标出列表长度），然后根据这个长度，调用getView（）逐一绘制每一行。如果你的getCount（）返回值是0的话，列表将不显示同样return 1，就只显示一行。</p>
+<p>系统显示列表时，首先实例化一个适配器（这里将实例化自定义的适配器）。当手动完成适配时，必须手动映射数据，这需要重写getView（）方法。系统在绘制列表的每一行的时候将调用此方法。getView()有三个参数，position表示将显示的是第几行，covertView是从布局文件中inflate来的布局。我们用LayoutInflater的方法将定义好的vlist2.xml文件提取成View实例用来显示。然后将xml文件中的各个组件实例化（简单的findViewById()方法）。这样便可以将数据对应到各个组件上了。但是按钮为了响应点击事件，需要为它添加点击监听器，这样就能捕获点击事件。至此一个自定义的listView就完成了，现在让我们回过头从新审视这个过程。系统要绘制ListView了，他首先获得要绘制的这个列表的长度，然后开始绘制第一行，怎么绘制呢？调用getView()函数。在这个函数里面首先获得一个View（实际上是一个ViewGroup），然后再实例并设置各个组件，显示之。好了，绘制完这一行了。那再绘制下一行，直到绘完为止。在实际的运行过程中会发现listView的每一行没有焦点了，这是因为Button抢夺了listView的焦点，只要布局文件中将Button设置为没有焦点就OK了。</p>
+<p>效果如下：</p>
+<p><img src="/img/Android之Adapter用法总结/6.png" alt="image"></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

@@ -8,6 +8,8 @@ date: 2014-05-14 14:20:06
 
 首先，在你的home目录下面创建下面的空文件，来测试下面的find命令示例。
 
+<!-- more -->
+
 	# vim create_sample_files.sh
 	touch MybashProgram.sh
 	touch mycprogram.c

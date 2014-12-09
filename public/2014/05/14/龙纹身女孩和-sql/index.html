@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
-  <title>龙纹身女孩和 SQL | 挖之家</title>
+  <title>龙纹身女孩和SQL | 挖之家</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   
     <meta name="author" content="Xin Zhang">
@@ -15,9 +15,9 @@
 我们从电影里可以看到她使用笔记本电脑，轻而易举的进入瑞典警察局">
   
   <meta content="article" property="og:type">
-<meta content="龙纹身女孩和 SQL" property="og:title">
+<meta content="龙纹身女孩和SQL" property="og:title">
 <meta content="http://waakaakaa.github.io/2014/05/14/龙纹身女孩和-sql/" property="og:url">
-<meta content="http://waakaakaa.qiniudn.com/07063334_bQur.jpg" property="og:image">
+<meta content="/img/龙纹身女孩和SQL/1.jpg" property="og:image">
 <meta content="挖之家" property="og:site_name">
 <meta content="我喜欢大卫·芬奇(David Fincher)拍的电影《龙纹身女孩》，他成功的把小说《龙纹身女孩》搬上了荧幕，超出了我的预期。我本以为这又是一部肤浅的、愤世嫉俗的用来敛钱的好莱坞电影，事实情况却是，这是一部情节紧张，能引起共鸣的电影，只是里面的淫杀犯罪让人毛骨悚然。我最喜欢的一个情节是龙纹身女孩用SQL来查找40年前的凶杀案的过程。
 
@@ -64,7 +64,7 @@
     
     
   
-    <h1 class="title">龙纹身女孩和 SQL</h1>
+    <h1 class="title">龙纹身女孩和SQL</h1>
   
 
   </header>
@@ -72,16 +72,18 @@
   <div class="entry">
     
       <p>我喜欢大卫·芬奇(David Fincher)拍的电影《龙纹身女孩》，他成功的把小说《龙纹身女孩》搬上了荧幕，超出了我的预期。我本以为这又是一部肤浅的、愤世嫉俗的用来敛钱的好莱坞电影，事实情况却是，这是一部情节紧张，能引起共鸣的电影，只是里面的淫杀犯罪让人毛骨悚然。我最喜欢的一个情节是龙纹身女孩用SQL来查找40年前的凶杀案的过程。</p>
-<p><img src="http://waakaakaa.qiniudn.com/07063334_bQur.jpg" alt="image"></p>
+<p><img src="/img/龙纹身女孩和SQL/1.jpg" alt="image"></p>
 <p>我们从电影里可以看到她使用笔记本电脑，轻而易举的进入瑞典警察局数据库，当她敲入像‘unsolved(未破案)’和‘decapitation(斩首)’等关键词时，屏幕上翻滚着绿色的检索出的信息，虽然我们看不清她使用的完整的查询语句：</p>
-<p><img src="http://waakaakaa.qiniudn.com/07063335_Gdmf.jpg" alt="image"></p>
+<p><img src="/img/龙纹身女孩和SQL/2.jpg" alt="image"></p>
+<a id="more"></a>
+
 <p>处于一种天生的好奇，我忍不住截取了这些镜头画面，用Photoshop拼接了一下，下面是我得到的结果：</p>
-<p><img src="http://waakaakaa.qiniudn.com/07063335_FVKP.jpg" alt="image"></p>
+<p><img src="/img/龙纹身女孩和SQL/3.jpg" alt="image"></p>
 <p>你马上能发现，这不是Oracle SQL——很显然 AS 关键字在Oracle里不能用在表假名上。事实上，如果我们回去看看她那个令人兴奋的查询结果输出时，你会看到 mysql 的提示符，而且还有 use [dbname] 连接数据库的语法，下面是一个更详细的画面：</p>
-<p><img src="http://waakaakaa.qiniudn.com/07063335_0rrP.jpg" alt="image"></p>
+<p><img src="/img/龙纹身女孩和SQL/4.jpg" alt="image"></p>
 <p>我们实际上可以把她用的left join关键词表的SQL语句整理出来。</p>
 <p>最终我们获得了一个全屏的输出结果信息：</p>
-<p><img src="http://waakaakaa.qiniudn.com/07063336_bdtZ.jpg" alt="image"></p>
+<p><img src="/img/龙纹身女孩和SQL/5.jpg" alt="image"></p>
 <p>下面就是我们Oracle“WTF研究会”部门重新构造出的她使用的SQL：</p>
 <pre><code>SELECT DISTINCT v.fname, v.lname, i.year, i.location, i.report_file
 FROM   Incident AS i
@@ -149,6 +151,7 @@ AND    (k.keyword IN (<span class="string">'rape'</span>, <span class="string">'
     $('.fancybox').fancybox();
   })(jQuery);
 </script>
+
 
 </body>
 </html>

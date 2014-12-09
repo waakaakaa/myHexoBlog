@@ -2,9 +2,11 @@ title: 'Peter Norvig：编程语言的选择并不重要'
 date: 2014-05-14 11:49:25
 
 ---
-![image](http://waakaakaa.qiniudn.com/58_101020040205_1.jpg)
+![image](/img/Peter Norvig：编程语言的选择并不重要/1.jpg)
 
 Lisp被许多资深程序员视为编程语言中的圣杯，因为学起来很难。著名程序员、最热门的技术问答网站StackOverflow创始人Joel Spolsky曾经在[“Java语言学校的危险性”](http://www.ruanyifeng.com/blog/2008/12/the_perils_of_javaschools.html)一 文中说，自己当年在大学里学习用Lisp的导论课程也是苦不堪言，而Lisp这样的函数式语言实际开发中并不常用，但是一旦到了体现优势的时候，你如果不 懂，将失之千里。他还认为，Google的核心技术之一MapReduce就来自函数式语言，而且使Google领先微软多年。请注意，Spolsky曾 经1990年代微软的Excel项目经理，VBA的主要创造者。
+
+<!-- more -->
 
 《Unix编程艺术》的作者Eric Raymond也在[“如何成为黑客”](http://www.aka.org.cn/Docs/hacker-howto_2001.html)（英文版）中说过，Lisp是对黑客特别重要的语言，“掌握了之后，你会得到丰富的启迪和经验。 即使实际上很少使用Lisp，这些经验也会使你在以后的日子里成为更好的程序员。”
 

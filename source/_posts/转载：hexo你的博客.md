@@ -11,6 +11,8 @@ date: 2014-05-07 14:09:48
 
 hexo出自台湾大学生[tommy351](http://twitter.com/tommy351)之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。先看看tommy是如何吐槽Octopress的 →＿→ [Hexo颯爽登場](http://zespia.tw/blog/2012/10/11/hexo-debut)。
 
+<!-- more -->
+
 * *如果你对默认配置满意，只需几个命令便可秒搭一个hexo。*
 * *如果你跟我一样喜欢折腾下，30分钟也足够个性化。*
 * *如果你过于喜欢折腾，可以折腾个把星期，尽情的玩。* 
@@ -55,7 +57,7 @@ GitHub
 * 建立与你用户名对应的仓库，仓库名必须为『your_user_name.github.com』
 * 添加SSH公钥到『Account settings -> SSH Keys -> Add SSH Key』
 
-![my GitHub Pages](http://bruce.u.qiniudn.com/2013/11/22/hexo-your-blog/my-github-pages.jpg)
+![my GitHub Pages](/img/转载：hexo你的博客/1.jpg)
 
 前两步忽略，只说第三步，**添加SSH-Key**。
 
@@ -87,7 +89,7 @@ GitHub
 1. 用文本编辑器打开ssh.pub文件，拷贝其中的内容，将其添加到[Add SSH Key](http://github.com/settings/ssh)
 2. 将id_rsa和id_rsa.pub拷贝至你Git安装目录下的.ssh目录，如H:\PortableGit-1.8.4\.ssh
 
-![Add SSH Keys](http://bruce.u.qiniudn.com/2013/11/22/hexo-your-blog/add-ssh-keys.jpg)
+![Add SSH Keys](/img/转载：hexo你的博客/2.jpg)
 
 最后可以验证一下：
 

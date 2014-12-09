@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android中Activity和Service和线程之间的通信 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="Activity、Service和线程应该是Android编程中最常见的几种类了，几乎大多数应用程序都会涉及到这几个类的编程，自然而然的，也就会涉及到三者之间的相互通信，本文就试图简单地介绍一下这三者通信的方式。
+想写这篇文章的起因是，笔者跟几个同学在做一个Android上的应用，起初代码写得很凌乱，因为我在Activity中直接创建了线程，去执行某些任务。但是我们知道线程可能需要运行的时间比较长">
+  
+  <meta content="article" property="og:type">
+<meta content="Android中Activity和Service和线程之间的通信" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/05/android中activity和service和线程之间的通信/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="Activity、Service和线程应该是Android编程中最常见的几种类了，几乎大多数应用程序都会涉及到这几个类的编程，自然而然的，也就会涉及到三者之间的相互通信，本文就试图简单地介绍一下这三者通信的方式。
+想写这篇文章的起因是，笔者跟几个同学在做一个Android上的应用，起初代码写得很凌乱，因为我在Activity中直接创建了线程，去执行某些任务。但是我们知道线程可能需要运行的时间比较长" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/05/android中activity和service和线程之间的通信/">
+  <time datetime="2014-12-04T22:33:54.000Z">
+    12月 5 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android中Activity和Service和线程之间的通信</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>Activity、Service和线程应该是Android编程中最常见的几种类了，几乎大多数应用程序都会涉及到这几个类的编程，自然而然的，也就会涉及到三者之间的相互通信，本文就试图简单地介绍一下这三者通信的方式。</p>
+<p>想写这篇文章的起因是，笔者跟几个同学在做一个Android上的应用，起初代码写得很凌乱，因为我在Activity中直接创建了线程，去执行某些任务。但是我们知道线程可能需要运行的时间比较长，而Android在内存不足的时候，会将一些Activity销毁，这样线程就会失去了管理的对象，从而使程序发生意想不到的结果。此外，在Activity中创建线程，线程跟Activity的通信也比较麻烦，一般借助Handler类来进行通信（<a href="http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html" target="_blank">http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html</a>）。</p>
+<p>与Activity相比，Service一般“默默”地运行在后台，生命周期比较长，所以它更合适去为主程序提供某些服务，创建线程并管理线程。因此，笔者将原程序改成三层架构，从高到低分别为：Activity层—Service层—Thread层。Activity将需要的服务“告诉”Service层，Service层创建Thread去完成服务。Thread将任务的进度、状态、错误信息反馈给Service，Service将这些消息反馈给相关的Activity，并且还可以利用Notification更新通知栏消息。大体的结构就是这样。</p>
+<ol>
+<li><p>Activity和Service之间的通信</p>
+<ol>
+<li><p>利用Handler通信：<a href="http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html" target="_blank">http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html</a></p>
+</li>
+<li><p>Activity调用startService (Intent service)方法，将消息添加到Intent对象中，这样Service对象可以在调用onStartCommand (Intent intent, int flags, int startId)的时候可以得到这些消息。这种方法很简单，但如果有大量的信息要传递的话，就很麻烦了。因为Service端还要判断一下消息是什么，才能作进一步的动作。</p>
+</li>
+<li><p>Activity调用bindService (Intent service, ServiceConnection conn, int flags)方法，得到Service对象的一个引用，这样Activity可以直接调用到Service中的方法。具体代码：<a href="http://blog.csdn.net/liuhe688/article/details/6623924" target="_blank">http://blog.csdn.net/liuhe688/article/details/6623924</a>。</p>
+</li>
+<li><p>Service向Activity发送消息，除了可以利用Handler外，还可以使用广播，当然Activity要注册相应的接收器。比如Service要向多个Activity发送同样的消息的话，用这种方法就更好。具体方法可以看一下这篇文章：<a href="http://blog.csdn.net/liuhe688/article/details/6641806" target="_blank">http://blog.csdn.net/liuhe688/article/details/6641806</a>。</p>
+</li>
+</ol>
+</li>
+<li><p>Service跟Thread之间的通信</p>
+<ol>
+<li>Service创建Thread后，如果要对线程进行控制（启动，暂停，停止等），那么Service中应该保留线程的引用，这不用多说。那么有了这个引用，Service就可以直接调用Thread的其它方法了。运行的线程要向Service发送消息的话，通常使用Handler就可以了：<a href="http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html" target="_blank">http://blog.sina.com.cn/s/blog_3fe961ae0100mvc5.html</a>。</li>
+</ol>
+</li>
+<li><p>Activity和Thread之间的通信</p>
+<ol>
+<li>不用多想了，直接使用Handler吧。不推荐Activity直接去创建线程，因为不好管理线程。</li>
+</ol>
+</li>
+</ol>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

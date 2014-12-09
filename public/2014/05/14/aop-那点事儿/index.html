@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   
-  <title>AOP 那点事儿 | 挖之家</title>
+  <title>AOP那点事儿 | 挖之家</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   
     <meta name="author" content="Xin Zhang">
@@ -14,9 +14,9 @@
 今天我要和大家分享的是 AOP（Aspect-Oriented Programming）这个东西，名字与 OOP 仅差一个字母，其实它是对 OOP 编程方式的一种补充，并非是取而代之。翻译过来就是“面向方面编程”，可我更倾向于翻译为“面向切面编程”。它听起有些的神秘，为什么呢？当你看完这篇文章的">
   
   <meta content="article" property="og:type">
-<meta content="AOP 那点事儿" property="og:title">
+<meta content="AOP那点事儿" property="og:title">
 <meta content="http://waakaakaa.github.io/2014/05/14/aop-那点事儿/" property="og:url">
-<meta content="http://waakaakaa.qiniudn.com/111332_5YL3_223750.png" property="og:image">
+<meta content="/img/AOP那点事儿/1.png" property="og:image">
 <meta content="挖之家" property="og:site_name">
 <meta content="又是一个周末，刚给宝宝喂完牛奶，终于让她睡着了。所以现在我才能腾出手来，坐在电脑面前给大家写这篇文章。
 今天我要和大家分享的是 AOP（Aspect-Oriented Programming）这个东西，名字与 OOP 仅差一个字母，其实它是对 OOP 编程方式的一种补充，并非是取而代之。翻译过来就是“面向方面编程”，可我更倾向于翻译为“面向切面编程”。它听起有些的神秘，为什么呢？当你看完这篇文章的" property="og:description">
@@ -62,7 +62,7 @@
     
     
   
-    <h1 class="title">AOP 那点事儿</h1>
+    <h1 class="title">AOP那点事儿</h1>
   
 
   </header>
@@ -72,6 +72,8 @@
       <p>又是一个周末，刚给宝宝喂完牛奶，终于让她睡着了。所以现在我才能腾出手来，坐在电脑面前给大家写这篇文章。</p>
 <p>今天我要和大家分享的是 AOP（Aspect-Oriented Programming）这个东西，名字与 OOP 仅差一个字母，其实它是对 OOP 编程方式的一种补充，并非是取而代之。翻译过来就是“面向方面编程”，可我更倾向于翻译为“面向切面编程”。它听起有些的神秘，为什么呢？当你看完这篇文章的时候，就会知道，我们做的很重要的工作就是去写这个“切面” 。那么什么是“切面”呢？</p>
 <p>没错！就是用一把刀来切一坨面。注意，相对于面而言，我们一定是横着来切它，这简称为“横切”。可以把一段代码想象成一坨面，同样也可以用一把刀来横切它，下面要做的就是如何去实现这把刀！</p>
+<a id="more"></a>
+
 <p>需要澄清的是，这个概念不是由 Rod Johnson（老罗）提出的。其实很早以前就有了，目前最知名最强大的 Java 开源项目就是 AspectJ 了，然而它的前身是 AspectWerkz（该项目已经在 2005 年停止更新），这才是 AOP 的老祖宗。老罗（一个头发秃得和我老爸有一拼的天才）写了一个叫做 Spring 框架，从此一炮走红，成为了 Spring 之父。他在自己的 IOC 的基础之上，又实现了一套 AOP 的框架，后来仿佛发现自己越来越走进深渊里，在不能自拔的时候，有人建议他还是集成 AspectJ 吧，他在万般无奈之下才接受了该建议。于是，我们现在用得最多的想必就是 Spring + AspectJ 这种 AOP 框架了。</p>
 <p>那么 AOP 到底是什么？如何去使用它？本文将逐步带您进入 AOP 的世界，让您感受到前所未有的畅快！</p>
 <p>不过在开始讲解 AOP 之前，我想有必要回忆一下这段代码：</p>
@@ -704,9 +706,9 @@ public class GreetingAspect {
 <p>无论您是不能使用注解，还是不愿意使用注解，Spring AOP 都能为您提供全方位的服务。</p>
 <p>好了，我所知道的比较实用的 AOP 技术都在这里了，当然还有一些更为高级的特性，由于个人精力有限，这里就不再深入了。</p>
 <p>还是依照惯例，给一张牛逼的高清无码思维导图，总结一下以上各个知识点：</p>
-<p><img src="http://waakaakaa.qiniudn.com/111332_5YL3_223750.png" alt="image"></p>
+<p><img src="/img/AOP那点事儿/1.png" alt="image"></p>
 <p>最后给一张 UML 类图描述一下 Spring AOP 的整体架构：</p>
-<p><img src="http://waakaakaa.qiniudn.com/235319_GQUH_223750.png" alt="image"></p>
+<p><img src="/img/AOP那点事儿/2.png" alt="image"></p>
 
     
   </div>
@@ -747,6 +749,7 @@ public class GreetingAspect {
     $('.fancybox').fancybox();
   })(jQuery);
 </script>
+
 
 </body>
 </html>

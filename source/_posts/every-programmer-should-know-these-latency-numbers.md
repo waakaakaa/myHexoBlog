@@ -20,7 +20,9 @@ date: 2014-05-14 11:56:45
 
 Assuming ~1GB/sec SSD
 
-![Visual representation of latencies](http://i.imgur.com/k0t1e.png)
+<!-- more -->
+
+![Visual representation of latencies](/img/Every Programmer Should Know These Latency Numbers/1.png)
 
 Visual chart provided by [ayshen](https://gist.github.com/ayshen)
 

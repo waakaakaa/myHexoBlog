@@ -2,6 +2,10 @@ title: '单个 C 文件实现的 Web 服务器'
 date: 2014-05-14 15:58:31
 
 ---
+
+转自osc
+<!-- more -->
+
 	/*
 	 * WebServer.c
 	 *

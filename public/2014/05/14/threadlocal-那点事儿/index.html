@@ -10,16 +10,14 @@
     <meta name="author" content="Xin Zhang">
   
   
-    <meta name="description" content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。
-早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难">
+    <meta name="description" content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。">
   
   <meta content="article" property="og:type">
 <meta content="ThreadLocal 那点事儿" property="og:title">
 <meta content="http://waakaakaa.github.io/2014/05/14/threadlocal-那点事儿/" property="og:url">
 <meta property="og:image">
 <meta content="挖之家" property="og:site_name">
-<meta content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。
-早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难" property="og:description">
+<meta content="ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。" property="og:description">
 <meta content="summary" name="twitter:card">
   
   
@@ -70,6 +68,8 @@
   <div class="entry">
     
       <p>ThreadLocal，直译为“线程本地”或“本地线程”，如果你真的这么认为，那就错了！其实，它就是一个容器，用于存放线程的局部变量，我认为应该叫做 ThreadLocalVariable（线程局部变量）才对，真不理解为什么当初 Sun 公司的工程师这样命名。</p>
+<a id="more"></a>
+
 <p>早在 JDK 1.2 的时代，java.lang.ThreadLocal 就诞生了，它是为了解决多线程并发问题而设计的，只不过设计得有些难用，所以至今没有得到广泛使用。其实它还是挺有用的，不相信的话，我们一起来看看这个例子吧。</p>
 <p>一个序列号生成器的程序，可能同时会有多个线程并发访问它，要保证每个线程得到的序列号都是自增的，而不能相互干扰。</p>
 <p>先定义一个接口：</p>
@@ -540,6 +540,7 @@ at <span class="keyword">com</span><span class="preprocessor">.smart</span><span
     $('.fancybox').fancybox();
   })(jQuery);
 </script>
+
 
 </body>
 </html>
