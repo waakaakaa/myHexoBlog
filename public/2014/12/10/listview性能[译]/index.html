@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>ListView性能[译] | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="ListView是一种可以显示一系列项目并能进行滚动显示的View。在每行里，既可以是简单的文本，也可以是复杂的结构。一般情况下，你都需要保证ListView运行得很好（即：渲染更快，滚动流畅）。在接下来的内容里，我将就ListView的使用，向大家提供几种解决不同性能问题的解决方案。">
+  
+  <meta content="article" property="og:type">
+<meta content="ListView性能[译]" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/10/listview性能[译]/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="ListView是一种可以显示一系列项目并能进行滚动显示的View。在每行里，既可以是简单的文本，也可以是复杂的结构。一般情况下，你都需要保证ListView运行得很好（即：渲染更快，滚动流畅）。在接下来的内容里，我将就ListView的使用，向大家提供几种解决不同性能问题的解决方案。" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/10/listview性能[译]/">
+  <time datetime="2014-12-09T17:14:21.000Z">
+    12月 10 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">ListView性能[译]</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>ListView是一种可以显示一系列项目并能进行滚动显示的View。在每行里，既可以是简单的文本，也可以是复杂的结构。一般情况下，你都需要保证ListView运行得很好（即：渲染更快，滚动流畅）。在接下来的内容里，我将就ListView的使用，向大家提供几种解决不同性能问题的解决方案。</p>
+<a id="more"></a>
+
+<p>如果你想使用ListView，你就不得不使用ListAdapter来显示内容。SDK中，已经有了几种简单实现的Adapter：</p>
+<ol>
+<li>ArrayAdapter<T> （显示数组对象，使用toString()来显示）</li>
+<li>SimpleAdapter （显示Maps列表）</li>
+<li>SimpleCursorAdapter（显示通过Cursor从DB中获取的信息）</li>
+</ol>
+<p>这些实现对于显示简单的列表来说，非常棒！一旦你的列表比较复杂，你就不得不书写自己的ListAdapter实现。在多数情况下，直接从ArrayAdapter扩展就能很好地处理一组对象。此时，你需要处理的工作只是告诉系统如何处理列表中的对象。通过重写getView(int, View, ViewGroup)方法即可达到。</p>
+<p>在这里，举一个你需要自定义ListAdapter的例子：显示一组图片，图片的旁边有文字挨着。</p>
+<p>ListView例：以图片文字方式显示的Youtube搜索结果</p>
+<p>图片需要实时从internet上下载下来。让我们先创建一个Class来代表列表中的项目：</p>
+<pre><code>publicclassImageAndText {
+    privateString imageUrl;
+    privateString text;
+    publicImageAndText(<span class="built_in">String</span> imageUrl, <span class="built_in">String</span> text) {
+        <span class="keyword">this</span>.imageUrl = imageUrl;
+        <span class="keyword">this</span>.text = text;
+    }
+    publicString getImageUrl() {
+        returnimageUrl;
+    }
+    publicString getText() {
+        returntext;
+    }
+}
+</code></pre><p>现在，我们要实现一个ListAdapter，来显示ImageAndText列表。</p>
+<pre><code>publicclassImageAndTextListAdapter extendsArrayAdapter&lt;ImageAndText&gt; {
+publicImageAndTextListAdapter(Activity activity, List&lt;ImageAndText&gt; imageAndTexts) {
+        super(activity, <span class="number">0</span>, imageAndTexts)<span class="comment">;</span>
+    }
+    @Override
+    publicView getView(intposition, View convertView, ViewGroup parent) {
+        Activity activity = (Activity) getContext()<span class="comment">;</span>
+        LayoutInflater inflater = activity<span class="preprocessor">.getLayoutInflater</span>()<span class="comment">;</span>
+        // Inflate the views from XML
+        View rowView = inflater<span class="preprocessor">.inflate</span>(R<span class="preprocessor">.layout</span><span class="preprocessor">.image</span>_and_text_row, null)<span class="comment">;</span>
+        ImageAndText imageAndText = getItem(position)<span class="comment">;</span>
+        // Load the image <span class="keyword">and</span> <span class="keyword">set</span> it on the ImageView
+        ImageView imageView = (ImageView) rowView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.image</span>)<span class="comment">;</span>
+        imageView<span class="preprocessor">.setImageDrawable</span>(loadImageFromUrl(imageAndText<span class="preprocessor">.getImageUrl</span>()))<span class="comment">;</span>
+        // <span class="keyword">Set</span> the text on the TextView
+        TextView textView = (TextView) rowView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.text</span>)<span class="comment">;</span>
+        textView<span class="preprocessor">.setText</span>(imageAndText<span class="preprocessor">.getText</span>())<span class="comment">;</span>
+        returnrowView<span class="comment">;</span>
+    }
+    publicstaticDrawable loadImageFromUrl(String url) {
+        InputStream inputStream<span class="comment">;</span>
+        try{
+            inputStream = newURL(url)<span class="preprocessor">.openStream</span>()<span class="comment">;</span>
+        } catch(IOException e) {
+            thrownewRuntimeException(e)<span class="comment">;</span>
+        }
+        returnDrawable<span class="preprocessor">.createFromStream</span>(inputStream, <span class="string">"src"</span>)<span class="comment">;</span>
+}
+}
+</code></pre><p>这些View都是从“image_and_text_row.xml”XML文件中inflate的：</p>
+<pre><code><span class="pi">&lt;?xmlversion="1.0"encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayoutxmlns:android="http:</span>//<span class="attribute">schemas.android.com</span>/<span class="attribute">apk</span>/<span class="attribute">res</span>/<span class="attribute">android</span>"
+              <span class="attribute">android:orientation</span>=<span class="value">"horizontal"</span>
+              <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+              <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">ImageViewandroid:id="@+id</span>/<span class="attribute">image</span>"
+                   <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+                   <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+                   <span class="attribute">android:src</span>=<span class="value">"@drawable/default_image"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">TextViewandroid:id="@+id</span>/<span class="attribute">text</span>"
+                  <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+                  <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>这个ListAdapter实现正如你所期望的那样，能在ListView中加载ImageAndText。但是，它唯一可用的场合是那些拥有很少项目、无需滚动即可看到全部的列表。如果ImageAndText列表内容很多的时候，你会看到，滚动起来不是那么的平滑（事实上，远远不是）。</p>
+<p>性能改善</p>
+<p>上面例子最大的瓶颈是图片需要从internet上下载。因为我们的代码都在UI线程中执行，所以，每当一张图片从网络上下载时，UI就会变得停滞。如果你用3G网络代替WiFi的话，性能情况会变得更糟。</p>
+<p>为了避免这种情况，我们想让图片的下载处于单独的线程里，这样就不会过多地占用UI线程。为了达到这一目的，我们可能需要使用为这种情况特意设计的AsyncTask。实际情况中，你将注意到AsyncTask被限制在10个以内。这个数量是在Android SDK中硬编码的，所以我们无法改变。这对我们来说是一个制限事项，因为常常有超过10个图片同时在下载。</p>
+<p>AsyncImageLoader</p>
+<p>一个变通的做法是手动的为每个图片创建一个线程。另外，我们还应该使用Handler来将下载的图片invoke到UI线程。我们这样做的原因是我们只能在UI线程中修改UI。我创建了一个AsyncImageLoader类，利用线程和Handler来负责图片的下载。此外，它还缓存了图片，防止单个图片被下载多次。</p>
+<pre><code>publicclassAsyncImageLoader {
+    privateHashMap&lt;<span class="keyword">String</span>, SoftReference&lt;Drawable&gt;&gt; imageCache;
+    publicAsyncImageLoader() {
+        imageCache = newHashMap&lt;<span class="keyword">String</span>, SoftReference&lt;Drawable&gt;&gt;();
+    }
+    publicDrawable loadDrawable(finalString imageUrl, finalImageCallback imageCallback) {
+        <span class="keyword">if</span>(imageCache.containsKey(imageUrl)) {
+            SoftReference&lt;Drawable&gt; softReference = imageCache.get(imageUrl);
+            Drawable drawable = softReference.get();
+            <span class="keyword">if</span>(drawable != null) {
+                returndrawable;
+            }
+        }
+        finalHandler handler = newHandler() {
+            @Override
+            publicvoidhandleMessage(<span class="keyword">Message</span> <span class="keyword">message</span>) {
+                imageCallback.imageLoaded((Drawable) <span class="keyword">message</span>.obj, imageUrl);
+            }
+        };
+        newThread() {
+            @Override
+            publicvoidrun() {
+                Drawable drawable = loadImageFromUrl(imageUrl);
+                imageCache.put(imageUrl, newSoftReference&lt;Drawable&gt;(drawable));
+                <span class="keyword">Message</span> <span class="keyword">message</span> = handler.obtainMessage(<span class="number">0</span>, drawable);
+                handler.sendMessage(<span class="keyword">message</span>);
+            }
+        }.start();
+        returnnull;
+    }
+    publicstaticDrawable loadImageFromUrl(<span class="keyword">String</span> url) {
+        // ...
+    }
+    publicinterfaceImageCallback {
+        publicvoidimageLoaded(Drawable imageDrawable, <span class="keyword">String</span> imageUrl);
+}
+}
+</code></pre><p>注意：我使用了SoftReference来缓存图片，允许GC在需要的时候可以对缓存中的图片进行清理。它这样工作：</p>
+<ol>
+<li>调用loadDrawable(ImageUrl, imageCallback)，传入一个匿名实现的ImageCallback接口</li>
+<li>如果图片在缓存中不存在的话，图片将从单一的线程中下载并在下载结束时通过ImageCallback回调</li>
+<li>如果图片确实存在于缓存中，就会马上返回，不会回调ImageCallback</li>
+</ol>
+<p>在你的程序中，只能存在一个AsyncImageLoader实例，否则，缓存不能正常工作。在ImageAndTextListAdapter类中，我们可以这样替换：</p>
+<pre><code>ImageView imageView = (ImageView) rowView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.image</span>)<span class="comment">;</span>
+imageView<span class="preprocessor">.setImageDrawable</span>(loadImageFromUrl(imageAndText<span class="preprocessor">.getImageUrl</span>()))<span class="comment">;</span>
+</code></pre><p>换成</p>
+<pre><code>finalImageView imageView = (ImageView) rowView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.image</span>)<span class="comment">;</span>
+Drawable cachedImage = asyncImageLoader<span class="preprocessor">.loadDrawable</span>(imageAndText<span class="preprocessor">.getImageUrl</span>(), newImageCallback() {
+    publicvoidimageLoaded(Drawable imageDrawable, String imageUrl) {
+        imageView<span class="preprocessor">.setImageDrawable</span>(imageDrawable)<span class="comment">;</span>
+    }
+})<span class="comment">;</span>
+
+imageView<span class="preprocessor">.setImageDrawable</span>(cachedImage)<span class="comment">;</span>
+</code></pre><p>使用这个方法，ListView执行得很好了，并且感觉滑动更平滑了，因为UI线程再也不会被图片加载所阻塞。</p>
+<p>更好的性能改善</p>
+<p>如果你尝试了上面的解决方案，你将注意到ListView也不是100%的平滑，仍然会有些东西阻滞着它的平滑性。这里，还有两个地方可以进行改善：</p>
+<ol>
+<li>findViewById()的昂贵调用</li>
+<li>每次都inflate XML</li>
+</ol>
+<p>因此，修改代码如下：</p>
+<pre><code>publicclassImageAndTextListAdapter extendsArrayAdapter&lt;ImageAndText&gt; {
+privateListView listView<span class="comment">;</span>
+    privateAsyncImageLoader asyncImageLoader<span class="comment">;</span>
+    publicImageAndTextListAdapter(Activity activity, List&lt;ImageAndText&gt; imageAndTexts, ListView listView) {
+        super(activity, <span class="number">0</span>, imageAndTexts)<span class="comment">;</span>
+        this<span class="preprocessor">.listView</span> = listView<span class="comment">;</span>
+asyncImageLoader = newAsyncImageLoader()<span class="comment">;</span>
+    }
+    @Override
+    publicView getView(intposition, View convertView, ViewGroup parent) {
+        Activity activity = (Activity) getContext()<span class="comment">;</span>
+        // Inflate the views from XML
+        View rowView = convertView<span class="comment">;</span>
+        ViewCache viewCache<span class="comment">;</span>
+        if(rowView == null) {
+            LayoutInflater inflater = activity<span class="preprocessor">.getLayoutInflater</span>()<span class="comment">;</span>
+            rowView = inflater<span class="preprocessor">.inflate</span>(R<span class="preprocessor">.layout</span><span class="preprocessor">.image</span>_and_text_row, null)<span class="comment">;</span>
+            viewCache = newViewCache(rowView)<span class="comment">;</span>
+            rowView<span class="preprocessor">.setTag</span>(viewCache)<span class="comment">;</span>
+        } else{
+            viewCache = (ViewCache) rowView<span class="preprocessor">.getTag</span>()<span class="comment">;</span>
+        }
+        ImageAndText imageAndText = getItem(position)<span class="comment">;</span>
+        // Load the image <span class="keyword">and</span> <span class="keyword">set</span> it on the ImageView
+        String imageUrl = imageAndText<span class="preprocessor">.getImageUrl</span>()<span class="comment">;</span>
+        ImageView imageView = viewCache<span class="preprocessor">.getImageView</span>()<span class="comment">;</span>
+        imageView<span class="preprocessor">.setTag</span>(imageUrl)<span class="comment">;</span>
+        Drawable cachedImage = asyncImageLoader<span class="preprocessor">.loadDrawable</span>(imageUrl, newImageCallback() {
+            publicvoidimageLoaded(Drawable imageDrawable, String imageUrl) {
+                ImageView imageViewByTag = (ImageView) listView<span class="preprocessor">.findViewWithTag</span>(imageUrl)<span class="comment">;</span>
+                if(imageViewByTag != null) {
+                    imageViewByTag<span class="preprocessor">.setImageDrawable</span>(imageDrawable)<span class="comment">;</span>
+                }
+            }
+        })<span class="comment">;</span>
+        imageView<span class="preprocessor">.setImageDrawable</span>(cachedImage)<span class="comment">;</span>
+        // <span class="keyword">Set</span> the text on the TextView
+        TextView textView = viewCache<span class="preprocessor">.getTextView</span>()<span class="comment">;</span>
+        textView<span class="preprocessor">.setText</span>(imageAndText<span class="preprocessor">.getText</span>())<span class="comment">;</span>
+returnrowView<span class="comment">;</span>
+    }
+}
+</code></pre><p>这里有两点需要注意：第一点是drawable不再是加载完毕后直接设定到ImageView上。正确的ImageView是通过tag查找的，这是因为我们现在重用了View，并且图片有可能出现在错误的行上。我们需要拥有一个ListView的引用来通过tag查找ImageView。</p>
+<p>另外一点是，实现中我们使用了一个叫ViewCache的对象。它这样定义：</p>
+<pre><code>publicclassViewCache {
+    privateView baseView<span class="comment">;</span>
+    privateTextView textView<span class="comment">;</span>
+    privateImageView imageView<span class="comment">;</span>
+    publicViewCache(View baseView) {
+        this<span class="preprocessor">.baseView</span> = baseView<span class="comment">;</span>
+    }
+    publicTextView getTextView() {
+        if(textView == null) {
+            textView = (TextView) baseView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.text</span>)<span class="comment">;</span>
+        }
+        returntitleView<span class="comment">;</span>
+    }
+    publicImageView getImageView() {
+        if(imageView == null) {
+            imageView = (ImageView) baseView<span class="preprocessor">.findViewById</span>(R<span class="preprocessor">.id</span><span class="preprocessor">.image</span>)<span class="comment">;</span>
+        }
+        returnimageView<span class="comment">;</span>
+    }
+}
+</code></pre><p>有了ViewCache对象，我们就不需要使用findViewById()来多次查询View对象了。</p>
+<p>总结</p>
+<p>我已经向大家演示了3种改进ListView性能的方法：</p>
+<ol>
+<li>在单一线程里加载图片</li>
+<li>重用列表中行</li>
+<li>缓存行中的View</li>
+</ol>
+<p>xirihanlin 2011.04.06</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

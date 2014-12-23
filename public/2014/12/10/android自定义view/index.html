@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>android自定义View | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="哈哈，兄弟我终于自己写了一个view，不是网上那种简单的哦，还是有一定技术含量的，我是通过学习ApiDemo（android自带的sample）里面LabelView实现的，先谈谈学习过程，觉得一开始不应当盲目的动手做，应对想把原理搞明白，哪怕一个很小的View，也应当将各个细节弄清楚，等这些搞定了，接下来的工作就是水道渠成了！">
+  
+  <meta content="article" property="og:type">
+<meta content="android自定义View" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/10/android自定义view/" property="og:url">
+<meta content="/img/android自定义View/1.png" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="哈哈，兄弟我终于自己写了一个view，不是网上那种简单的哦，还是有一定技术含量的，我是通过学习ApiDemo（android自带的sample）里面LabelView实现的，先谈谈学习过程，觉得一开始不应当盲目的动手做，应对想把原理搞明白，哪怕一个很小的View，也应当将各个细节弄清楚，等这些搞定了，接下来的工作就是水道渠成了！" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/10/android自定义view/">
+  <time datetime="2014-12-09T16:47:57.000Z">
+    12月 10 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">android自定义View</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>哈哈，兄弟我终于自己写了一个view，不是网上那种简单的哦，还是有一定技术含量的，<br>我是通过学习ApiDemo（android自带的sample）里面LabelView实现的，<br>先谈谈学习过程，觉得一开始不应当盲目的动手做，应对想把原理搞明白，哪怕一个很小的View，也应当将各个细节弄清楚，<br>等这些搞定了，接下来的工作就是水道渠成了！</p>
+<a id="more"></a>
+
+<p>自定义一个View那必须继承View，<br>首先说说我的View是啥，恩，很简单，就是一个椭圆，其中可以设置4个参数，分别是top、left、right、bottom，应该很清楚吧，因为canvas.drawOval时用到了4个值，</p>
+<p>首先得定义4个属性值，是我的View专有的，<br>建立attr.xml放到values下面</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">resources</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"RocketView"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"ovalLeft"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"ovalTop"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"ovalRight"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"ovalBottom"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">resources</span>&gt;</span>
+</code></pre><p>然后写个RocketView</p>
+<pre><code><span class="keyword">package</span> com.myos;
+
+<span class="keyword">import</span> android.content.Context;
+<span class="keyword">import</span> android.content.res.TypedArray;
+<span class="keyword">import</span> android.graphics.Canvas;
+<span class="keyword">import</span> android.graphics.Color;
+<span class="keyword">import</span> android.graphics.Paint;
+<span class="keyword">import</span> android.graphics.RectF;
+<span class="keyword">import</span> android.util.AttributeSet;
+<span class="keyword">import</span> android.util.Log;
+<span class="keyword">import</span> android.view.View;
+<span class="keyword">import</span> android.view.View.MeasureSpec;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RocketView</span> <span class="keyword">extends</span> <span class="title">View</span>{</span>
+    <span class="keyword">private</span> Paint mOvalPaint;
+    <span class="keyword">private</span> <span class="keyword">int</span> mStrokeWidth = <span class="number">2</span>;
+    <span class="keyword">private</span> <span class="keyword">int</span> padding = <span class="number">3</span>;
+
+    <span class="comment">//椭圆参数</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mOval_l;
+    <span class="keyword">private</span> <span class="keyword">int</span> mOval_t;
+    <span class="keyword">private</span> <span class="keyword">int</span> mOval_r;
+    <span class="keyword">private</span> <span class="keyword">int</span> mOval_b;
+
+
+
+    <span class="comment">//构造</span>
+    <span class="keyword">public</span> <span class="title">RocketView</span>(Context context, AttributeSet attrs) {
+        <span class="keyword">super</span>(context, attrs);
+        initRocketView();
+
+        TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.RocketView);
+
+        mOval_l = a.getDimensionPixelOffset(R.styleable.RocketView_ovalLeft, padding);  
+        mOval_t = a.getDimensionPixelOffset(R.styleable.RocketView_ovalTop, padding);  
+        mOval_r = a.getDimensionPixelOffset(R.styleable.RocketView_ovalRight, <span class="number">100</span>);  
+        mOval_b = a.getDimensionPixelOffset(R.styleable.RocketView_ovalBottom, <span class="number">100</span>);  
+
+        a.recycle();
+    }
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initRocketView</span>() {
+        mOvalPaint = <span class="keyword">new</span> Paint();
+        mOvalPaint.setAntiAlias(<span class="keyword">true</span>);
+        mOvalPaint.setColor(Color.BLUE);
+        mOvalPaint.setStyle(Paint.Style.STROKE);
+        mOvalPaint.setStrokeWidth(mStrokeWidth);
+        setPadding(padding,padding,padding,padding);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOvalRect</span>(<span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b){
+        mOval_l = l + padding;
+        mOval_t = t + padding;
+        mOval_r = r;
+        mOval_b = b;
+        requestLayout();
+        invalidate();
+    }
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span>(Canvas canvas) {
+        <span class="comment">// TODO Auto-generated method stub</span>
+        <span class="keyword">super</span>.onDraw(canvas);
+        canvas.drawColor(Color.WHITE);
+        <span class="comment">// 绘制椭圆</span>
+        RectF re11 = <span class="keyword">new</span> RectF(mOval_l, mOval_t, mOval_r, mOval_b);
+        canvas.drawOval(re11, mOvalPaint);    
+
+<span class="comment">//        // 绘制圆形</span>
+<span class="comment">//        canvas.drawCircle(mCircle_x, mCircle_y, mCircle_r, mPaint);</span>
+    }
+
+     <span class="javadoc">/**
+      *<span class="javadoctag"> @see</span> android.view.View#measure(int, int)
+      */</span>
+     <span class="annotation">@Override</span>
+     <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span>(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec) {
+         setMeasuredDimension(measureWidth(widthMeasureSpec),
+                 measureHeight(heightMeasureSpec));
+     }
+
+     <span class="javadoc">/**
+      * Determines the width of this view
+      *<span class="javadoctag"> @param</span> measureSpec A measureSpec packed into an int
+      *<span class="javadoctag"> @return</span> The width of the view, honoring constraints from measureSpec
+      */</span>
+     <span class="keyword">private</span> <span class="keyword">int</span> <span class="title">measureWidth</span>(<span class="keyword">int</span> measureSpec) {
+         <span class="keyword">int</span> result = <span class="number">0</span>;
+         <span class="keyword">int</span> specMode = MeasureSpec.getMode(measureSpec);
+         <span class="keyword">int</span> specSize = MeasureSpec.getSize(measureSpec);
+
+         <span class="keyword">if</span> (specMode == MeasureSpec.EXACTLY) {
+             <span class="comment">// We were told how big to be</span>
+             result = specSize;
+         } <span class="keyword">else</span> {
+             <span class="comment">// Measure the text</span>
+             result = mOval_r + getPaddingLeft()
+                     + getPaddingRight();
+             <span class="keyword">if</span> (specMode == MeasureSpec.AT_MOST) {
+                 <span class="comment">// Respect AT_MOST value if that was what is called for by measureSpec</span>
+                 result = Math.min(result, specSize);
+             }
+         }
+
+         <span class="keyword">return</span> result;
+     }
+
+     <span class="javadoc">/**
+      * Determines the height of this view
+      *<span class="javadoctag"> @param</span> measureSpec A measureSpec packed into an int
+      *<span class="javadoctag"> @return</span> The height of the view, honoring constraints from measureSpec
+      */</span>
+     <span class="keyword">private</span> <span class="keyword">int</span> <span class="title">measureHeight</span>(<span class="keyword">int</span> measureSpec) {
+         <span class="keyword">int</span> result = <span class="number">0</span>;
+         <span class="keyword">int</span> specMode = MeasureSpec.getMode(measureSpec);
+         <span class="keyword">int</span> specSize = MeasureSpec.getSize(measureSpec);
+
+         <span class="keyword">if</span> (specMode == MeasureSpec.EXACTLY) {
+             <span class="comment">// We were told how big to be</span>
+             result = specSize;
+         } <span class="keyword">else</span> {
+             <span class="comment">// Measure the text (beware: ascent is a negative number)</span>
+             result = mOval_b + getPaddingTop()
+                     + getPaddingBottom();
+             <span class="keyword">if</span> (specMode == MeasureSpec.AT_MOST) {
+                 <span class="comment">// Respect AT_MOST value if that was what is called for by measureSpec</span>
+                 result = Math.min(result, specSize);
+             }
+         }
+
+         <span class="keyword">return</span> result;
+     }
+}
+</code></pre><p>在构造中getDimensionPixelOffset检索出一个属性值，没有的话就使用第2个参数做默认值，<br>可以在布局xml中初始化这个属性值，下面是我main.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">xmlns:app</span>=<span class="value">"http://schemas.android.com/apk/res/com.myos"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    &gt;</span>
+
+    <span class="tag">&lt;<span class="title">TextView</span>  
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span> 
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> 
+        <span class="attribute">android:text</span>=<span class="value">"@string/hello"</span>
+        /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">com.myos.RocketView
+</span>        <span class="attribute">app:ovalLeft</span>=<span class="value">"0dp"</span>
+        <span class="attribute">android:id</span>=<span class="value">"@+id/rv"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span> /&gt;</span>
+
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>我这里没啥用处，仅仅试一下，待扩展属性时再说，说明一下xmlns:app中app可以随便命名的，这个android的规矩还真多<br>另外构造函数中onMeasure很重要的，onDraw很明显就是画椭圆了，android在画的时候呢，会去先测量，需要我们来提供View的宽和高，</p>
+<p>大家都知道wrap_content、fill_parent，测量时会有3种模式，分别是UNSPECIFIED、EXACTLY、AT_MOST，<br>当使用<br>wrap_content时就是AT_MOST模式，fill_parent就是EXACTLY模式，可以看看官方文档：<br><a href="http://developer.android.com/guide/topics/ui/how-android-draws.html" target="_blank">http://developer.android.com/guide/topics/ui/how-android-draws.html</a><br>相信研读一下代码就明白了</p>
+<p>RocketView定义好了，接下来就是使用了</p>
+<pre><code><span class="keyword">package</span> com.myos;
+
+<span class="keyword">import</span> android.app.Activity;
+<span class="keyword">import</span> android.os.Bundle;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> {</span>
+    RocketView mRocketView;
+    <span class="javadoc">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span>(Bundle savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+        mRocketView = (RocketView)findViewById(R.id.rv);
+        mRocketView.setOvalRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">500</span>, <span class="number">100</span>);
+    }
+}
+</code></pre><p>可以通过setOvalRect函数来动态调整椭圆的大小！</p>
+<p>下面是运行效果，ko啦！</p>
+<p><img src="/img/android自定义View/1.png" alt="image"></p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

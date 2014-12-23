@@ -1,0 +1,895 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>Android UI--自定义ListView(实现下拉刷新+加载更多） | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="关于实现ListView下拉刷新和加载更多的实现，我想网上一搜就一堆。不过我就没发现比较实用的，要不就是实现起来太复杂，要不就是不健全的。因为小巫近期要开发新浪微博客户端，需要实现ListView的下拉刷新，所以就想把这个UI整合到项目当中去，这里只是一个demo，可以根据项目的需要进行修改。">
+  
+  <meta content="article" property="og:type">
+<meta content="Android UI--自定义ListView(实现下拉刷新+加载更多）" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/10/android-ui--自定义listview(实现下拉刷新+加载更多）/" property="og:url">
+<meta content="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/1.png" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="关于实现ListView下拉刷新和加载更多的实现，我想网上一搜就一堆。不过我就没发现比较实用的，要不就是实现起来太复杂，要不就是不健全的。因为小巫近期要开发新浪微博客户端，需要实现ListView的下拉刷新，所以就想把这个UI整合到项目当中去，这里只是一个demo，可以根据项目的需要进行修改。" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/10/android-ui--自定义listview(实现下拉刷新+加载更多）/">
+  <time datetime="2014-12-09T17:03:32.000Z">
+    12月 10 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">Android UI--自定义ListView(实现下拉刷新+加载更多）</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>关于实现ListView下拉刷新和加载更多的实现，我想网上一搜就一堆。不过我就没发现比较实用的，要不就是实现起来太复杂，要不就是不健全的。因为小巫近期要开发新浪微博客户端，需要实现ListView的下拉刷新，所以就想把这个UI整合到项目当中去，这里只是一个demo，可以根据项目的需要进行修改。</p>
+<a id="more"></a>
+
+<p>就不要太在乎界面了哈：</p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/1.png" alt="image"></p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/2.png" alt="image"></p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/3.png" alt="image"></p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/4.png" alt="image"></p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/5.png" alt="image"></p>
+<p><img src="/img/Android UI--自定义ListView(实现下拉刷新+加载更多）/6.png" alt="image"></p>
+<p>自定义ListView：</p>
+<pre><code><span class="keyword">package</span> com.markupartist.android.widget;
+
+
+<span class="keyword">import</span> java.lang.reflect.InvocationTargetException;
+<span class="keyword">import</span> java.lang.reflect.Method;
+
+<span class="keyword">import</span> com.markupartist.android.example.pulltorefresh.R;
+
+<span class="keyword">import</span> android.content.Context;
+<span class="keyword">import</span> android.util.AttributeSet;
+<span class="keyword">import</span> android.util.Log;
+<span class="keyword">import</span> android.view.LayoutInflater;
+<span class="keyword">import</span> android.view.MotionEvent;
+<span class="keyword">import</span> android.view.View;
+<span class="keyword">import</span> android.view.ViewGroup;
+<span class="keyword">import</span> android.view.animation.LinearInterpolator;
+<span class="keyword">import</span> android.view.animation.RotateAnimation;
+<span class="keyword">import</span> android.widget.AbsListView;
+<span class="keyword">import</span> android.widget.AbsListView.OnScrollListener;
+<span class="keyword">import</span> android.widget.ImageView;
+<span class="keyword">import</span> android.widget.ListAdapter;
+<span class="keyword">import</span> android.widget.ListView;
+<span class="keyword">import</span> android.widget.ProgressBar;
+<span class="keyword">import</span> android.widget.RelativeLayout;
+<span class="keyword">import</span> android.widget.TextView;
+
+
+
+<span class="javadoc">/**
+ * 2013/8/13
+ * 自定义ListView，实现OnScrollListener接口
+ * 此ListView是为实现"下拉刷新"和"上拉加载更多"而定制的，具体效果可参考新浪微博、腾讯微博
+ *<span class="javadoctag"> @author</span> wwj
+ *
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PullToRefreshListView</span> <span class="keyword">extends</span> <span class="title">ListView</span> <span class="keyword">implements</span> <span class="title">OnScrollListener</span> {</span>
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TAP_TO_REFRESH = <span class="number">1</span>;            <span class="comment">//（未刷新）</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> PULL_TO_REFRESH = <span class="number">2</span>;            <span class="comment">// 下拉刷新</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RELEASE_TO_REFRESH = <span class="number">3</span>;        <span class="comment">// 释放刷新</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> REFRESHING = <span class="number">4</span>;                <span class="comment">// 正在刷新</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TAP_TO_LOADMORE = <span class="number">5</span>;            <span class="comment">// 未加载更多</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> LOADING = <span class="number">6</span>;                    <span class="comment">// 正在加载</span>
+
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"PullToRefreshListView"</span>;
+
+    <span class="keyword">private</span> OnRefreshListener mOnRefreshListener;            <span class="comment">// 刷新监听器</span>
+
+    <span class="javadoc">/**
+     * Listener that will receive notifications every time the list scrolls.
+     */</span>
+    <span class="keyword">private</span> OnScrollListener mOnScrollListener;                <span class="comment">// 列表滚动监听器</span>
+    <span class="keyword">private</span> LayoutInflater mInflater;                        <span class="comment">// 用于加载布局文件</span>
+
+    <span class="keyword">private</span> RelativeLayout mRefreshHeaderView;                <span class="comment">// 刷新视图(也就是头部那部分)    </span>
+    <span class="keyword">private</span> TextView mRefreshViewText;                        <span class="comment">// 刷新提示文本        </span>
+    <span class="keyword">private</span> ImageView mRefreshViewImage;                    <span class="comment">// 刷新向上向下的那个图片</span>
+    <span class="keyword">private</span> ProgressBar mRefreshViewProgress;                <span class="comment">// 这里是圆形进度条</span>
+    <span class="keyword">private</span> TextView mRefreshViewLastUpdated;                <span class="comment">// 最近更新的文本</span>
+
+    <span class="keyword">private</span> RelativeLayout mLoadMoreFooterView;                <span class="comment">// 加载更多</span>
+    <span class="keyword">private</span> TextView mLoadMoreText;                            <span class="comment">// 提示文本</span>
+    <span class="keyword">private</span> ProgressBar mLoadMoreProgress;                    <span class="comment">// 加载更多进度条</span>
+
+
+    <span class="keyword">private</span> <span class="keyword">int</span> mCurrentScrollState;                        <span class="comment">// 当前滚动位置            </span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mRefreshState;                                <span class="comment">// 刷新状态    </span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mLoadState;                                    <span class="comment">// 加载状态</span>
+
+    <span class="keyword">private</span> RotateAnimation mFlipAnimation;                    <span class="comment">// 下拉动画</span>
+    <span class="keyword">private</span> RotateAnimation mReverseFlipAnimation;            <span class="comment">// 恢复动画</span>
+
+    <span class="keyword">private</span> <span class="keyword">int</span> mRefreshViewHeight;                            <span class="comment">// 刷新视图高度                    </span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mRefreshOriginalTopPadding;                    <span class="comment">// 原始上部间隙</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> mLastMotionY;                                <span class="comment">// 记录点击位置</span>
+
+    <span class="keyword">public</span> <span class="title">PullToRefreshListView</span>(Context context) {
+        <span class="keyword">super</span>(context);
+        init(context);
+    }
+
+    <span class="keyword">public</span> <span class="title">PullToRefreshListView</span>(Context context, AttributeSet attrs) {
+        <span class="keyword">super</span>(context, attrs);
+        init(context);
+    }
+
+    <span class="keyword">public</span> <span class="title">PullToRefreshListView</span>(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle) {
+        <span class="keyword">super</span>(context, attrs, defStyle);
+        init(context);
+    }
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span>(Context context) {
+        <span class="comment">// Load all of the animations we need in code rather than through XML</span>
+        <span class="javadoc">/** 定义旋转动画**/</span>
+        <span class="comment">// 参数：1.旋转开始的角度 2.旋转结束的角度 3. X轴伸缩模式 4.X坐标的伸缩值 5.Y轴的伸缩模式 6.Y坐标的伸缩值</span>
+        mFlipAnimation = <span class="keyword">new</span> RotateAnimation(<span class="number">0</span>, -<span class="number">180</span>,
+                RotateAnimation.RELATIVE_TO_SELF, <span class="number">0.5</span>f,
+                RotateAnimation.RELATIVE_TO_SELF, <span class="number">0.5</span>f);
+        mFlipAnimation.setInterpolator(<span class="keyword">new</span> LinearInterpolator());
+        mFlipAnimation.setDuration(<span class="number">250</span>);                <span class="comment">// 设置持续时间</span>
+        mFlipAnimation.setFillAfter(<span class="keyword">true</span>);                <span class="comment">// 动画执行完是否停留在执行完的状态</span>
+        mReverseFlipAnimation = <span class="keyword">new</span> RotateAnimation(-<span class="number">180</span>, <span class="number">0</span>,
+                RotateAnimation.RELATIVE_TO_SELF, <span class="number">0.5</span>f,
+                RotateAnimation.RELATIVE_TO_SELF, <span class="number">0.5</span>f);
+        mReverseFlipAnimation.setInterpolator(<span class="keyword">new</span> LinearInterpolator());
+        mReverseFlipAnimation.setDuration(<span class="number">250</span>);
+        mReverseFlipAnimation.setFillAfter(<span class="keyword">true</span>);
+
+        <span class="comment">// 获取LayoutInflater实例对象</span>
+        mInflater = (LayoutInflater) context.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+
+        <span class="comment">// 加载下拉刷新的头部视图</span>
+        mRefreshHeaderView = (RelativeLayout) mInflater.inflate(
+                R.layout.pull_to_refresh_header, <span class="keyword">this</span>, <span class="keyword">false</span>);
+        mRefreshViewText =
+            (TextView) mRefreshHeaderView.findViewById(R.id.pull_to_refresh_text);
+        mRefreshViewImage =
+            (ImageView) mRefreshHeaderView.findViewById(R.id.pull_to_refresh_image);
+        mRefreshViewProgress =
+            (ProgressBar) mRefreshHeaderView.findViewById(R.id.pull_to_refresh_progress);
+        mRefreshViewLastUpdated =
+            (TextView) mRefreshHeaderView.findViewById(R.id.pull_to_refresh_updated_at);
+        mLoadMoreFooterView = (RelativeLayout) mInflater.inflate(
+                R.layout.loadmore_footer, <span class="keyword">this</span>, <span class="keyword">false</span>);
+        mLoadMoreText = (TextView) mLoadMoreFooterView.findViewById(R.id.loadmore_text);
+        mLoadMoreProgress = (ProgressBar) mLoadMoreFooterView.findViewById(R.id.loadmore_progress);
+
+
+        mRefreshViewImage.setMinimumHeight(<span class="number">50</span>);        <span class="comment">// 设置图片最小高度</span>
+        mRefreshHeaderView.setOnClickListener(<span class="keyword">new</span> OnClickRefreshListener());
+        mRefreshOriginalTopPadding = mRefreshHeaderView.getPaddingTop();
+        mLoadMoreFooterView.setOnClickListener(<span class="keyword">new</span> OnClickLoadMoreListener());
+
+        mRefreshState = TAP_TO_REFRESH;                <span class="comment">// 初始刷新状态</span>
+        mLoadState = TAP_TO_LOADMORE;
+
+        addHeaderView(mRefreshHeaderView);            <span class="comment">// 增加头部视图</span>
+        addFooterView(mLoadMoreFooterView);            <span class="comment">// 增加尾部视图</span>
+
+        <span class="keyword">super</span>.setOnScrollListener(<span class="keyword">this</span>);        
+
+        measureView(mRefreshHeaderView);                <span class="comment">// 测量视图</span>
+        mRefreshViewHeight = mRefreshHeaderView.getMeasuredHeight();    <span class="comment">// 得到视图的高度</span>
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onAttachedToWindow</span>() {
+        setSelection(<span class="number">1</span>);        <span class="comment">// 设置当前选中的项</span>
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAdapter</span>(ListAdapter adapter) {
+        <span class="keyword">super</span>.setAdapter(adapter);
+
+        setSelection(<span class="number">1</span>);
+    }
+
+    <span class="javadoc">/**
+     * Set the listener that will receive notifications every time the list
+     * scrolls.
+     * 
+     *<span class="javadoctag"> @param</span> l The scroll listener. 
+     */</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnScrollListener</span>(AbsListView.OnScrollListener l) {
+        mOnScrollListener = l;
+    }
+
+    <span class="javadoc">/**
+     * Register a callback to be invoked when this list should be refreshed.
+     * 注册监听器
+     *<span class="javadoctag"> @param</span> onRefreshListener The callback to run.
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setOnRefreshListener</span>(OnRefreshListener onRefreshListener) {
+        mOnRefreshListener = onRefreshListener;
+    }
+
+    <span class="javadoc">/**
+     * Set a text to represent when the list was last updated.
+     * 设置一个文本来表示最近更新的列表，显示的是最近更新列表的时间
+     *<span class="javadoctag"> @param</span> lastUpdated Last updated at.
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLastUpdated</span>(CharSequence lastUpdated) {
+        <span class="keyword">if</span> (lastUpdated != <span class="keyword">null</span>) {
+            mRefreshViewLastUpdated.setVisibility(View.VISIBLE);
+            mRefreshViewLastUpdated.setText(<span class="string">"更新于: "</span> + lastUpdated);
+        } <span class="keyword">else</span> {
+            mRefreshViewLastUpdated.setVisibility(View.GONE);
+        }
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span>(MotionEvent event) {
+        <span class="keyword">final</span> <span class="keyword">int</span> y = (<span class="keyword">int</span>) event.getY();     <span class="comment">// 获取点击位置的Y坐标</span>
+
+        <span class="keyword">switch</span> (event.getAction()) {
+            <span class="keyword">case</span> MotionEvent.ACTION_UP:        <span class="comment">// 手指抬起</span>
+                <span class="keyword">if</span> (!isVerticalScrollBarEnabled()) {
+                    setVerticalScrollBarEnabled(<span class="keyword">true</span>);
+                }
+                <span class="keyword">if</span> (getFirstVisiblePosition() == <span class="number">0</span> &amp;&amp; mRefreshState != REFRESHING) {
+                    <span class="keyword">if</span> ((mRefreshHeaderView.getBottom() &gt; mRefreshViewHeight
+                            || mRefreshHeaderView.getTop() &gt;= <span class="number">0</span>)
+                            &amp;&amp; mRefreshState == RELEASE_TO_REFRESH) {
+                        <span class="comment">// Initiate the refresh</span>
+                        mRefreshState = REFRESHING;        <span class="comment">// 刷新状态</span>
+                        prepareForRefresh();
+                        onRefresh();
+                    } <span class="keyword">else</span> <span class="keyword">if</span> (mRefreshHeaderView.getBottom() &lt; mRefreshViewHeight
+                            || mRefreshHeaderView.getTop() &lt; <span class="number">0</span>) {
+                        <span class="comment">// Abort refresh and scroll down below the refresh view</span>
+                        resetHeader();
+                        setSelection(<span class="number">1</span>);
+                    }
+                }
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> MotionEvent.ACTION_DOWN:
+                mLastMotionY = y;
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> MotionEvent.ACTION_MOVE:
+                applyHeaderPadding(event);
+                <span class="keyword">break</span>;
+        }
+        <span class="keyword">return</span> <span class="keyword">super</span>.onTouchEvent(event);
+    }
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">applyHeaderPadding</span>(MotionEvent ev) {
+        <span class="keyword">final</span> <span class="keyword">int</span> historySize = ev.getHistorySize();
+
+        <span class="comment">// Workaround for getPointerCount() which is unavailable in 1.5</span>
+        <span class="comment">// (it's always 1 in 1.5)</span>
+        <span class="keyword">int</span> pointerCount = <span class="number">1</span>;
+        <span class="keyword">try</span> {
+            Method method = MotionEvent.class.getMethod(<span class="string">"getPointerCount"</span>);
+            pointerCount = (Integer)method.invoke(ev);
+        } <span class="keyword">catch</span> (NoSuchMethodException e) {
+            pointerCount = <span class="number">1</span>;
+        } <span class="keyword">catch</span> (IllegalArgumentException e) {
+            <span class="keyword">throw</span> e;
+        } <span class="keyword">catch</span> (IllegalAccessException e) {
+            System.err.println(<span class="string">"unexpected "</span> + e);
+        } <span class="keyword">catch</span> (InvocationTargetException e) {
+            System.err.println(<span class="string">"unexpected "</span> + e);
+        }
+
+        <span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; historySize; h++) {
+            <span class="keyword">for</span> (<span class="keyword">int</span> p = <span class="number">0</span>; p &lt; pointerCount; p++) {
+                <span class="keyword">if</span> (mRefreshState == RELEASE_TO_REFRESH) {
+                    <span class="keyword">if</span> (isVerticalFadingEdgeEnabled()) {
+                        setVerticalScrollBarEnabled(<span class="keyword">false</span>);
+                    }
+
+                    <span class="keyword">int</span> historicalY = <span class="number">0</span>;
+                    <span class="keyword">try</span> {
+                        <span class="comment">// For Android &gt; 2.0</span>
+                        Method method = MotionEvent.class.getMethod(
+                                <span class="string">"getHistoricalY"</span>, Integer.TYPE, Integer.TYPE);
+                        historicalY = ((Float) method.invoke(ev, p, h)).intValue();
+                    } <span class="keyword">catch</span> (NoSuchMethodException e) {
+                        <span class="comment">// For Android &lt; 2.0</span>
+                        historicalY = (<span class="keyword">int</span>) (ev.getHistoricalY(h));
+                    } <span class="keyword">catch</span> (IllegalArgumentException e) {
+                        <span class="keyword">throw</span> e;
+                    } <span class="keyword">catch</span> (IllegalAccessException e) {
+                        System.err.println(<span class="string">"unexpected "</span> + e);
+                    } <span class="keyword">catch</span> (InvocationTargetException e) {
+                        System.err.println(<span class="string">"unexpected "</span> + e);
+                    }
+
+                    <span class="comment">// Calculate the padding to apply, we divide by 1.7 to</span>
+                    <span class="comment">// simulate a more resistant effect during pull.</span>
+                    <span class="keyword">int</span> topPadding = (<span class="keyword">int</span>) (((historicalY - mLastMotionY)
+                            - mRefreshViewHeight) / <span class="number">1.7</span>);
+
+                    <span class="comment">// 设置上、下、左、右四个位置的间隙间隙</span>
+                    mRefreshHeaderView.setPadding(
+                            mRefreshHeaderView.getPaddingLeft(),
+                            topPadding,
+                            mRefreshHeaderView.getPaddingRight(),
+                            mRefreshHeaderView.getPaddingBottom());
+                }
+            }
+        }
+    }
+
+    <span class="javadoc">/**
+     * Sets the header padding back to original size.
+     * 设置头部填充会原始大小
+     */</span>
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resetHeaderPadding</span>() {
+        mRefreshHeaderView.setPadding(
+                mRefreshHeaderView.getPaddingLeft(),
+                mRefreshOriginalTopPadding,
+                mRefreshHeaderView.getPaddingRight(),
+                mRefreshHeaderView.getPaddingBottom());
+    }
+
+    <span class="javadoc">/**
+     * Resets the header to the original state.
+     * 重新设置头部为原始状态
+     */</span>
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resetHeader</span>() {
+        <span class="keyword">if</span> (mRefreshState != TAP_TO_REFRESH) {
+            mRefreshState = TAP_TO_REFRESH;
+
+            resetHeaderPadding();
+
+            <span class="comment">// Set refresh view text to the pull label</span>
+            mRefreshViewText.setText(R.string.pull_to_refresh_tap_label);
+            <span class="comment">// Replace refresh drawable with arrow drawable</span>
+            mRefreshViewImage.setImageResource(R.drawable.ic_pulltorefresh_arrow);
+            <span class="comment">// Clear the full rotation animation</span>
+            mRefreshViewImage.clearAnimation();
+            <span class="comment">// Hide progress bar and arrow.</span>
+            mRefreshViewImage.setVisibility(View.GONE);
+            mRefreshViewProgress.setVisibility(View.GONE);
+        }
+    }
+
+    <span class="javadoc">/**
+     * 重设ListView尾部视图为初始状态
+     */</span>
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">resetFooter</span>() {
+        <span class="keyword">if</span>(mLoadState != TAP_TO_LOADMORE) {
+            mLoadState = TAP_TO_LOADMORE;
+
+            <span class="comment">// 进度条设置为不可见</span>
+            mLoadMoreProgress.setVisibility(View.GONE);
+            <span class="comment">// 按钮的文本替换为“加载更多”</span>
+            mLoadMoreText.setText(R.string.loadmore_label);
+        }
+
+    }
+
+
+    <span class="javadoc">/**
+     * 测量视图的大小
+     *<span class="javadoctag"> @param</span> child
+     */</span>
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">measureView</span>(View child) {
+        ViewGroup.LayoutParams p = child.getLayoutParams();
+        <span class="keyword">if</span> (p == <span class="keyword">null</span>) {
+            p = <span class="keyword">new</span> ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        <span class="keyword">int</span> childWidthSpec = ViewGroup.getChildMeasureSpec(<span class="number">0</span>,
+                <span class="number">0</span> + <span class="number">0</span>, p.width);
+        <span class="keyword">int</span> lpHeight = p.height;
+        <span class="keyword">int</span> childHeightSpec;
+        <span class="keyword">if</span> (lpHeight &gt; <span class="number">0</span>) {
+            childHeightSpec = MeasureSpec.makeMeasureSpec(lpHeight, MeasureSpec.EXACTLY);
+        } <span class="keyword">else</span> {
+            childHeightSpec = MeasureSpec.makeMeasureSpec(<span class="number">0</span>, MeasureSpec.UNSPECIFIED);
+        }
+        child.measure(childWidthSpec, childHeightSpec);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScroll</span>(AbsListView view, <span class="keyword">int</span> firstVisibleItem,
+            <span class="keyword">int</span> visibleItemCount, <span class="keyword">int</span> totalItemCount) {
+        <span class="comment">// When the refresh view is completely visible, change the text to say</span>
+        <span class="comment">// "Release to refresh..." and flip the arrow drawable.</span>
+        <span class="keyword">if</span> (mCurrentScrollState == SCROLL_STATE_TOUCH_SCROLL
+                &amp;&amp; mRefreshState != REFRESHING) {
+            <span class="keyword">if</span> (firstVisibleItem == <span class="number">0</span>) {        <span class="comment">// 如果第一个可见条目为0</span>
+                mRefreshViewImage.setVisibility(View.VISIBLE);    <span class="comment">// 让指示箭头变得可见</span>
+                <span class="javadoc">/**如果头部视图相对与父容器的位置大于其自身高度+20或者头部视图的顶部位置&gt;0,并且要在刷新状态不等于"释放以刷新"**/</span>
+                <span class="keyword">if</span> ((mRefreshHeaderView.getBottom() &gt; mRefreshViewHeight + <span class="number">20</span>
+                        || mRefreshHeaderView.getTop() &gt;= <span class="number">0</span>)
+                        &amp;&amp; mRefreshState != RELEASE_TO_REFRESH) {
+                    mRefreshViewText.setText(R.string.pull_to_refresh_release_label);<span class="comment">// 设置刷新文本为"Release to refresh..."</span>
+                    mRefreshViewImage.clearAnimation();                    <span class="comment">// 清除动画    </span>
+                    mRefreshViewImage.startAnimation(mFlipAnimation);    <span class="comment">// 启动动画</span>
+                    mRefreshState = RELEASE_TO_REFRESH;                    <span class="comment">// 更改刷新状态为“释放以刷新"</span>
+                } <span class="keyword">else</span> <span class="keyword">if</span> (mRefreshHeaderView.getBottom() &lt; mRefreshViewHeight + <span class="number">20</span>
+                        &amp;&amp; mRefreshState != PULL_TO_REFRESH) {
+                    mRefreshViewText.setText(R.string.pull_to_refresh_pull_label);<span class="comment">// 设置刷新文本为"Pull to refresh..."</span>
+                    <span class="keyword">if</span> (mRefreshState != TAP_TO_REFRESH) {
+                        mRefreshViewImage.clearAnimation();
+                        mRefreshViewImage.startAnimation(mReverseFlipAnimation);
+                    }
+                    mRefreshState = PULL_TO_REFRESH;
+                }
+            } <span class="keyword">else</span> {
+                mRefreshViewImage.setVisibility(View.GONE);            <span class="comment">// 让刷新箭头不可见</span>
+                resetHeader();    <span class="comment">// 重新设置头部为原始状态</span>
+            }
+        } <span class="keyword">else</span> <span class="keyword">if</span> (mCurrentScrollState == SCROLL_STATE_FLING
+                &amp;&amp; firstVisibleItem == <span class="number">0</span>
+                &amp;&amp; mRefreshState != REFRESHING) {
+            setSelection(<span class="number">1</span>);
+        }
+
+        <span class="keyword">if</span> (mOnScrollListener != <span class="keyword">null</span>) {
+            mOnScrollListener.onScroll(view, firstVisibleItem,
+                    visibleItemCount, totalItemCount);
+        }
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScrollStateChanged</span>(AbsListView view, <span class="keyword">int</span> scrollState) {
+        mCurrentScrollState = scrollState;
+
+        <span class="keyword">if</span> (mOnScrollListener != <span class="keyword">null</span>) {
+            mOnScrollListener.onScrollStateChanged(view, scrollState);
+        }
+    }
+
+
+    <span class="javadoc">/**为刷新做准备**/</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepareForRefresh</span>() {
+        resetHeaderPadding();        
+
+        mRefreshViewImage.setVisibility(View.GONE);            <span class="comment">// 去掉刷新的箭头</span>
+        <span class="comment">// We need this hack, otherwise it will keep the previous drawable.</span>
+        mRefreshViewImage.setImageDrawable(<span class="keyword">null</span>);
+        mRefreshViewProgress.setVisibility(View.VISIBLE);    <span class="comment">// 圆形进度条变为可见</span>
+
+        <span class="comment">// Set refresh view text to the refreshing label</span>
+        mRefreshViewText.setText(R.string.pull_to_refresh_refreshing_label);
+
+        mRefreshState = REFRESHING;
+    }
+
+    <span class="javadoc">/**为加载更多做准备**/</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">prepareForLoadMore</span>() {
+        mLoadMoreProgress.setVisibility(View.VISIBLE);     
+        mLoadMoreText.setText(R.string.loading_label);
+        mLoadState = LOADING;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRefresh</span>() {
+        Log.d(TAG, <span class="string">"onRefresh"</span>);
+
+        <span class="keyword">if</span> (mOnRefreshListener != <span class="keyword">null</span>) {
+            mOnRefreshListener.onRefresh();
+        }
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnLoadMore</span>() {
+        Log.d(TAG, <span class="string">"onLoadMore"</span>);
+        <span class="keyword">if</span>(mOnRefreshListener != <span class="keyword">null</span>) {
+            mOnRefreshListener.onLoadMore();
+        }
+    }
+
+    <span class="javadoc">/**
+     * Resets the list to a normal state after a refresh.
+     *<span class="javadoctag"> @param</span> lastUpdated Last updated at.
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRefreshComplete</span>(CharSequence lastUpdated) {
+        setLastUpdated(lastUpdated);    <span class="comment">// 显示更新时间</span>
+        onRefreshComplete();
+    }
+
+    <span class="javadoc">/**
+     * Resets the list to a normal state after a refresh.
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRefreshComplete</span>() {        
+        Log.d(TAG, <span class="string">"onRefreshComplete"</span>);
+
+        resetHeader();
+
+        <span class="comment">// If refresh view is visible when loading completes, scroll down to</span>
+        <span class="comment">// the next item.</span>
+        <span class="keyword">if</span> (mRefreshHeaderView.getBottom() &gt; <span class="number">0</span>) {
+            invalidateViews();
+            setSelection(<span class="number">1</span>);
+        }
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoadMoreComplete</span>() {
+        Log.d(TAG, <span class="string">"onLoadMoreComplete"</span>);
+        resetFooter();
+    }
+
+    <span class="javadoc">/**
+     * Invoked when the refresh view is clicked on. This is mainly used when
+     * there's only a few items in the list and it's not possible to drag the
+     * list.
+     * 点击刷新
+     */</span>
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">OnClickRefreshListener</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span> {</span>
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(View v) {
+            <span class="keyword">if</span> (mRefreshState != REFRESHING) {
+                prepareForRefresh();
+                onRefresh();
+            }
+        }
+
+    }
+
+    <span class="javadoc">/**
+     * 
+     *<span class="javadoctag"> @author</span> wwj
+     * 加载更多
+     */</span>
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">OnClickLoadMoreListener</span> <span class="keyword">implements</span> <span class="title">OnClickListener</span> {</span>
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(View v) {
+            <span class="keyword">if</span>(mLoadState != LOADING) {
+                prepareForLoadMore();
+                OnLoadMore();
+            }
+        }
+    }
+
+    <span class="javadoc">/**
+     * Interface definition for a callback to be invoked when list should be
+     * refreshed.
+     * 接口定义一个回调方法当列表应当被刷新
+     */</span>
+    <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OnRefreshListener</span> {</span>
+        <span class="javadoc">/**
+         * Called when the list should be refreshed.
+         * 当列表应当被刷新是调用这个方法
+         * &lt;p&gt;
+         * A call to {@link PullToRefreshListView #onRefreshComplete()} is
+         * expected to indicate that the refresh has completed.
+         */</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRefresh</span>();
+
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onLoadMore</span>();
+    }
+}
+</code></pre><p>使用方法：</p>
+<pre><code><span class="keyword">package</span> com.markupartist.android.example.pulltorefresh;
+
+<span class="keyword">import</span> java.text.SimpleDateFormat;
+<span class="keyword">import</span> java.util.Arrays;
+<span class="keyword">import</span> java.util.Date;
+<span class="keyword">import</span> java.util.LinkedList;
+
+<span class="keyword">import</span> android.app.Activity;
+<span class="keyword">import</span> android.content.Context;
+<span class="keyword">import</span> android.os.AsyncTask;
+<span class="keyword">import</span> android.os.Bundle;
+<span class="keyword">import</span> android.widget.ArrayAdapter;
+
+<span class="keyword">import</span> com.markupartist.android.widget.PullToRefreshListView;
+<span class="keyword">import</span> com.markupartist.android.widget.PullToRefreshListView.OnRefreshListener;
+
+public <span class="class"><span class="keyword">class</span> <span class="title">PullToRefreshActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> {</span>
+    <span class="keyword">private</span> LinkedList&lt;String&gt; mListItems;
+    public static PullToRefreshListView weiboListView;
+
+    <span class="javadoc">/** Called when the activity is first created. */</span>
+    <span class="annotation">@Override</span>
+    public void onCreate(Bundle savedInstanceState) {
+        <span class="keyword">super</span>.onCreate(savedInstanceState);
+        setContentView(R.layout.pull_to_refresh);
+        weiboListView = (PullToRefreshListView) findViewById(R.id.weibolist);
+
+        <span class="comment">// Set a listener to be invoked when the list should be refreshed.</span>
+        weiboListView.setOnRefreshListener(<span class="keyword">new</span> OnRefreshListener() {
+            <span class="annotation">@Override</span>
+            public void onRefresh() {
+                <span class="comment">// Do work to refresh the list here.</span>
+                <span class="keyword">new</span> GetDataTask(PullToRefreshActivity.<span class="keyword">this</span>, <span class="number">0</span>).execute();
+            }
+
+            <span class="annotation">@Override</span>
+            public void onLoadMore() {
+                <span class="keyword">new</span> GetDataTask(PullToRefreshActivity.<span class="keyword">this</span>, <span class="number">1</span>).execute();
+            }
+        });
+
+        mListItems = <span class="keyword">new</span> LinkedList&lt;String&gt;();
+        mListItems.addAll(Arrays.asList(mStrings));
+
+        ArrayAdapter&lt;String&gt; adapter = <span class="keyword">new</span> ArrayAdapter&lt;String&gt;(<span class="keyword">this</span>,
+                android.R.layout.simple_list_item_1, mListItems);
+
+        weiboListView.setAdapter(adapter);
+    }
+
+    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">GetDataTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">Void</span>, <span class="title">Void</span>, <span class="title">String</span>[]&gt; {</span>
+        <span class="keyword">private</span> Context context;
+        <span class="keyword">private</span> int index;
+
+        public GetDataTask(Context context, int index) {
+            <span class="keyword">this</span>.context = context;
+            <span class="keyword">this</span>.index = index;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">protected</span> String[] doInBackground(Void... params) {
+            <span class="comment">// Simulates a background job.</span>
+            <span class="keyword">try</span> {
+                Thread.sleep(<span class="number">2000</span>);
+            } <span class="keyword">catch</span> (InterruptedException e) {
+                ;
+            }
+            <span class="keyword">return</span> mStrings;
+        }
+
+        <span class="annotation">@Override</span>
+        <span class="keyword">protected</span> void onPostExecute(String[] result) {
+            <span class="keyword">if</span> (index == <span class="number">0</span>) {
+                <span class="comment">// 将字符串“Added after refresh”添加到顶部</span>
+                mListItems.addFirst(<span class="string">"Added after refresh..."</span>);
+
+                SimpleDateFormat format = <span class="keyword">new</span> SimpleDateFormat(
+                        <span class="string">"yyyy年MM月dd日  HH:mm"</span>);
+                String date = format.format(<span class="keyword">new</span> Date());
+                <span class="comment">// Call onRefreshComplete when the list has been refreshed.</span>
+                weiboListView.onRefreshComplete(date);
+            } <span class="keyword">else</span> <span class="keyword">if</span> (index == <span class="number">1</span>) {
+                mListItems.addLast(<span class="string">"Added after loadmore..."</span>);
+                weiboListView.onLoadMoreComplete();
+            }
+
+            <span class="keyword">super</span>.onPostExecute(result);
+        }
+    }
+
+    public static String[] mStrings = { <span class="string">"一条微博"</span>, <span class="string">"两条微博"</span>, <span class="string">"三条微博"</span>, <span class="string">"四条微博"</span>, <span class="string">"五条微博"</span>,
+            <span class="string">"六条微博"</span>, <span class="string">"七条微博"</span>, <span class="string">"八条微博"</span>, <span class="string">"九条微博"</span>, <span class="string">"十条微博"</span>, <span class="string">"十一条微博"</span>, <span class="string">"十二条微博"</span> };
+
+}
+</code></pre><p>下拉刷新的那个头部布局<br>/2013.08.22_PullToRefresh_ListView_Demo/res/layout/pull_to_refresh_header.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="comment">&lt;!--
+     Copyright (C) 2011 Johan Nilsson &lt;http://markupartist.com&gt;
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+--&gt;</span>
+
+<span class="tag">&lt;<span class="title">RelativeLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"fill_parent"</span>
+    <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+    <span class="attribute">android:paddingBottom</span>=<span class="value">"15dip"</span>
+    <span class="attribute">android:paddingTop</span>=<span class="value">"10dip"</span> &gt;</span>
+
+    <span class="comment">&lt;!-- 小型圆形进度条，初始为不可见 --&gt;</span>
+
+    <span class="tag">&lt;<span class="title">ProgressBar
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/pull_to_refresh_progress"</span>
+        <span class="attribute">style</span>=<span class="value">"?android:attr/progressBarStyleSmall"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_centerVertical</span>=<span class="value">"true"</span>
+        <span class="attribute">android:layout_marginLeft</span>=<span class="value">"30dip"</span>
+        <span class="attribute">android:layout_marginRight</span>=<span class="value">"20dip"</span>
+        <span class="attribute">android:layout_marginTop</span>=<span class="value">"10dip"</span>
+        <span class="attribute">android:indeterminate</span>=<span class="value">"true"</span>
+        <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</span>
+    <span class="comment">&lt;!-- 下拉刷新的那个箭头 --&gt;</span>
+
+    <span class="tag">&lt;<span class="title">ImageView
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/pull_to_refresh_image"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:layout_marginLeft</span>=<span class="value">"30dip"</span>
+        <span class="attribute">android:layout_marginRight</span>=<span class="value">"20dip"</span>
+        <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:src</span>=<span class="value">"@drawable/ic_pulltorefresh_arrow"</span>
+        <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</span>
+    <span class="comment">&lt;!-- 下拉刷新的提示文本 --&gt;</span>
+
+    <span class="tag">&lt;<span class="title">TextView
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/pull_to_refresh_text"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span>
+        <span class="attribute">android:text</span>=<span class="value">"@string/pull_to_refresh_tap_label"</span>
+        <span class="attribute">android:textAppearance</span>=<span class="value">"?android:attr/textAppearanceMedium"</span>
+        <span class="attribute">android:textStyle</span>=<span class="value">"bold"</span> /&gt;</span>
+
+    <span class="tag">&lt;<span class="title">TextView
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/pull_to_refresh_updated_at"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_below</span>=<span class="value">"@+id/pull_to_refresh_text"</span>
+        <span class="attribute">android:layout_gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:textAppearance</span>=<span class="value">"?android:attr/textAppearanceSmall"</span>
+        <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</span>
+
+<span class="tag">&lt;/<span class="title">RelativeLayout</span>&gt;</span>
+</code></pre><p>加载更多的底部布局<br>/2013.08.22_PullToRefresh_ListView_Demo/res/layout/loadmore_footer.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">RelativeLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:id</span>=<span class="value">"@+id/loadmore_layout"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+    <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+    <span class="attribute">android:paddingBottom</span>=<span class="value">"15dip"</span>
+    <span class="attribute">android:paddingTop</span>=<span class="value">"10dip"</span> &gt;</span>
+
+<span class="comment">&lt;!--     &lt;Button
+        android:id="@+id/loadmore_btn"
+        android:layout_width="match_parent"
+        android:layout_height="60.0dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0.0dip"
+        android:background="@drawable/weibo_list_item_selector"
+        android:text="@string/loadmore_label"
+        android:textColor="@color/loadmore_btn_selector"
+        android:textSize="18.0sp" /&gt;
+ --&gt;</span>
+    <span class="tag">&lt;<span class="title">ProgressBar
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/loadmore_progress"</span>
+        <span class="attribute">style</span>=<span class="value">"?android:attr/progressBarStyleSmall"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_centerVertical</span>=<span class="value">"true"</span>
+        <span class="attribute">android:layout_marginLeft</span>=<span class="value">"30dip"</span>
+        <span class="attribute">android:layout_marginRight</span>=<span class="value">"20dip"</span>
+        <span class="attribute">android:layout_marginTop</span>=<span class="value">"10dip"</span>
+        <span class="attribute">android:indeterminate</span>=<span class="value">"true"</span>
+        <span class="attribute">android:visibility</span>=<span class="value">"gone"</span> /&gt;</span>
+
+   <span class="tag">&lt;<span class="title">TextView
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/loadmore_text"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"fill_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"wrap_content"</span>
+        <span class="attribute">android:layout_gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:gravity</span>=<span class="value">"center"</span>
+        <span class="attribute">android:paddingTop</span>=<span class="value">"5dip"</span>
+        <span class="attribute">android:text</span>=<span class="value">"@string/loadmore_label"</span>
+        <span class="attribute">android:textAppearance</span>=<span class="value">"?android:attr/textAppearanceMedium"</span>
+        <span class="attribute">android:textStyle</span>=<span class="value">"bold"</span> /&gt;</span>
+
+<span class="tag">&lt;/<span class="title">RelativeLayout</span>&gt;</span>
+</code></pre><p>/2013.08.22_PullToRefresh_ListView_Demo/res/layout/pull_to_refresh.xml</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span>
+    <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span> &gt;</span>
+
+    <span class="comment">&lt;!--
+    The PullToRefreshListView replaces a standard ListView widget.
+        自定义列表在这
+    --&gt;</span>
+
+    <span class="tag">&lt;<span class="title">com.markupartist.android.widget.PullToRefreshListView
+</span>        <span class="attribute">android:id</span>=<span class="value">"@+id/weibolist"</span>
+        <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span>
+        <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span> 
+        <span class="attribute">android:cacheColorHint</span>=<span class="value">"#00000000"</span>
+        <span class="attribute">android:fastScrollEnabled</span>=<span class="value">"true"</span>/&gt;</span>
+
+<span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span>
+</code></pre><p>评论修改方案：</p>
+<pre><code><span class="annotation">@Override</span> <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onAttachedToWindow</span>() { 
+    <span class="keyword">super</span>.onAttachedToWindow(); setSelection(<span class="number">1</span>);     <span class="comment">// 设置当前选中的项 </span>
+    } 
+    <span class="comment">//改成这样就OK了。</span>
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

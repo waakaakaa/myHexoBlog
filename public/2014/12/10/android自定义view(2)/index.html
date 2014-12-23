@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>android自定义View(2) | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="转载请标明出处：http://blog.csdn.net/lmj623565791/article/details/24252901
+很多的Android入门程序猿来说对于Android自定义View，可能都是比较恐惧的，但是这又是高手进阶的必经之路，所有准备在自定义View上面花一些功夫，多写一些文章。先总结下自定义View的步骤：">
+  
+  <meta content="article" property="og:type">
+<meta content="android自定义View(2)" property="og:title">
+<meta content="http://waakaakaa.github.io/2014/12/10/android自定义view(2)/" property="og:url">
+<meta content="/img/android自定义View(2" property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="转载请标明出处：http://blog.csdn.net/lmj623565791/article/details/24252901
+很多的Android入门程序猿来说对于Android自定义View，可能都是比较恐惧的，但是这又是高手进阶的必经之路，所有准备在自定义View上面花一些功夫，多写一些文章。先总结下自定义View的步骤：" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2014/12/10/android自定义view(2)/">
+  <time datetime="2014-12-09T16:53:12.000Z">
+    12月 10 2014
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">android自定义View(2)</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>转载请标明出处：<a href="http://blog.csdn.net/lmj623565791/article/details/24252901" target="_blank">http://blog.csdn.net/lmj623565791/article/details/24252901</a></p>
+<p>很多的Android入门程序猿来说对于Android自定义View，可能都是比较恐惧的，但是这又是高手进阶的必经之路，所有准备在自定义View上面花一些功夫，多写一些文章。先总结下自定义View的步骤：</p>
+<a id="more"></a>
+
+<ol>
+<li><p>自定义View的属性</p>
+</li>
+<li><p>在View的构造方法中获得我们自定义的属性</p>
+</li>
+<li><p>重写onMesure</p>
+</li>
+<li><p>重写onDraw</p>
+</li>
+</ol>
+<p>3不一定是必须的，当然了大部分情况下还是需要重写的。</p>
+<p>1、自定义View的属性，首先在res/values/  下建立一个attrs.xml ， 在里面定义我们的属性和声明我们的整个样式。</p>
+<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>  
+<span class="tag">&lt;<span class="title">resources</span>&gt;</span>  
+
+    <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleText"</span> <span class="attribute">format</span>=<span class="value">"string"</span> /&gt;</span>  
+    <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextColor"</span> <span class="attribute">format</span>=<span class="value">"color"</span> /&gt;</span>  
+    <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextSize"</span> <span class="attribute">format</span>=<span class="value">"dimension"</span> /&gt;</span>  
+
+    <span class="tag">&lt;<span class="title">declare-styleable</span> <span class="attribute">name</span>=<span class="value">"CustomTitleView"</span>&gt;</span>  
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleText"</span> /&gt;</span>  
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextColor"</span> /&gt;</span>  
+        <span class="tag">&lt;<span class="title">attr</span> <span class="attribute">name</span>=<span class="value">"titleTextSize"</span> /&gt;</span>  
+    <span class="tag">&lt;/<span class="title">declare-styleable</span>&gt;</span>  
+
+<span class="tag">&lt;/<span class="title">resources</span>&gt;</span>  
+</code></pre><p>我们定义了字体，字体颜色，字体大小3个属性，format是值该属性的取值类型:<br>一共有：string,color,demension,integer,enum,reference,float,boolean,fraction,flag;不清楚的可以google一把。</p>
+<p>然后在布局中声明我们的自定义View</p>
+<pre><code>&lt;RelativeLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>  
+    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>  
+    xmlns:custom=<span class="string">"http://schemas.android.com/apk/res/com.example.customview01"</span>  
+    android:layout_width=<span class="string">"match_parent"</span>  
+    android:layout_height=<span class="string">"match_parent"</span> &gt;  
+
+    &lt;<span class="keyword">com</span><span class="preprocessor">.example</span><span class="preprocessor">.customview</span>01<span class="preprocessor">.view</span><span class="preprocessor">.CustomTitleView</span>  
+        android:layout_width=<span class="string">"200dp"</span>  
+        android:layout_height=<span class="string">"100dp"</span>  
+        custom:titleText=<span class="string">"3712"</span>  
+        custom:titleTextColor=<span class="string">"#ff0000"</span>  
+        custom:titleTextSize=<span class="string">"40sp"</span> /&gt;  
+
+&lt;/RelativeLayout&gt;  
+</code></pre><p>一定要引入 xmlns:custom=”<a href="http://schemas.android.com/apk/res/com.example.customview01&quot;我们的命名空间，后面的包路径指的是项目的package" target="_blank">http://schemas.android.com/apk/res/com.example.customview01&quot;我们的命名空间，后面的包路径指的是项目的package</a></p>
+<p>2、在View的构造方法中，获得我们的自定义的样式    </p>
+<pre><code><span class="javadoc">/** 
+ * 文本 
+ */</span>  
+<span class="keyword">private</span> String mTitleText;  
+<span class="javadoc">/** 
+ * 文本的颜色 
+ */</span>  
+<span class="keyword">private</span> <span class="keyword">int</span> mTitleTextColor;  
+<span class="javadoc">/** 
+ * 文本的大小 
+ */</span>  
+<span class="keyword">private</span> <span class="keyword">int</span> mTitleTextSize;  
+
+<span class="javadoc">/** 
+ * 绘制时控制文本绘制的范围 
+ */</span>  
+<span class="keyword">private</span> Rect mBound;  
+<span class="keyword">private</span> Paint mPaint;  
+
+<span class="keyword">public</span> <span class="title">CustomTitleView</span>(Context context, AttributeSet attrs)  
+{  
+    <span class="keyword">this</span>(context, attrs, <span class="number">0</span>);  
+}  
+
+<span class="keyword">public</span> <span class="title">CustomTitleView</span>(Context context)  
+{  
+    <span class="keyword">this</span>(context, <span class="keyword">null</span>);  
+}  
+
+<span class="javadoc">/** 
+ * 获得我自定义的样式属性 
+ *  
+ *<span class="javadoctag"> @param</span> context 
+ *<span class="javadoctag"> @param</span> attrs 
+ *<span class="javadoctag"> @param</span> defStyle 
+ */</span>  
+<span class="keyword">public</span> <span class="title">CustomTitleView</span>(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle)  
+{  
+    <span class="keyword">super</span>(context, attrs, defStyle);  
+    <span class="javadoc">/** 
+     * 获得我们所定义的自定义样式属性 
+     */</span>  
+    TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomTitleView, defStyle, <span class="number">0</span>);  
+    <span class="keyword">int</span> n = a.getIndexCount();  
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)  
+    {  
+        <span class="keyword">int</span> attr = a.getIndex(i);  
+        <span class="keyword">switch</span> (attr)  
+        {  
+        <span class="keyword">case</span> R.styleable.CustomTitleView_titleText:  
+            mTitleText = a.getString(attr);  
+            <span class="keyword">break</span>;  
+        <span class="keyword">case</span> R.styleable.CustomTitleView_titleTextColor:  
+            <span class="comment">// 默认颜色设置为黑色  </span>
+            mTitleTextColor = a.getColor(attr, Color.BLACK);  
+            <span class="keyword">break</span>;  
+        <span class="keyword">case</span> R.styleable.CustomTitleView_titleTextSize:  
+            <span class="comment">// 默认设置为16sp，TypeValue也可以把sp转化为px  </span>
+            mTitleTextSize = a.getDimensionPixelSize(attr, (<span class="keyword">int</span>) TypedValue.applyDimension(  
+                    TypedValue.COMPLEX_UNIT_SP, <span class="number">16</span>, getResources().getDisplayMetrics()));  
+            <span class="keyword">break</span>;  
+
+        }  
+
+    }  
+    a.recycle();  
+
+    <span class="javadoc">/** 
+     * 获得绘制文本的宽和高 
+     */</span>  
+    mPaint = <span class="keyword">new</span> Paint();  
+    mPaint.setTextSize(mTitleTextSize);  
+    <span class="comment">// mPaint.setColor(mTitleTextColor);  </span>
+    mBound = <span class="keyword">new</span> Rect();  
+    mPaint.getTextBounds(mTitleText, <span class="number">0</span>, mTitleText.length(), mBound);  
+
+}  
+</code></pre><p>我们重写了3个构造方法，默认的布局文件调用的是两个参数的构造方法，所以记得让所有的构造调用我们的三个参数的构造，我们在三个参数的构造中获得自定义属性。</p>
+<p>3、我们重写onDraw，onMesure调用系统提供的：</p>
+<pre><code><span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span>(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)  
+{  
+    <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);  
+}  
+
+<span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span>(Canvas canvas)  
+{  
+    mPaint.setColor(Color.YELLOW);  
+    canvas.drawRect(<span class="number">0</span>, <span class="number">0</span>, getMeasuredWidth(), getMeasuredHeight(), mPaint);  
+
+    mPaint.setColor(mTitleTextColor);  
+    canvas.drawText(mTitleText, getWidth() / <span class="number">2</span> - mBound.width() / <span class="number">2</span>, getHeight() / <span class="number">2</span> + mBound.height() / <span class="number">2</span>, mPaint);  
+}  
+</code></pre><p>此时的效果是：</p>
+<p><img src="/img/android自定义View(2" alt="image">/1.jpg)</p>
+<p>是不是觉得还不错，基本已经实现了自定义View。但是此时如果我们把布局文件的宽和高写成wrap_content，会发现效果并不是我们的预期：</p>
+<p><img src="/img/android自定义View(2" alt="image">/2.jpg)</p>
+<p>系统帮我们测量的高度和宽度都是MATCH_PARNET，当我们设置明确的宽度和高度时，系统帮我们测量的结果就是我们设置的结果，当我们设置为WRAP_CONTENT,或者MATCH_PARENT系统帮我们测量的结果就是MATCH_PARENT的长度。</p>
+<p>所以，当设置了WRAP_CONTENT时，我们需要自己进行测量，即重写onMesure方法”：</p>
+<p>重写之前先了解MeasureSpec的specMode,一共三种类型：</p>
+<p>EXACTLY：一般是设置了明确的值或者是MATCH_PARENT</p>
+<p>AT_MOST：表示子布局限制在一个最大值内，一般为WARP_CONTENT</p>
+<p>UNSPECIFIED：表示子布局想要多大就多大，很少使用</p>
+<p>下面是我们重写onMeasure代码：</p>
+<pre><code><span class="annotation">@Override</span>  
+<span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span>(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)  
+{  
+    <span class="keyword">int</span> widthMode = MeasureSpec.getMode(widthMeasureSpec);  
+    <span class="keyword">int</span> widthSize = MeasureSpec.getSize(widthMeasureSpec);  
+    <span class="keyword">int</span> heightMode = MeasureSpec.getMode(heightMeasureSpec);  
+    <span class="keyword">int</span> heightSize = MeasureSpec.getSize(heightMeasureSpec);  
+    <span class="keyword">int</span> width;  
+    <span class="keyword">int</span> height ;  
+    <span class="keyword">if</span> (widthMode == MeasureSpec.EXACTLY)  
+    {  
+        width = widthSize;  
+    } <span class="keyword">else</span>  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, <span class="number">0</span>, mTitle.length(), mBounds);  
+        <span class="keyword">float</span> textWidth = mBounds.width();  
+        <span class="keyword">int</span> desired = (<span class="keyword">int</span>) (getPaddingLeft() + textWidth + getPaddingRight());  
+        width = desired;  
+    }  
+
+    <span class="keyword">if</span> (heightMode == MeasureSpec.EXACTLY)  
+    {  
+        height = heightSize;  
+    } <span class="keyword">else</span>  
+    {  
+        mPaint.setTextSize(mTitleTextSize);  
+        mPaint.getTextBounds(mTitle, <span class="number">0</span>, mTitle.length(), mBounds);  
+        <span class="keyword">float</span> textHeight = mBounds.height();  
+        <span class="keyword">int</span> desired = (<span class="keyword">int</span>) (getPaddingTop() + textHeight + getPaddingBottom());  
+        height = desired;  
+    }  
+
+
+
+    setMeasuredDimension(width, height);  
+}  
+</code></pre><p>现在我们修改下布局文件：</p>
+<pre><code>&lt;RelativeLayout xmlns:android=<span class="string">"http://schemas.android.com/apk/res/android"</span>  
+    xmlns:tools=<span class="string">"http://schemas.android.com/tools"</span>  
+    xmlns:custom=<span class="string">"http://schemas.android.com/apk/res/com.example.customview01"</span>  
+    android:layout_width=<span class="string">"match_parent"</span>  
+    android:layout_height=<span class="string">"match_parent"</span> &gt;  
+
+    &lt;<span class="keyword">com</span><span class="preprocessor">.example</span><span class="preprocessor">.customview</span>01<span class="preprocessor">.view</span><span class="preprocessor">.CustomTitleView</span>  
+        android:layout_width=<span class="string">"wrap_content"</span>  
+        android:layout_height=<span class="string">"wrap_content"</span>  
+        custom:titleText=<span class="string">"3712"</span>  
+        android:padding=<span class="string">"10dp"</span>  
+        custom:titleTextColor=<span class="string">"#ff0000"</span>  
+        android:layout_centerInParent=<span class="string">"true"</span>  
+        custom:titleTextSize=<span class="string">"40sp"</span> /&gt;  
+
+&lt;/RelativeLayout&gt;  
+</code></pre><p>现在的效果是：</p>
+<p><img src="/img/android自定义View(2" alt="image">/3.jpg)</p>
+<p>完全复合我们的预期，现在我们可以对高度、宽度进行随便的设置了，基本可以满足我们的需求。</p>
+<p>当然了，这样下来我们这个自定义View与TextView相比岂不是没什么优势，所有我们觉得给自定义View添加一个事件：</p>
+<p>在构造中添加：</p>
+<pre><code><span class="keyword">this</span>.setOnClickListener(<span class="keyword">new</span> OnClickListener()  
+    {  
+
+        @Override  
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span>(View v)  
+        {  
+            mTitleText = randomText();  
+            postInvalidate();  
+        }  
+
+    });  
+
+<span class="keyword">private</span> String <span class="title">randomText</span>()  
+    {  
+    Random random = <span class="keyword">new</span> Random();  
+    Set&lt;Integer&gt; <span class="keyword">set</span> = <span class="keyword">new</span> HashSet&lt;Integer&gt;();  
+    <span class="keyword">while</span> (<span class="keyword">set</span>.size() &lt; <span class="number">4</span>)  
+    {  
+        <span class="keyword">int</span> randomInt = random.nextInt(<span class="number">10</span>);  
+        <span class="keyword">set</span>.add(randomInt);  
+    }  
+    StringBuffer sb = <span class="keyword">new</span> StringBuffer();  
+    <span class="keyword">for</span> (Integer i : <span class="keyword">set</span>)  
+    {  
+        sb.append(<span class="string">""</span> + i);  
+    }  
+
+    <span class="keyword">return</span> sb.toString();  
+}  
+</code></pre><p>下面再来运行：</p>
+<p><img src="/img/android自定义View(2" alt="image">/4.gif)</p>
+<p>我们添加了一个点击事件，每次让它随机生成一个4位的随机数，有兴趣的可以在onDraw中添加一点噪点，然后改写为验证码，是不是感觉很不错。</p>
+<p>好了，各位学习的，打酱油的留个言，顶个呗~</p>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2014 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>
