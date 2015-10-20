@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>从strStr谈面试技巧与Coding Style | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="从一道入门题说起：
+strStr
+/* Return the position of the first occurence of string target in string source, or -1 if target is not part of source.*/
+int strStr(String source, String target){
+    //...
+}">
+  
+  <meta content="article" property="og:type">
+<meta content="从strStr谈面试技巧与Coding Style" property="og:title">
+<meta content="http://waakaakaa.github.io/2015/10/15/从strstr谈面试技巧与coding-style/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="从一道入门题说起：
+strStr
+/* Return the position of the first occurence of string target in string source, or -1 if target is not part of source.*/
+int strStr(String source, String target){
+    //...
+}" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/10/15/从strstr谈面试技巧与coding-style/">
+  <time datetime="2015-10-15T04:37:11.000Z">
+    10月 15 2015
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">从strStr谈面试技巧与Coding Style</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <p>从一道入门题说起：</p>
+<pre><code>strStr
+/* Return the position of the first occurence of string target <span class="keyword">in</span> string <span class="keyword">source</span>, or -<span class="number">1</span> <span class="keyword">if</span> target is not part of source.*/
+int strStr(String <span class="keyword">source</span>, String target){
+    //<span class="keyword">...</span>
+}
+</code></pre><a id="more"></a>
+
+<p>常见错误：</p>
+<ol>
+<li>我知道一个算法叫KMP</li>
+<li>命名用s1, s2</li>
+<li>for和if没有花括号</li>
+</ol>
+<p>参考解法：</p>
+<pre><code>class Solution{
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">strStr</span>(String source, String target){
+        <span class="keyword">if</span> (source == <span class="keyword">null</span> || target == <span class="keyword">null</span>){
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+
+        <span class="keyword">int</span> i,j;
+        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; source.length() - target.length() + <span class="number">1</span>; i++){
+            <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; target.length(); j++){
+                <span class="keyword">if</span> (source.charAt(i + j) != target.charAt(j)){
+                    <span class="keyword">break</span>;
+                }
+            }
+            <span class="keyword">if</span> (j == target.length()){
+                <span class="keyword">return</span> i;
+            }
+        }
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }    
+}
+</code></pre><p>排列组合模板（Subsets）：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">void</span> subsetsHelper(ArrayList&lt;Arraylist&lt;Integer&gt;&gt; result, ArrayList&lt;Integer&gt; <span class="built_in">list</span>, <span class="keyword">int</span>[] nums, <span class="keyword">int</span> pos){
+    result.add(<span class="keyword">new</span> ArrayList&lt;Integer&gt;(<span class="built_in">list</span>));
+
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = pos; i &lt; nums.length; i++){
+        <span class="built_in">list</span>.add(nums[i]);
+        subsetsHelper(result, <span class="built_in">list</span>, nums, i + <span class="number">1</span>);
+        <span class="built_in">list</span>.remove(<span class="built_in">list</span>.size() - <span class="number">1</span>);
+    }
+}
+</code></pre><p>Unique Subsets：</p>
+<pre><code><span class="keyword">private</span> <span class="keyword">void</span> subsetsHelper(ArrayList&lt;Arraylist&lt;Integer&gt;&gt; result, ArrayList&lt;Integer&gt; <span class="built_in">list</span>, <span class="keyword">int</span>[] nums, <span class="keyword">int</span> pos){
+    result.add(<span class="keyword">new</span> ArrayList&lt;Integer&gt;(<span class="built_in">list</span>));
+
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = pos; i &lt; nums.length; i++){
+        <span class="keyword">if</span> (i != pos &amp;&amp; num[i] == nums[i - <span class="number">1</span>]){
+            <span class="keyword">continue</span>;
+        }
+        <span class="built_in">list</span>.add(nums[i]);
+        subsetsHelper(result, <span class="built_in">list</span>, nums, i + <span class="number">1</span>);
+        <span class="built_in">list</span>.remove(<span class="built_in">list</span>.size() - <span class="number">1</span>);
+    }
+}
+</code></pre>
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>

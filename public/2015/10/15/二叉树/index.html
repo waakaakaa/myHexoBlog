@@ -1,0 +1,227 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  
+  <title>二叉树 | 挖之家</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+    <meta name="author" content="Xin Zhang">
+  
+  
+    <meta name="description" content="迭代：代码复杂，运行效率最高
+递归：代码简介，容易栈溢出">
+  
+  <meta content="article" property="og:type">
+<meta content="二叉树" property="og:title">
+<meta content="http://waakaakaa.github.io/2015/10/15/二叉树/" property="og:url">
+<meta property="og:image">
+<meta content="挖之家" property="og:site_name">
+<meta content="迭代：代码复杂，运行效率最高
+递归：代码简介，容易栈溢出" property="og:description">
+<meta content="summary" name="twitter:card">
+  
+  
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+<body>
+  <div class="wrapper">
+    <header id="header">
+  <div class="title">
+    <h1><a href="/">挖之家</a></h1>
+    <p><a href="/">太阳每天都是欣的</a></p>
+  </div>
+  <nav class="nav">
+    <ul>
+      
+        <li><a href="/archives">Archives</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+      
+    </ul>
+    <div class="clearfix"></div>
+  </nav>
+  <div class="clearfix"></div>
+</header>
+    <div class="content"><article class="post">
+  <header>
+    
+      <div class="icon"></div>
+      <a href="/2015/10/15/二叉树/">
+  <time datetime="2015-10-15T08:37:52.000Z">
+    10月 15 2015
+  </time>
+</a>
+    
+    
+  
+    <h1 class="title">二叉树</h1>
+  
+
+  </header>
+  
+  <div class="entry">
+    
+      <ul>
+<li>迭代：代码复杂，运行效率最高</li>
+<li>递归：代码简介，容易栈溢出</li>
+</ul>
+<a id="more"></a>
+
+<p>DFS</p>
+<pre><code><span class="keyword">public</span> class Solution {
+    <span class="keyword">public</span> class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val <span class="subst">=</span> x; }
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraversal(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">stack</span> <span class="subst">=</span> <span class="literal">new</span> <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+        <span class="built_in">stack</span><span class="built_in">.</span>push(root);
+        <span class="keyword">while</span> (<span class="subst">!</span><span class="built_in">stack</span><span class="built_in">.</span>empty()) {
+            TreeNode node <span class="subst">=</span> <span class="built_in">stack</span><span class="built_in">.</span>pop();
+            result<span class="built_in">.</span>add(node<span class="built_in">.</span>val);
+            <span class="keyword">if</span> (node<span class="built_in">.</span>right <span class="subst">!=</span> <span class="built_in">null</span>) {
+                <span class="built_in">stack</span><span class="built_in">.</span>push(node<span class="built_in">.</span>right);
+            }
+            <span class="keyword">if</span> (node<span class="built_in">.</span>left <span class="subst">!=</span> <span class="built_in">null</span>) {
+                <span class="built_in">stack</span><span class="built_in">.</span>push(node<span class="built_in">.</span>left);
+            }
+        }
+        <span class="keyword">return</span> result;
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> preorderTraversalRecursion(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        result<span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+        result<span class="built_in">.</span>addAll(preorderTraversalRecursion(root<span class="built_in">.</span>left));
+        result<span class="built_in">.</span>addAll(preorderTraversalRecursion(root<span class="built_in">.</span>right));
+
+        <span class="keyword">return</span> result;
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> inorderTraversal(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">stack</span> <span class="subst">=</span> <span class="literal">new</span> <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+        <span class="keyword">while</span> (root <span class="subst">!=</span> <span class="built_in">null</span> <span class="subst">||</span> <span class="subst">!</span><span class="built_in">stack</span><span class="built_in">.</span>empty()) {
+            <span class="keyword">while</span> (root <span class="subst">!=</span> <span class="built_in">null</span>) {
+                <span class="built_in">stack</span><span class="built_in">.</span>push(root);
+                root <span class="subst">=</span> root<span class="built_in">.</span>left;
+            }
+            root <span class="subst">=</span> <span class="built_in">stack</span><span class="built_in">.</span>pop();
+            result<span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+            root <span class="subst">=</span> root<span class="built_in">.</span>right;
+        }
+        <span class="keyword">return</span> result;
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> inorderTraversalRecursion(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        result<span class="built_in">.</span>addAll(inorderTraversalRecursion(root<span class="built_in">.</span>left));
+        result<span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+        result<span class="built_in">.</span>addAll(inorderTraversalRecursion(root<span class="built_in">.</span>right));
+
+        <span class="keyword">return</span> result;
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> postorderTraversal(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span> <span class="built_in">stack</span> <span class="subst">=</span> <span class="literal">new</span> <span class="built_in">Stack</span><span class="subst">&lt;</span>TreeNode<span class="subst">&gt;</span>();
+
+    }
+
+    <span class="keyword">public</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> postorderTraversalRecursion(TreeNode root) {
+        ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span> result <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>();
+        <span class="keyword">if</span> (root <span class="subst">==</span> <span class="built_in">null</span>) {
+            <span class="keyword">return</span> result;
+        }
+
+        result<span class="built_in">.</span>addAll(postorderTraversalRecursion(root<span class="built_in">.</span>left));
+        result<span class="built_in">.</span>addAll(postorderTraversalRecursion(root<span class="built_in">.</span>right));
+        result<span class="built_in">.</span>add(root<span class="built_in">.</span>val);
+
+        <span class="keyword">return</span> result;
+    }
+}
+</code></pre><p>BFS</p>
+<p>BST</p>
+<p>相关题目</p>
+<ul>
+<li>qwe</li>
+<li>qweqwe</li>
+<li>qweqweqwe</li>
+</ul>
+
+    
+  </div>
+  <footer>
+    
+      
+      
+    
+    <div class="clearfix"></div>
+  </footer>
+</article>
+
+</div>
+  </div>
+  <footer id="footer"><div class="copyright">
+  
+  &copy; 2015 <a href="/">Xin Zhang</a>
+  
+</div>
+<div class="theme-copyright">
+  Theme by <a href="https://github.com/orderedlist" target="_blank">orderedlist</a>
+   | 
+  Redesign by <a href="http://heroicyang.com/" target="_blank">Heroic Yang</a>
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script src="/js/scale.fix.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+  (function($){
+    $('.fancybox').fancybox();
+  })(jQuery);
+</script>
+
+
+</body>
+</html>
